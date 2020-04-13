@@ -27,7 +27,6 @@ public class MenuController {
     @Resource
     private MenuService menuService;
 
-
     /**
      * menu 新增菜单
      *
@@ -53,25 +52,6 @@ public class MenuController {
     }
 
     /**
-     * menu 菜单列表(分页)
-     *
-     * @param menuInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-03-28
-     */
-    @RequestMapping(value = "listMenus")
-    public AppResponse listMenus(@RequestBody MenuInfo menuInfo) {
-        try {
-            return menuService.listMenus(menuInfo);
-        } catch (Exception e) {
-            logger.error("查询菜单列表异常", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
      * menu 删除菜单
      *
      * @param menuInfo
@@ -84,7 +64,7 @@ public class MenuController {
         try {
             return menuService.updateMenuById(menuInfo);
         } catch (Exception e) {
-            logger.error("菜单删除错误", e);
+            logger.error("菜单删除失败", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -107,7 +87,7 @@ public class MenuController {
             menuInfo.setUpdateUser(menuId);
             return menuService.updateMenu(menuInfo);
         } catch (Exception e) {
-            logger.error("修改菜单信息错误", e);
+            logger.error("修改菜单信息失败", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -126,7 +106,26 @@ public class MenuController {
         try {
             return menuService.getMenuByInfo(menuInfo);
         } catch (Exception e) {
-            logger.error("菜单查询错误", e);
+            logger.error("菜单查询失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * menu 菜单列表
+     *
+     * @param
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-03-28
+     */
+    @RequestMapping(value = "listMenus")
+    public AppResponse listMenus() {
+        try {
+            return menuService.listMenus();
+        } catch (Exception e) {
+            logger.error("查询菜单列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

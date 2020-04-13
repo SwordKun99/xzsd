@@ -9,8 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * @Description Upload公用（图片）
+ * @Author SwordKun.
+ * @Date 2020-04-12
+ */
 
 @RestController
 @RequestMapping("/upload")
@@ -23,13 +32,14 @@ public class UploadController {
 
     /**
      * 上传图片功能
+     *
      * @param file
      * @return
      */
     @PostMapping("image")
-    public ResponseEntity<String> uploadImage(@RequestParam("Biz_Msg") String Biz_Msg,@RequestParam("Biz_ID") String Biz_ID,@RequestParam("file") MultipartFile file) throws Exception {
-        String url = uploadService.uploadImage(Biz_Msg,Biz_ID,file);
-        if(StringUtils.isBlank(url)){
+    public ResponseEntity<String> uploadImage(@RequestParam("Biz_Msg") String Biz_Msg, @RequestParam("Biz_ID") String Biz_ID, @RequestParam("file") MultipartFile file) throws Exception {
+        String url = uploadService.uploadImage(Biz_Msg, Biz_ID, file);
+        if (StringUtils.isBlank(url)) {
             // url为空，证明上传失败
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -39,6 +49,7 @@ public class UploadController {
 
     /**
      * 查询图片列表功能
+     *
      * @param bizId
      * @return
      */
@@ -55,6 +66,7 @@ public class UploadController {
 
     /**
      * 删除图片功能
+     *
      * @param fileId
      * @return
      */

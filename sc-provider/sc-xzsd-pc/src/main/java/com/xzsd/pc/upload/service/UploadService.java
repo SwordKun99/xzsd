@@ -20,6 +20,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-04-12
+ */
+
 @Service
 public class UploadService {
     @Autowired
@@ -31,12 +37,13 @@ public class UploadService {
 
     /**
      * upload 新增附件
+     *
      * @param Biz_Id
      * @return
      * @Author SwordKun.
      * @Date 2020-04-12
      */
-    public String uploadImage(String Biz_Msg,String Biz_Id,MultipartFile file) throws Exception {
+    public String uploadImage(String Biz_Msg, String Biz_Id, MultipartFile file) throws Exception {
         try {
             //校验文件类型
             String contentType = file.getContentType();
@@ -49,8 +56,8 @@ public class UploadService {
                 throw new Exception("文件内容不对");
             }
             //准备目标路径
-            String key = TencentCosUtil.getKey(Biz_Msg,file);
-            String path = TencentCosUtil.upload(file,key);
+            String key = TencentCosUtil.getKey(Biz_Msg, file);
+            String path = TencentCosUtil.upload(file, key);
             FileInfo fileInfo = new FileInfo();
             fileInfo.setBizId(Biz_Id);
             fileInfo.setPath(path);
@@ -66,20 +73,22 @@ public class UploadService {
 
     /**
      * upload 查询附件列表
+     *
      * @param bizId
      * @return
      * @Author SwordKun.
      * @Date 2020-04-12
      */
-    public AppResponse getImageList(String bizId){
+    public AppResponse getImageList(String bizId) {
         QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId,bizId);
-        List<FileInfo> list =  fileDao.selectList(queryWrapper);
+        queryWrapper.lambda().eq(FileInfo::getBizId, bizId);
+        List<FileInfo> list = fileDao.selectList(queryWrapper);
         return AppResponse.success("查询成功！", list);
     }
 
     /**
      * upload 删除附件
+     *
      * @param filId
      * @return
      * @Author SwordKun.
@@ -97,7 +106,7 @@ public class UploadService {
         String path = fileInfo.getPath();
         String key = fileInfo.getPathKey();
         int count = fileDao.deleteById(filId);
-        if(0 == count) {
+        if (0 == count) {
             appResponse = AppResponse.bizError("删除失败，请重试！");
         }
         appResponse = AppResponse.success("删除成功！");

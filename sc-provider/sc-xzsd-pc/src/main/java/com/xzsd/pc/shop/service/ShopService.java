@@ -17,6 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-04-10
+ */
+
 @Service
 public class ShopService {
 
@@ -34,16 +40,17 @@ public class ShopService {
 
     /**
      * shop 新增门店
+     *
      * @param shopInfo
      * @return
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveShop(ShopInfo shopInfo){
+    public AppResponse saveShop(ShopInfo shopInfo) {
         // 校验门店是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getShopName,shopInfo.getShopName());
+        queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
         int countUserAcct = shopDao.selectCount(queryWrapper);
         if (0 != countUserAcct) {
             return AppResponse.bizError("门店已存在，请重新输入");
@@ -51,7 +58,7 @@ public class ShopService {
         shopInfo.setShopNumber(StringUtil.getCommonCode(2));
         shopInfo.setIsDelete(0);
         Integer count = shopDao.insert(shopInfo);
-        if (0 == count){
+        if (0 == count) {
             return AppResponse.bizError("新增失败，请重试");
         }
         return AppResponse.success("新增成功");
@@ -59,22 +66,23 @@ public class ShopService {
 
     /**
      * shop 删除门店
+     *
      * @param shopInfo
      * @return
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteShopId(ShopInfo shopInfo){
+    public AppResponse deleteShopId(ShopInfo shopInfo) {
         AppResponse appResponse = AppResponse.success("删除成功！");
         shopInfo = shopDao.selectById(shopInfo.getUserId());
         if (shopInfo == null) {
-            appResponse = AppResponse.bizError("查询不到该数据，请重试！");
+            appResponse = AppResponse.bizError("查询不到该门店，请重试！");
             return appResponse;
         }
         shopInfo.setIsDelete(1);
         int count = shopDao.updateById(shopInfo);
-        if(0 == count) {
+        if (0 == count) {
             appResponse = AppResponse.bizError("删除失败，请重试！");
         }
         return appResponse;
@@ -82,6 +90,7 @@ public class ShopService {
 
     /**
      * shop 修改门店
+     *
      * @param shopInfo
      * @return
      * @Author SwordKun.
@@ -92,23 +101,23 @@ public class ShopService {
         AppResponse appResponse = AppResponse.success("修改成功");
         // 校验账号是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getIsDelete,0);
-        queryWrapper.lambda().eq(ShopInfo::getShopName,shopInfo.getShopName());
-        queryWrapper.lambda().ne(ShopInfo::getShopId,shopInfo.getUserId());
+        queryWrapper.lambda().eq(ShopInfo::getIsDelete, 0);
+        queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
+        queryWrapper.lambda().ne(ShopInfo::getShopId, shopInfo.getUserId());
         Integer countShopAcct = shopDao.selectCount(queryWrapper);
-        if(0 != countShopAcct) {
+        if (0 != countShopAcct) {
             return AppResponse.bizError("门店账号已存在，请重新输入！");
         }
         ShopInfo shopInfoOld = shopDao.selectById(shopInfo.getUserId());
         if (shopInfoOld == null) {
-            appResponse = AppResponse.bizError("查询不到该数据，请重试！");
+            appResponse = AppResponse.bizError("查询不到该门店，请重试！");
             return appResponse;
         }
-        shopInfo.setVersion(shopInfoOld.getVersion()+1);
+        shopInfo.setVersion(shopInfoOld.getVersion() + 1);
         // 修改用户信息
         int count = shopDao.updateById(shopInfo);
         if (0 == count) {
-            appResponse = AppResponse.versionError("数据有变化，请刷新！");
+            appResponse = AppResponse.versionError("门店信息有变化，请刷新！");
             return appResponse;
         }
         return appResponse;
@@ -116,6 +125,7 @@ public class ShopService {
 
     /**
      * shop 查询门店详情
+     *
      * @param shopInfo
      * @return
      * @Author SwordKun.
@@ -123,46 +133,49 @@ public class ShopService {
      */
     public AppResponse getUserByShopNumber(ShopInfo shopInfo) {
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getShopNumber,shopInfo.getShopNumber());
+        queryWrapper.lambda().eq(ShopInfo::getShopNumber, shopInfo.getShopNumber());
         shopInfo = shopDao.selectOne(queryWrapper);
-        return AppResponse.success("查询成功！",shopInfo);
+        return AppResponse.success("查询成功！", shopInfo);
     }
 
     /**
      * shop 省份列表
+     *
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-01
+     * @Date 2020-04-10
      */
-    public AppResponse getProviceByIdList(){
+    public AppResponse getProviceByIdList() {
         QueryWrapper<PrviceInfo> queryWrapper = new QueryWrapper<>();
-        List<PrviceInfo> list =  prviceDao.selectList(queryWrapper);
+        List<PrviceInfo> list = prviceDao.selectList(queryWrapper);
         return AppResponse.success("查询成功！", list);
     }
 
     /**
      * shop 查询市列表
+     *
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-01
+     * @Date 2020-04-10
      */
-    public AppResponse getCityByPrviceCode(String proviceCode){
+    public AppResponse getCityByPrviceCode(String proviceCode) {
         QueryWrapper<CityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CityInfo::getProviceCode,proviceCode);
-        List<CityInfo> list =  cityDao.selectList(queryWrapper);
+        queryWrapper.lambda().eq(CityInfo::getProviceCode, proviceCode);
+        List<CityInfo> list = cityDao.selectList(queryWrapper);
         return AppResponse.success("查询成功！", list);
     }
 
     /**
      * shop 查询区列表
+     *
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-01
+     * @Date 2020-04-10
      */
-    public AppResponse getDistrictByCityCode(String cityCode){
+    public AppResponse getDistrictByCityCode(String cityCode) {
         QueryWrapper<DistrictInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(DistrictInfo::getCityCode,cityCode);
-        List<DistrictInfo> list =  districtDao.selectList(queryWrapper);
+        queryWrapper.lambda().eq(DistrictInfo::getCityCode, cityCode);
+        List<DistrictInfo> list = districtDao.selectList(queryWrapper);
         return AppResponse.success("查询成功！", list);
     }
 }

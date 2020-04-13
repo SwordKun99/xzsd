@@ -6,8 +6,8 @@ import com.xzsd.pc.entity.FileInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName CommodityClassDao
- * @Description ComodityClass
+ * @ClassName FileDao
+ * @Description File
  * @Author SwordKun.
  * @Date 2020-03-29
  */

@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * 增删改查customer
  *
  * @Author SwordKun.
- * @Date 2020-03-27
+ * @Date 2020-03-28
  */
 
 @RestController
@@ -35,7 +35,7 @@ public class CustomerController {
      * @param customerInfo
      * @return AppResponse
      * @author SwordKun.
-     * @Date 2020-03-25
+     * @Date 2020-03-28
      */
     @PostMapping("saveCustomer")
     public AppResponse saveCustomer(@RequestBody CustomerInfo customerInfo) {
@@ -54,25 +54,6 @@ public class CustomerController {
     }
 
     /**
-     * customer 客户列表(分页)
-     *
-     * @param customerInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-03-25
-     */
-    @RequestMapping(value = "listCustomers")
-    public AppResponse listCustomers(@RequestBody CustomerInfo customerInfo) {
-        try {
-            return customerService.listCustomers(customerInfo);
-        } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
      * customer 删除客户
      *
      * @param customerInfo
@@ -85,7 +66,7 @@ public class CustomerController {
         try {
             return customerService.updateCustomerById(customerInfo);
         } catch (Exception e) {
-            logger.error("用户删除错误", e);
+            logger.error("客户删除错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -108,7 +89,7 @@ public class CustomerController {
             customerInfo.setUpdateUser(customerId);
             return customerService.updateCustomer(customerInfo);
         } catch (Exception e) {
-            logger.error("修改用户信息错误", e);
+            logger.error("修改客户信息错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -120,17 +101,35 @@ public class CustomerController {
      * @param customerInfo
      * @return AppResponse
      * @Author SwordKun.
-     * @Date 2020-03-25
+     * @Date 2020-03-28
      */
     @RequestMapping(value = "getCustomerByInfo")
     public AppResponse getCustomerByInfo(@RequestBody CustomerInfo customerInfo) {
         try {
             return customerService.getCustomerByInfo(customerInfo);
         } catch (Exception e) {
-            logger.error("用户查询错误", e);
+            logger.error("客户查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
+    /**
+     * customer 客户列表(分页)
+     *
+     * @param customerInfo
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-03-28
+     */
+    @RequestMapping(value = "listCustomers")
+    public AppResponse listCustomers(@RequestBody CustomerInfo customerInfo) {
+        try {
+            return customerService.listCustomers(customerInfo);
+        } catch (Exception e) {
+            logger.error("查询客户列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

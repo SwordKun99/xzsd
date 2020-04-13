@@ -3,19 +3,34 @@ package com.xzsd.pc.commodity.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.util.concurrent.ServiceManager;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
+import com.xzsd.pc.dao.CommodityClassDao;
 import com.xzsd.pc.dao.CommodityDao;
+import com.xzsd.pc.entity.CommodityClassInfo;
 import com.xzsd.pc.entity.CommodityInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-21
+ */
 
 @Service
 public class CommodityService {
 
     @Autowired(required = true)
     private CommodityDao commodityDao;
+
+    @Autowired
+    private CommodityClassDao commodityClassDao;
 
     /**
      * Commodity 新增商品
@@ -32,7 +47,7 @@ public class CommodityService {
         queryWrapper.lambda().eq(CommodityInfo::getCommodityName, commodityInfo.getCommodityName());
         int countUCommodityNo = commodityDao.selectCount(queryWrapper);
         if (0 != countUCommodityNo) {
-            return AppResponse.bizError("商品分类名称已存在，请重新输入！");
+            return AppResponse.bizError("商品名称已存在，请重新输入！");
         }
         commodityInfo.setCommodityNunmer(StringUtil.getCommonCode(2));
         commodityInfo.setIsDelete(0);
@@ -42,24 +57,6 @@ public class CommodityService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         return AppResponse.success("新增成功！");
-    }
-
-
-    /**
-     * commodity 查询商品列表（分页）
-     *
-     * @param commodityInfo
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-03-29
-     */
-    public AppResponse listCommodity(CommodityInfo commodityInfo, long time) {
-        QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CommodityInfo::getCommodityId, commodityInfo.getCommodityId());
-        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
-//        redisUtils.set(commodityInfo.getSystematicId(),pageData.getList().get(0),time);
-//        Object o = redisUtils.get(commodityInfo.getSystematicId());
-        return AppResponse.success("查询成功！", pageData);
     }
 
 
@@ -141,16 +138,16 @@ public class CommodityService {
 
 
     /**
-     * commodity 查询商家列表（分页）
+     * commodity 查询商品列表（分页）
      *
      * @param commodityInfo
      * @return
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    public AppResponse listCommodityStone(CommodityInfo commodityInfo, long time) {
+    public AppResponse listCommodity(CommodityInfo commodityInfo, long time) {
         QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CommodityInfo::getStoneId, commodityInfo.getStoneId());
+        queryWrapper.lambda().eq(CommodityInfo::getCommodityId, commodityInfo.getCommodityId());
         PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
 //        redisUtils.set(commodityInfo.getSystematicId(),pageData.getList().get(0),time);
 //        Object o = redisUtils.get(commodityInfo.getSystematicId());
@@ -158,36 +155,57 @@ public class CommodityService {
     }
 
     /**
-     * commodity 查询一级分类列表（分页）
+     * commodity 查询商家列表
      *
-     * @param commodityInfo
+     * @param
      * @return
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    public AppResponse listCommodityFirst(CommodityInfo commodityInfo, long time) {
+    public AppResponse listCommodityStone() {
         QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CommodityInfo::getCodeSortinfirst, commodityInfo.getCodeSortinfirst());
-        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
+//        queryWrapper.lambda().eq(CommodityInfo::getStoneId, commodityInfo.getStoneId());
+        List<CommodityInfo> list = commodityDao.selectList(queryWrapper);
+//        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
 //        redisUtils.set(commodityInfo.getSystematicId(),pageData.getList().get(0),time);
 //        Object o = redisUtils.get(commodityInfo.getSystematicId());
-        return AppResponse.success("查询成功！", pageData);
+        return AppResponse.success("查询成功！", list);
     }
 
     /**
-     * commodity 查询二级分类列表（分页）
+     * commodity 查询一级分类列表
+     *
+     * @param
+     * @return
+     * @Author SwordKun.
+     * @Date 2020-03-29
+     */
+    public AppResponse listCommodityFirst() {
+        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
+        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
+//        queryWrapper.lambda().eq(CommodityInfo::getCodeSortinfirst, commodityInfo.getCodeSortinfirst());
+//        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
+//        redisUtils.set(commodityInfo.getSystematicId(),pageData.getList().get(0),time);
+//        Object o = redisUtils.get(commodityInfo.getSystematicId());
+        return AppResponse.success("查询成功！", list);
+    }
+
+    /**
+     * commodity 查询二级分类列表
      *
      * @param commodityInfo
      * @return
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    public AppResponse listCommoditySecond(CommodityInfo commodityInfo, long time) {
-        QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CommodityInfo::getCodeSortsecond, commodityInfo.getCodeSortsecond());
-        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
+    /*public AppResponse listCommoditySecond(CommodityClassInfo commodityClassInfo,String parentCode) {
+        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
+        String system = listCommodityFirst(commodityClassInfo.getSystematicCode());
+        queryWrapper.lambda().eq(system, parentCode;
+        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
+//        PageInfo<CommodityInfo> pageData = PageHelper.startPage(commodityInfo.getStartPage(), commodityInfo.getPagesize()).doSelectPageInfo(() -> commodityDao.selectList(queryWrapper));
 //        redisUtils.set(commodityInfo.getSystematicId(),pageData.getList().get(0),time);
 //        Object o = redisUtils.get(commodityInfo.getSystematicId());
         return AppResponse.success("查询成功！", pageData);
-    }
+    }*/
 }

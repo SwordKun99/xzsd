@@ -6,8 +6,8 @@ import com.xzsd.pc.entity.CommodityInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName CommodityClassDao
- * @Description ComodityClass
+ * @ClassName CommodityDao
+ * @Description Commodity
  * @Author SwordKun.
  * @Date 2020-03-29
  */

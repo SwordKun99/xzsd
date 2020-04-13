@@ -6,8 +6,8 @@ import com.xzsd.pc.entity.OrderInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName CommodityClassDao
- * @Description ComodityClass
+ * @ClassName OrderDao
+ * @Description Order
  * @Author SwordKun.
  * @Date 2020-03-29
  */

@@ -15,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 //import org.springframework.jms.annotation.JmsListener;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
+
 @Service
 public class CustomerService {
     @Autowired
@@ -53,23 +59,6 @@ public class CustomerService {
         return AppResponse.success("新增成功！");
     }
 
-
-    /**
-     * customer 查询用户列表（分页）
-     *
-     * @param customerInfo
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-03-28
-     */
-    public AppResponse listCustomers(CustomerInfo customerInfo) {
-        QueryWrapper<CustomerInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().like(CustomerInfo::getCustomerName, customerInfo.getCustomerName());
-        PageInfo<CustomerInfo> pageData = PageHelper.startPage(customerInfo.getPageNum(), customerInfo.getPageSize()).doSelectPageInfo(() -> customerDao.selectList(queryWrapper));
-        return AppResponse.success("查询成功！", pageData);
-    }
-
-
     /**
      * customer 删除客户
      *
@@ -94,7 +83,6 @@ public class CustomerService {
         return appResponse;
     }
 
-
     /**
      * customer 修改客户
      *
@@ -106,7 +94,7 @@ public class CustomerService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateCustomer(CustomerInfo customerInfo) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        // 校验账号是否存在
+        // 校验客户是否存在
         QueryWrapper<CustomerInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CustomerInfo::getIsDelete, 0);
         queryWrapper.lambda().eq(CustomerInfo::getCustormerNo, customerInfo.getCustormerNo());
@@ -130,9 +118,8 @@ public class CustomerService {
         return appResponse;
     }
 
-
     /**
-     * customer 查询用户详情
+     * customer 查询客户详情
      *
      * @param customerInfo
      * @return
@@ -146,5 +133,19 @@ public class CustomerService {
         return AppResponse.success("查询成功！", info);
     }
 
+    /**
+     * customer 查询客户列表（分页）
+     *
+     * @param customerInfo
+     * @return
+     * @Author SwordKun.
+     * @Date 2020-03-28
+     */
+    public AppResponse listCustomers(CustomerInfo customerInfo) {
+        QueryWrapper<CustomerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().like(CustomerInfo::getCustomerName, customerInfo.getCustomerName());
+        PageInfo<CustomerInfo> pageData = PageHelper.startPage(customerInfo.getPageNum(), customerInfo.getPageSize()).doSelectPageInfo(() -> customerDao.selectList(queryWrapper));
+        return AppResponse.success("查询成功！", pageData);
+    }
 }
 

@@ -28,7 +28,7 @@ public class CommodityClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse saveCommodityClass(CommodityClassInfo commodityclassInfo) {
-        // 校验账号是否存在
+        // 校验商品分类是否存在
         QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CommodityClassInfo::getSystematicName, commodityclassInfo.getSystematicName());
         int countUCommodityClassNo = commodityClassDao.selectCount(queryWrapper);

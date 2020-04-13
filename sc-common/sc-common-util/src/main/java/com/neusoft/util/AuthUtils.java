@@ -56,4 +56,11 @@ public class AuthUtils {
         return "1";
     }
 
+    /**
+     * 获取当前热门位设定id
+     * @return 热门位设定id
+     */
+    public static String getCurrentGhsId(){
+        return "1";
+    }
 }

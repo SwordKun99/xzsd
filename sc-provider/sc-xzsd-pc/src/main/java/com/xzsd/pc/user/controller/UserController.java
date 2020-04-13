@@ -1,7 +1,6 @@
 package com.xzsd.pc.user.controller;
 
 
-
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
 import com.neusoft.util.UUIDUtils;
@@ -39,36 +38,16 @@ public class UserController {
      * @Date 2020-03-25
      */
     @PostMapping("saveUser")
-    public AppResponse saveUser(@RequestBody UserInfo userInfo,@RequestParam(value = "file",required = false) MultipartFile file,@RequestParam(value = "biz_msg",required = false) String biz_msg) throws Exception {
+    public AppResponse saveUser(@RequestBody UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
         try {
             //获取用户id
             String userId = AuthUtils.getCurrentUserId();
             userInfo.setCreateUser(userId);
             userInfo.setUserId(UUIDUtils.getUUID());
-            AppResponse appResponse = userService.saveUser(userInfo,biz_msg,file);
+            AppResponse appResponse = userService.saveUser(userInfo, biz_msg, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("用户新增失败", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-
-    /**
-     * user 用户列表(分页)
-     *
-     * @param userInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-03-25
-     */
-    @RequestMapping(value = "listUsers")
-    public AppResponse listUsers(@RequestBody UserInfo userInfo) {
-        try {
-            return userService.listUsers(userInfo);
-        } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -130,6 +109,25 @@ public class UserController {
             return userService.getUserByUserCode(userInfo);
         } catch (Exception e) {
             logger.error("用户查询错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * user 用户列表(分页)
+     *
+     * @param userInfo
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-03-25
+     */
+    @RequestMapping(value = "listUsers")
+    public AppResponse listUsers(@RequestBody UserInfo userInfo) {
+        try {
+            return userService.listUsers(userInfo);
+        } catch (Exception e) {
+            logger.error("查询用户列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

@@ -6,8 +6,8 @@ import com.xzsd.pc.entity.CityInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName CommodityClassDao
- * @Description ComodityClass
+ * @ClassName CityDao
+ * @Description City
  * @Author SwordKun.
  * @Date 2020-03-29
  */

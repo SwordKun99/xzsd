@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+
+/**
+ * @Description增删改查Commodity
+ * @Author SwordKun.
+ * @Date 2020-03-29
+ */
+
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
@@ -21,7 +28,6 @@ public class CommodityController {
 
     @Resource
     private CommodityService commodityService;
-
 
 
     /**
@@ -48,24 +54,6 @@ public class CommodityController {
         }
     }
 
-    /**
-     * commodity 商品列表(分页)
-     *
-     * @param commodityInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-03-29
-     */
-    @RequestMapping(value = "listCommodity")
-    public AppResponse listCommodity(@RequestBody CommodityInfo commodityInfo, long time) {
-        try {
-            return commodityService.listCommodity(commodityInfo, time);
-        } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
 
     /**
      * commodity 删除商品
@@ -109,6 +97,7 @@ public class CommodityController {
         }
     }
 
+
     /**
      * commodity 查询商品详情
      *
@@ -128,16 +117,17 @@ public class CommodityController {
         }
     }
 
+
     /**
-     * commodity 商家列表(分页)
+     * commodity 商品列表(分页)
      *
      * @param commodityInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    @RequestMapping(value = "listCommodityStone")
-    public AppResponse listCommodityStone(@RequestBody CommodityInfo commodityInfo, long time) {
+    @RequestMapping(value = "listCommodity")
+    public AppResponse listCommodity(@RequestBody CommodityInfo commodityInfo, long time) {
         try {
             return commodityService.listCommodity(commodityInfo, time);
         } catch (Exception e) {
@@ -147,18 +137,38 @@ public class CommodityController {
         }
     }
 
+
     /**
-     * commodity 一级分类列表(分页)
+     * commodity 商家列表
      *
-     * @param commodityInfo
+     * @param
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-03-29
+     */
+    @RequestMapping(value = "listCommodityStone")
+    public AppResponse listCommodityStone() {
+        try {
+            return commodityService.listCommodityStone();
+        } catch (Exception e) {
+            logger.error("查询用户列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * commodity 一级分类列表
+     *
+     * @param
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
     @RequestMapping(value = "listCommodityFirst")
-    public AppResponse listCommodityFirst(@RequestBody CommodityInfo commodityInfo, long time) {
+    public AppResponse listCommodityFirst() {
         try {
-            return commodityService.listCommodity(commodityInfo, time);
+            return commodityService.listCommodityFirst();
         } catch (Exception e) {
             logger.error("查询一级分类列表异常", e);
             System.out.println(e.toString());
@@ -167,14 +177,14 @@ public class CommodityController {
     }
 
     /**
-     * commodity 二级分类列表(分页)
+     * commodity 二级分类列表
      *
      * @param commodityInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    @RequestMapping(value = "listCommoditySecond")
+    /*@RequestMapping(value = "listCommoditySecond")
     public AppResponse listCommoditySecond(@RequestBody CommodityInfo commodityInfo, long time) {
         try {
             return commodityService.listCommodity(commodityInfo, time);
@@ -183,6 +193,6 @@ public class CommodityController {
             System.out.println(e.toString());
             throw e;
         }
-    }
+    }*/
 
 }

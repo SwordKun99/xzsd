@@ -59,14 +59,14 @@ public class ShopContorller {
      * @param shopInfo
      * @return AppResponse
      * @Author SwordKun.
-     * @Date 2020-03-25
+     * @Date 2020-04-10
      */
     @PostMapping("deleteShop")
     public AppResponse deleteShop(@RequestBody ShopInfo shopInfo) {
         try {
             return shopService.deleteShopId(shopInfo);
         } catch (Exception e) {
-            logger.error("门店删除错误", e);
+            logger.error("门店删除失败", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -78,7 +78,7 @@ public class ShopContorller {
      * @param shopInfo
      * @return AppResponse
      * @Author SwordKun.
-     * @Date 2020-04-01
+     * @Date 2020-04-10
      */
     @PostMapping("updateShop")
     public AppResponse updateShop(@RequestBody ShopInfo shopInfo) {
@@ -116,6 +116,7 @@ public class ShopContorller {
 
     /**
      * shop 查询省份列表
+     *
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
@@ -133,6 +134,7 @@ public class ShopContorller {
 
     /**
      * shop 查询市列表
+     *
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
@@ -150,6 +152,7 @@ public class ShopContorller {
 
     /**
      * shop 查询区列表
+     *
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10

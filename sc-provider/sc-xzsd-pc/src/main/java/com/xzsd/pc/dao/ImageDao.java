@@ -6,8 +6,8 @@ import com.xzsd.pc.entity.ImageInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName CommodityClassDao
- * @Description ComodityClass
+ * @ClassName ImageDao
+ * @Description Image
  * @Author SwordKun.
  * @Date 2020-03-29
  */

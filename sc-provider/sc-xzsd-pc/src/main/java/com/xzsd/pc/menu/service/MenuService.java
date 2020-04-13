@@ -12,6 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
+
 @Service
 public class MenuService {
 
@@ -28,12 +36,12 @@ public class MenuService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse saveMenu(MenuInfo menuInfo) {
-        // 校验账号是否存在
+        // 校验菜单是否存在
         QueryWrapper<MenuInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(MenuInfo::getMenuName, menuInfo.getMenuName());
         int countMenuName = menuDao.selectCount(queryWrapper);
         if (0 != countMenuName) {
-            return AppResponse.bizError("菜单名称已存在，请重新输入！");
+            return AppResponse.bizError("菜单已存在，请重新输入！");
         }
         menuInfo.setMenuNumber(StringUtil.getCommonCode(2));
         menuInfo.setIsDelete(0);
@@ -41,26 +49,9 @@ public class MenuService {
         Integer count = menuDao.insert(menuInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
-        }
+    }
         return AppResponse.success("新增成功！");
     }
-
-
-    /**
-     * menu 查询菜单列表（分页）
-     *
-     * @param menuInfo
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-03-28
-     */
-    public AppResponse listMenus(MenuInfo menuInfo) {
-        QueryWrapper<MenuInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().like(MenuInfo::getMenuName, menuInfo.getMenuName());
-        PageInfo<MenuInfo> pageData = PageHelper.startPage(menuInfo.getStartPage(), menuInfo.getPagesize()).doSelectPageInfo(() -> menuDao.selectList(queryWrapper));
-        return AppResponse.success("查询成功！", pageData);
-    }
-
 
     /**
      * menu 删除菜单
@@ -75,7 +66,7 @@ public class MenuService {
         AppResponse appResponse = AppResponse.success("删除成功！");
         menuInfo = menuDao.selectById(menuInfo.getMenuId());
         if (menuInfo == null) {
-            appResponse = AppResponse.bizError("查询不到该数据，请重试！");
+            appResponse = AppResponse.bizError("查询不到该菜单，请重试！");
             return appResponse;
         }
         menuInfo.setIsDelete(1);
@@ -85,7 +76,6 @@ public class MenuService {
         }
         return appResponse;
     }
-
 
     /**
      * menu 修改菜单
@@ -105,23 +95,22 @@ public class MenuService {
         queryWrapper.lambda().ne(MenuInfo::getMenuId, menuInfo.getMenuId());
         Integer countMenuAcct = menuDao.selectCount(queryWrapper);
         if (0 != countMenuAcct) {
-            return AppResponse.bizError("菜单名称已存在，请重新输入！");
+            return AppResponse.bizError("菜单已存在，请重新输入！");
         }
         // 修改菜单信息
         MenuInfo menuInfoOld = menuDao.selectById(menuInfo.getMenuId());
         if (menuInfoOld == null) {
-            appResponse = AppResponse.bizError("查询不到该数据，请重试！");
+            appResponse = AppResponse.bizError("查询不到该菜单，请重试！");
             return appResponse;
         }
         menuInfo.setVersion(menuInfoOld.getVersion() + 1);
         int count = menuDao.updateById(menuInfo);
         if (0 == count) {
-            appResponse = AppResponse.versionError("数据有变化，请刷新！");
+            appResponse = AppResponse.versionError("菜单信息有变化，请刷新！");
             return appResponse;
         }
         return appResponse;
     }
-
 
     /**
      * menu 查询菜单详情
@@ -136,6 +125,22 @@ public class MenuService {
         queryWrapper.lambda().eq(MenuInfo::getMenuNumber, menuInfo.getMenuNumber());
         MenuInfo info = menuDao.selectOne(queryWrapper);
         return AppResponse.success("查询成功！", info);
+    }
+
+    /**
+     * menu 查询菜单列表
+     *
+     * @param
+     * @return
+     * @Author SwordKun.
+     * @Date 2020-03-28
+     */
+    public AppResponse listMenus() {
+        QueryWrapper<MenuInfo> queryWrapper = new QueryWrapper<>();
+        List<MenuInfo> list = menuDao.selectList(queryWrapper);
+//        queryWrapper.lambda().like(MenuInfo::getMenuName, menuInfo.getMenuName());
+//        PageInfo<MenuInfo> pageData = PageHelper.startPage(menuInfo.getStartPage(), menuInfo.getPagesize()).doSelectPageInfo(() -> menuDao.selectList(queryWrapper));
+        return AppResponse.success("查询成功！", list);
     }
 
 }
