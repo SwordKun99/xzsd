@@ -98,15 +98,15 @@ public class UserController {
     /**
      * user 查询用户详情
      *
-     * @param userInfo
+     * @param userId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-25
      */
-    @RequestMapping(value = "getUserByUserCode")
-    public AppResponse getUserByUserCode(@RequestBody UserInfo userInfo) {
+    @RequestMapping(value = "getUserByUserId")
+    public AppResponse getUserByUserId(String userId) {
         try {
-            return userService.getUserByUserCode(userInfo);
+            return userService.getUserByUserId(userId);
         } catch (Exception e) {
             logger.error("用户查询错误", e);
             System.out.println(e.toString());

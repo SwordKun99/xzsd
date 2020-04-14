@@ -1,21 +1,18 @@
 package com.xzsd.pc.shop.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.dao.CityDao;
 import com.xzsd.pc.dao.DistrictDao;
 import com.xzsd.pc.dao.PrviceDao;
 import com.xzsd.pc.dao.ShopDao;
-import com.xzsd.pc.entity.CityInfo;
-import com.xzsd.pc.entity.DistrictInfo;
-import com.xzsd.pc.entity.PrviceInfo;
 import com.xzsd.pc.entity.ShopInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @DescriptionDemo 实现类
@@ -139,43 +136,17 @@ public class ShopService {
     }
 
     /**
-     * shop 省份列表
+     * shop 分页查询门店列表
      *
+     * @param shopInfo
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-10
+     * @Date 2020-04-01
      */
-    public AppResponse getProviceByIdList() {
-        QueryWrapper<PrviceInfo> queryWrapper = new QueryWrapper<>();
-        List<PrviceInfo> list = prviceDao.selectList(queryWrapper);
-        return AppResponse.success("查询成功！", list);
-    }
-
-    /**
-     * shop 查询市列表
-     *
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-04-10
-     */
-    public AppResponse getCityByPrviceCode(String proviceCode) {
-        QueryWrapper<CityInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CityInfo::getProviceCode, proviceCode);
-        List<CityInfo> list = cityDao.selectList(queryWrapper);
-        return AppResponse.success("查询成功！", list);
-    }
-
-    /**
-     * shop 查询区列表
-     *
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-04-10
-     */
-    public AppResponse getDistrictByCityCode(String cityCode) {
-        QueryWrapper<DistrictInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(DistrictInfo::getCityCode, cityCode);
-        List<DistrictInfo> list = districtDao.selectList(queryWrapper);
-        return AppResponse.success("查询成功！", list);
+    public AppResponse listShop(ShopInfo shopInfo) {
+        QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(ShopInfo::getShopId, shopInfo.getShopId());
+        PageInfo<ShopInfo> pageData = PageHelper.startPage(shopInfo.getStartPage(), shopInfo.getPagesize()).doSelectPageInfo(() -> shopDao.selectList(queryWrapper));
+        return AppResponse.success("查询成功！", pageData);
     }
 }

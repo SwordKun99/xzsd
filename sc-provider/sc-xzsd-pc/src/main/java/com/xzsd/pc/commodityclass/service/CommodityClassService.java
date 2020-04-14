@@ -49,7 +49,7 @@ public class CommodityClassService {
     /**
      * commodityclass 查询用户列表-
      *
-     * @param commodityclassInfo
+     * @param
      * @return
      * @Author SwordKun.
      * @Date 2020-03-29

@@ -2,14 +2,18 @@ package com.xzsd.pc.user.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.injector.methods.SelectList;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
+import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.CustomerInfo;
+import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.upload.service.UploadService;
+import com.xzsd.pc.util.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,9 @@ public class UserService {
     @Autowired
     private UploadService uploadService;
 
+    @Autowired
+    private FileDao fileDao;
+
     /**
      * user 新增用户
      *
@@ -46,6 +53,7 @@ public class UserService {
         if (0 != countUserAcct) {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
+        userInfo.setUserPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
         userInfo.setUserCode(StringUtil.getCommonCode(2));
         userInfo.setIsDeleted(0);
         Integer count = userDao.insert(userInfo);
@@ -117,19 +125,16 @@ public class UserService {
         return appResponse;
     }
 
-
     /**
      * user 查询用户详情
      *
-     * @param userInfo
+     * @param userId
      * @return
      * @Author SwordKun.
      * @Date 2020-03-28
      */
-    public AppResponse getUserByUserCode(UserInfo userInfo) {
-        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(UserInfo::getUserCode, userInfo.getUserCode());
-        userInfo = userDao.selectOne(queryWrapper);
+    public AppResponse getUserByUserId(String userId) {
+        UserInfo userInfo = userDao.getUserByUserId(userId);
         return AppResponse.success("查询成功！", userInfo);
     }
 
@@ -144,7 +149,7 @@ public class UserService {
     public AppResponse listUsers(UserInfo userInfo) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().like(UserInfo::getUserName, userInfo.getUserName());
-        PageInfo<CustomerInfo> pageData = PageHelper.startPage(userInfo.getPageNum(), userInfo.getPageSize()).doSelectPageInfo(() -> userDao.selectList(queryWrapper));
+        PageInfo<UserInfo> pageData = PageHelper.startPage(userInfo.getPageNum(), userInfo.getPageSize()).doSelectPageInfo(() -> userDao.selectList(queryWrapper));
         return AppResponse.success("查询成功！", pageData);
     }
 }

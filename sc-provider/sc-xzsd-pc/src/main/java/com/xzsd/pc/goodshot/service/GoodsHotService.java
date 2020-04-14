@@ -134,13 +134,13 @@ public class GoodsHotService {
      */
     public AppResponse listGoodsHots(GoodsHotInfo goodshotInfo) {
         QueryWrapper<GoodsHotInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(GoodsHotInfo::getGoodshotId, goodshotInfo.getGoodshotId());
-        PageInfo<GoodsHotInfo> pageData = PageHelper.startPage(goodshotInfo.getPageNum(), goodshotInfo.getPageSize()).doSelectPageInfo(() -> goodshotDao.selectList(queryWrapper.orderByAsc(goodshotInfo.getGoodshotId())));
+        queryWrapper.lambda().eq(GoodsHotInfo::getCommodityId, goodshotInfo.getCommodityId());
+        PageInfo<GoodsHotInfo> pageData = PageHelper.startPage(goodshotInfo.getPageNum(), goodshotInfo.getPageSize()).doSelectPageInfo(() -> goodshotDao.selectList(queryWrapper.orderByAsc(goodshotInfo.getGoodshotNun())));
         return AppResponse.success("查询成功！", pageData);
     }
 
     /**
-     * goodshot 查询热门位商品数量设定
+     * goodshot 修改热门位商品数量设定
      *
      * @param ghsInfo
      * @return

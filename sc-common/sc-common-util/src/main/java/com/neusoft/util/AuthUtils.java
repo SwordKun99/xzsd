@@ -63,4 +63,20 @@ public class AuthUtils {
     public static String getCurrentGhsId(){
         return "1";
     }
+
+    /**
+     * 获取当前司机id
+     * @return 司机id
+     */
+    public static String getCurrentDriveId(){
+        return "1";
+    }
+
+    /**
+     * 获取当前轮播图id
+     * @return 轮播图id
+     */
+    public static String getCurrentImageId(){
+        return "1";
+    }
 }

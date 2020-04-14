@@ -115,54 +115,19 @@ public class ShopContorller {
     }
 
     /**
-     * shop 查询省份列表
+     * shop 门店列表(分页)
      *
+     * @param shopInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
-    @RequestMapping(value = "getProviceByIdList")
-    public AppResponse getProviceByIdList() {
+    @RequestMapping(value = "listShop")
+    public AppResponse listShop(@RequestBody ShopInfo shopInfo) {
         try {
-            return shopService.getProviceByIdList();
+            return shopService.listShop(shopInfo);
         } catch (Exception e) {
-            logger.error("省份查询错误", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
-     * shop 查询市列表
-     *
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-10
-     */
-    @RequestMapping(value = "getCityByPrviceCode")
-    public AppResponse getCityByPrviceCode(String proviceCode) {
-        try {
-            return shopService.getCityByPrviceCode(proviceCode);
-        } catch (Exception e) {
-            logger.error("市查询错误", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
-     * shop 查询区列表
-     *
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-10
-     */
-    @RequestMapping(value = "getDistrictByCityCode")
-    public AppResponse getDistrictByCityCode(String cityCode) {
-        try {
-            return shopService.getDistrictByCityCode(cityCode);
-        } catch (Exception e) {
-            logger.error("区查询错误", e);
+            logger.error("查询门店列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

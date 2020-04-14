@@ -37,6 +37,8 @@ public class UserInfo {
     private int PageNum;
     @TableField(exist = false)
     private int PageSize;
+    @TableField(exist = false)
+    private String path;
 
     public String getUserId() {
         return userId;
@@ -230,5 +232,13 @@ public class UserInfo {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

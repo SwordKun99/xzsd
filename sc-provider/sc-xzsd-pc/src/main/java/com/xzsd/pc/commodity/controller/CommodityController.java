@@ -7,6 +7,7 @@ import com.xzsd.pc.commodity.service.CommodityService;
 import com.xzsd.pc.entity.CommodityInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +25,10 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
+
     private static final Logger logger = LoggerFactory.getLogger(CommodityController.class);
 
-    @Resource
+    @Autowired
     private CommodityService commodityService;
 
 

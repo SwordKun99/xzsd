@@ -15,7 +15,7 @@ public class ImageInfo {
     private String imageNumber;
     private String imageNo;
     private String imageUr1;
-    private String commodityNumber;
+    private String commodityId;
     private String commodityName;
     private String imageType;
     private String secondarDirectory;
@@ -73,11 +73,11 @@ public class ImageInfo {
 
 
     public String getCommodityNumber() {
-        return commodityNumber;
+        return commodityId;
     }
 
-    public void setCommodityNumber(String commodityNumber) {
-        this.commodityNumber = commodityNumber;
+    public void setCommodityNumber(String commodityId) {
+        this.commodityId = commodityId;
     }
 
 
