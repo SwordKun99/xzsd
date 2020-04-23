@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.dao.UserDao">
+    <!--用户详情-->
+    <select id="getUserByUserId" parameterType="java.lang.String" resultType="com.xzsd.app.entity.UserInfo">
+        select
+        a.user_Id userId,
+        a.user_No userNo,
+        a.user_name userName,
+        b.path path,
+        a.user_Sex userSex,
+        a.user_Phone userPhone,
+        a.user_Email userEmail,
+        a.user_Idcard userIdcard,
+        a.user_password userPassword,
+        a.role role,
+        a.version
+        from t_sys_user a left join t_file b
+        on a.user_Id = b.biz_id
+        <where>
+            a.is_Deleted = 0
+            and a.user_Id = #{userId}
+        </where>
+    </select>
+</mapper>

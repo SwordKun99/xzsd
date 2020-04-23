@@ -3,6 +3,9 @@ package com.xzsd.pc.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @TableName("t_menu")
 public class MenuInfo {
@@ -12,16 +15,19 @@ public class MenuInfo {
     private String menuNumber;
     private String menuName;
     private String menuSelection;
-    private long menuJudge;
+    private Integer menuJudge;
     private String menuRout;
-    private long isDelete;
+    private Integer isDelete;
     private String createUser;
-    private java.sql.Timestamp createTime;
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private Date createTime;
     private String updateUser;
-    private java.sql.Timestamp updateTime;
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private Date updateTime;
     private String soreNo;
-    private long version;
+    private Integer version;
     private String remake;
+    private Integer role;
 
     @TableField(exist = false)
     private int startPage;
@@ -64,30 +70,12 @@ public class MenuInfo {
     }
 
 
-    public long getMenuJudge() {
-        return menuJudge;
-    }
-
-    public void setMenuJudge(long menuJudge) {
-        this.menuJudge = menuJudge;
-    }
-
-
     public String getMenuRout() {
         return menuRout;
     }
 
     public void setMenuRout(String menuRout) {
         this.menuRout = menuRout;
-    }
-
-
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
     }
 
 
@@ -100,14 +88,21 @@ public class MenuInfo {
     }
 
 
-    public java.sql.Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(java.sql.Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public String getUpdateUser() {
         return updateUser;
@@ -118,30 +113,12 @@ public class MenuInfo {
     }
 
 
-    public java.sql.Timestamp getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(java.sql.Timestamp updateTime) {
-        this.updateTime = updateTime;
-    }
-
-
     public String getSoreNo() {
         return soreNo;
     }
 
     public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
-    }
-
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
     }
 
 
@@ -167,5 +144,37 @@ public class MenuInfo {
 
     public void setPagesize(int pagesize) {
         this.pagesize = pagesize;
+    }
+
+    public Integer getMenuJudge() {
+        return menuJudge;
+    }
+
+    public void setMenuJudge(Integer menuJudge) {
+        this.menuJudge = menuJudge;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 }

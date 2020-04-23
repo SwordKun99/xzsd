@@ -2,14 +2,14 @@ package com.xzsd.pc.goodshot.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.entity.GhsInfo;
 import com.xzsd.pc.entity.GoodsHotInfo;
+import com.xzsd.pc.entity.VO.GhsInfoVO;
+import com.xzsd.pc.entity.VO.GoodsHotInfoVO;
 import com.xzsd.pc.goodshot.service.GoodsHotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,12 +38,8 @@ public class GoodsHotController {
      * @Date 2020-04-01
      */
     @PostMapping("saveGoodsHot")
-    public AppResponse saveGoodsHot(@RequestBody GoodsHotInfo goodshotInfo) {
+    public AppResponse saveGoodsHot(GoodsHotInfo goodshotInfo) {
         try {
-            //获取热门商品id
-            String goodshotId = AuthUtils.getCurrentUserId();
-            goodshotInfo.setCreateSer(goodshotId);
-            goodshotInfo.setGoodshotId(UUIDUtils.getUUID());
             AppResponse appResponse = goodshotService.saveGoodsHot(goodshotInfo);
             return appResponse;
         } catch (Exception e) {
@@ -56,15 +52,15 @@ public class GoodsHotController {
     /**
      * goodshot 删除热门位商品
      *
-     * @param goodshotInfo
+     * @param goodhotId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
     @PostMapping("deleteGoodsHot")
-    public AppResponse deleteGoodsHot(@RequestBody GoodsHotInfo goodshotInfo) {
+    public AppResponse deleteGoodsHot(String goodhotId) {
         try {
-            return goodshotService.updateGoodsHotById(goodshotInfo);
+            return goodshotService.deleteGoodsHot(goodhotId);
         } catch (Exception e) {
             logger.error("热门商品删除失败", e);
             System.out.println(e.toString());
@@ -75,19 +71,15 @@ public class GoodsHotController {
     /**
      * goodshot 修改热门商品
      *
-     * @param goodshotInfo
+     * @param goodsHotInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
     @PostMapping("updateGoodsHot")
-    public AppResponse updategoodshot(@RequestBody GoodsHotInfo goodshotInfo) {
+    public AppResponse updategoodshot(GoodsHotInfoVO goodsHotInfoVO) {
         try {
-            //获取用户id
-            String goodshotId = AuthUtils.getCurrentUserId();
-            goodshotInfo.setCreateSer(goodshotId);
-            goodshotInfo.setUpdateUser(goodshotId);
-            return goodshotService.updateGoodsHot(goodshotInfo);
+            return goodshotService.updategoodshot(goodsHotInfoVO);
         } catch (Exception e) {
             logger.error("修改热门商品信息失败", e);
             System.out.println(e.toString());
@@ -104,7 +96,7 @@ public class GoodsHotController {
      * @Date 2020-04-01
      */
     @RequestMapping(value = "getGoodsHotByGoodsHotCode")
-    public AppResponse getGoodsHotByGoodsHotCode(@RequestBody GoodsHotInfo goodshotInfo) {
+    public AppResponse getGoodsHotByGoodsHotCode(GoodsHotInfo goodshotInfo) {
         try {
             return goodshotService.getGoodsHotByInfo(goodshotInfo);
         } catch (Exception e) {
@@ -123,7 +115,7 @@ public class GoodsHotController {
      * @Date 2020-04-01
      */
     @RequestMapping(value = "listGoodsHots")
-    public AppResponse listGoodsHots(@RequestBody GoodsHotInfo goodshotInfo) {
+    public AppResponse listGoodsHots(GoodsHotInfo goodshotInfo) {
         try {
             return goodshotService.listGoodsHots(goodshotInfo);
         } catch (Exception e) {
@@ -136,19 +128,15 @@ public class GoodsHotController {
     /**
      * goodshot 修改热门商品数量
      *
-     * @param ghsInfo
+     * @param ghsInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
     @PostMapping("updateGhs")
-    public AppResponse updateGhs(@RequestBody GhsInfo ghsInfo) {
+    public AppResponse updateGhs(GhsInfoVO ghsInfoVO) {
         try {
-            //获取设定id
-            String ghsId = AuthUtils.getCurrentGhsId();
-            ghsInfo.setCreateUser(ghsId);
-            ghsInfo.setUpdateUser(ghsId);
-            return goodshotService.updateGhs(ghsInfo);
+            return goodshotService.updateGhs(ghsInfoVO);
         } catch (Exception e) {
             logger.error("修改热门商品数量信息", e);
             System.out.println(e.toString());
@@ -159,15 +147,15 @@ public class GoodsHotController {
     /**
      * goodshot 查询热门商品展示数量
      *
-     * @param ghsInfo
+     * @param
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
     @RequestMapping(value = "getGhssumById")
-    public AppResponse getGhssumById(@RequestBody GhsInfo ghsInfo) {
+    public AppResponse getGhssumById() {
         try {
-            return goodshotService.getGhssumById(ghsInfo);
+            return goodshotService.getGhssumById();
         } catch (Exception e) {
             logger.error("热门商品展示数量查询失败", e);
             System.out.println(e.toString());

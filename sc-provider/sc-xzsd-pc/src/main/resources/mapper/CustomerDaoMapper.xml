@@ -2,5 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.dao.CustomerDao">
 
+    <!--客户列表-->
+    <select id="listCustomerByPage" parameterType="com.xzsd.pc.entity.VO.CustomerInfoVO"
+            resultType="com.xzsd.pc.entity.CustomerInfo">
+        select
+        a.customer_number customerNumber,
+        a.customer_name customerName,
+        a.custormer_no custormerNo,
+        a.customer_password customerPassword,
+        a.customer_idcode customerIdcode,
+        a.custormer_sex custormerSex,
+        a.customer_phone customerPhone,
+        a.customer_email customerEmail
+        from t_customer_information a
+        left join t_shop b on b.invitation = a.invitation
+        where a.is_delete = 0
+        <if test="userId != null and userId != ''">
+            and b.user_Id = #{userId}
+        </if>
+        <if test="custormerNo != null and custormerNo != ''">
+            and a.custormer_no like concat('%', #{custormerNo}, '%')
+        </if>
+        <if test="customerName != null and customerName != ''">
+            and a.customer_name like concat('%',#{customerName},'%')
+        </if>
+        order by a.create_user desc
+    </select>
 
 </mapper>

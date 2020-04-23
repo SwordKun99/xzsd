@@ -1,6 +1,5 @@
 package com.xzsd.pc.entity;
 
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,37 +11,49 @@ public class OrderInfo {
 
     @TableId
     private String orderId;
-    private String customerName;
-    private String shooppingName;
+    private String commodityId;
+    private String shopId;
     private String customerId;
+    private String customerName;
+    private String customerPhone;
     private double orderMoney;
     private double distnctMoney;
-    private double shoppingMoney;
+    private String goodsCnt;
     private String orderNumber;
     private long channelType;
     private double feeMoney;
-    private double goosPrice;
-    private long orderStatus;
+    private String goosNum;
+    private String orderStatus;
     private double paymentMoney;
-    private long payStatus;
-    private java.sql.Timestamp shoppingTime;
-    private java.sql.Timestamp payTime;
-    private java.sql.Timestamp receiveTime;
+    private Date payTimeend;
+    private Date payTimestart;
+    private String payStatus;
+    private Date shoppingTime;
+    private Date payTime;
+    private Date receiveTime;
     private String stoneNumber;
     private long isDelete;
     private String createSer;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
+    private String soreNo;
     private long version;
     private String remark;
-    private long goodsCnt;
 
     @TableField(exist = false)
-    private int startPage;
+    private int pageSize;
     @TableField(exist = false)
-    private int pagesize;
+    private int pageNum;
+
+
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
+    }
 
 
     public String getOrderId() {
@@ -54,21 +65,12 @@ public class OrderInfo {
     }
 
 
-    public String getCustomerName() {
-        return customerName;
+    public String getShopId() {
+        return shopId;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-
-    public String getShooppingName() {
-        return shooppingName;
-    }
-
-    public void setShooppingName(String shooppingName) {
-        this.shooppingName = shooppingName;
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 
 
@@ -80,6 +82,21 @@ public class OrderInfo {
         this.customerId = customerId;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
 
     public double getOrderMoney() {
         return orderMoney;
@@ -99,12 +116,12 @@ public class OrderInfo {
     }
 
 
-    public double getShoppingMoney() {
-        return shoppingMoney;
+    public String getGoodsCnt() {
+        return goodsCnt;
     }
 
-    public void setShoppingMoney(double shoppingMoney) {
-        this.shoppingMoney = shoppingMoney;
+    public void setGoodsCnt(String goodsCnt) {
+        this.goodsCnt = goodsCnt;
     }
 
 
@@ -135,20 +152,20 @@ public class OrderInfo {
     }
 
 
-    public double getGoosPrice() {
-        return goosPrice;
+    public String getGoosNum() {
+        return goosNum;
     }
 
-    public void setGoosPrice(double goosPrice) {
-        this.goosPrice = goosPrice;
+    public void setGoosNum(String goosNum) {
+        this.goosNum = goosNum;
     }
 
 
-    public long getOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(long orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -162,36 +179,86 @@ public class OrderInfo {
     }
 
 
-    public long getPayStatus() {
-        return payStatus;
+    public Date getPayTimeend() {
+        return payTimeend;
     }
 
-    public void setPayStatus(long payStatus) {
-        this.payStatus = payStatus;
+    public void setPayTimeend(Date payTimeend) {
+        this.payTimeend = payTimeend;
     }
 
+    public Date getPayTimestart() {
+        return payTimestart;
+    }
 
-    public java.sql.Timestamp getShoppingTime() {
+    public void setPayTimestart(Date payTimestart) {
+        this.payTimestart = payTimestart;
+    }
+
+    public Date getShoppingTime() {
         return shoppingTime;
     }
 
-    public void setShoppingTime(java.sql.Timestamp shoppingTime) {
+    public void setShoppingTime(Date shoppingTime) {
         this.shoppingTime = shoppingTime;
     }
 
-
-    public java.sql.Timestamp getPayTime() {
+    public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(java.sql.Timestamp payTime) {
+    public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
 
-
-    public java.sql.Timestamp getReceiveTime() {
+    public Date getReceiveTime() {
         return receiveTime;
     }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+
 
     public void setReceiveTime(java.sql.Timestamp receiveTime) {
         this.receiveTime = receiveTime;
@@ -225,14 +292,6 @@ public class OrderInfo {
     }
 
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getUpdateUser() {
         return updateUser;
     }
@@ -242,19 +301,11 @@ public class OrderInfo {
     }
 
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public long getSoreNo() {
+    public String getSoreNo() {
         return soreNo;
     }
 
-    public void setSoreNo(long soreNo) {
+    public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
     }
 
@@ -276,29 +327,4 @@ public class OrderInfo {
         this.remark = remark;
     }
 
-
-    public long getGoodsCnt() {
-        return goodsCnt;
-    }
-
-    public void setGoodsCnt(long goodsCnt) {
-        this.goodsCnt = goodsCnt;
-    }
-
-
-    public int getStartPage() {
-        return startPage;
-    }
-
-    public void setStartPage(int startPage) {
-        this.startPage = startPage;
-    }
-
-    public int getPagesize() {
-        return pagesize;
-    }
-
-    public void setPagesize(int pagesize) {
-        this.pagesize = pagesize;
-    }
 }

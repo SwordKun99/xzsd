@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/com.neusoft-sc-xzsd-pc.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/com.neusoft-sc-xzsd-pc.iml" group="sc2019/sc-provider/sc-xzsd-pc" />
       <module fileurl="file://$PROJECT_DIR$/sc-monitor/sc-admin-server/sc-admin-server.iml" filepath="$PROJECT_DIR$/sc-monitor/sc-admin-server/sc-admin-server.iml" group="sc2019/sc-monitor/sc-admin-server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-monitor/sc-admin-server/sc-admin-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-monitor/sc-admin-server/sc-admin-server_main.iml" group="sc2019/sc-monitor/sc-admin-server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-monitor/sc-admin-server/sc-admin-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-monitor/sc-admin-server/sc-admin-server_test.iml" group="sc2019/sc-monitor/sc-admin-server" />
@@ -86,7 +87,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app.iml" group="sc2019/sc-provider/sc-xzsd-app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app_main.iml" group="sc2019/sc-provider/sc-xzsd-app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-app/sc-xzsd-app_test.iml" group="sc2019/sc-provider/sc-xzsd-app" />
-      <module fileurl="file://$PROJECT_DIR$/sc-provider/sc-xzsd-pc/sc-xzsd-pc.iml" filepath="$PROJECT_DIR$/sc-provider/sc-xzsd-pc/sc-xzsd-pc.iml" group="sc2019/sc-provider/sc-xzsd-pc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/sc-xzsd-pc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/sc-xzsd-pc_main.iml" group="sc2019/sc-provider/sc-xzsd-pc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/sc-xzsd-pc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sc-provider/sc-xzsd-pc/sc-xzsd-pc_test.iml" group="sc2019/sc-provider/sc-xzsd-pc" />
       <module fileurl="file://$PROJECT_DIR$/sc-monitor/sc-zipkin-server/sc-zipkin-server.iml" filepath="$PROJECT_DIR$/sc-monitor/sc-zipkin-server/sc-zipkin-server.iml" group="sc2019/sc-monitor/sc-zipkin-server" />

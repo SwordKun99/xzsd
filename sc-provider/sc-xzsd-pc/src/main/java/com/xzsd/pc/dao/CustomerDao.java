@@ -2,7 +2,10 @@ package com.xzsd.pc.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.pc.entity.CustomerInfo;
+import com.xzsd.pc.entity.VO.CustomerInfoVO;
 import org.mapstruct.Mapper;
+
+import java.util.List;
 
 /**
  * @ClassName CustomerDao
@@ -12,5 +15,12 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface CustomerDao extends BaseMapper<CustomerInfo> {
+    /**
+     * 获取所有客户信息
+     *
+     * @param customerInfo 用户信息
+     * @return 所有用户信息
+     */
+    List<CustomerInfo> listCustomerByPage(CustomerInfoVO customerInfo);
 
 }

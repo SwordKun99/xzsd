@@ -3,12 +3,9 @@ spring:
     auto: true
     proxy-target-class: true
   redis:
-#    host: 47.92.101.6
-#    password: dnc.2009
-#    database: 10
     host: 127.0.0.1
-    port: 6379
     database: 0
+    port: 6379
     password: sjksjk12355
   datasource:
     name: dataSource
@@ -32,8 +29,6 @@ spring:
 mybatis:
   mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
   config-location: classpath:mybatis/mybatis-config.xml
-  #扫描映射文件
-  type-aliases-package: com.entity
 security:
   oauth2:
     resource:

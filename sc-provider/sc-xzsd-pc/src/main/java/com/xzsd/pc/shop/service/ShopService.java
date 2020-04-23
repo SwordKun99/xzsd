@@ -4,15 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
-import com.xzsd.pc.dao.CityDao;
-import com.xzsd.pc.dao.DistrictDao;
-import com.xzsd.pc.dao.PrviceDao;
+import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.ShopDao;
 import com.xzsd.pc.entity.ShopInfo;
+import com.xzsd.pc.entity.VO.ShopInfoVO;
+import com.xzsd.pc.upload.service.UploadService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @DescriptionDemo 实现类
@@ -27,13 +34,8 @@ public class ShopService {
     private ShopDao shopDao;
 
     @Autowired
-    private PrviceDao prviceDao;
+    private UploadService uploadService;
 
-    @Autowired
-    private CityDao cityDao;
-
-    @Autowired
-    private DistrictDao districtDao;
 
     /**
      * shop 新增门店
@@ -44,7 +46,7 @@ public class ShopService {
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveShop(ShopInfo shopInfo) {
+    public AppResponse saveShop(ShopInfo shopInfo, String biz_msg, MultipartFile file) throws Exception {
         // 校验门店是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
@@ -52,11 +54,32 @@ public class ShopService {
         if (0 != countUserAcct) {
             return AppResponse.bizError("门店已存在，请重新输入");
         }
+        QueryWrapper<ShopInfo> shopTel = new QueryWrapper<>();
+        shopTel.lambda().eq(ShopInfo::getShopTel, shopInfo.getShopTel());
+        int countTel = shopDao.selectCount(shopTel);
+        if (0 != countTel) {
+            return AppResponse.bizError("门店电话号码已注册，请重新输入！");
+        }
+        QueryWrapper<ShopInfo> shopbus = new QueryWrapper<>();
+        shopbus.lambda().eq(ShopInfo::getBusinessNumber, shopInfo.getBusinessNumber());
+        int countBus = shopDao.selectCount(shopbus);
+        if (0 != countBus) {
+            return AppResponse.bizError("营业执照已存在，请重新输入！");
+        }
         shopInfo.setShopNumber(StringUtil.getCommonCode(2));
         shopInfo.setIsDelete(0);
+        shopInfo.setVersion(0);
+        shopInfo.setCreateTime(new Date());
+        //获取操作人id
+        String createUserId = SecurityUtils.getCurrentUserId();
+        shopInfo.setCreateSer(createUserId);
+        shopInfo.setShopId(UUIDUtils.getUUID());
         Integer count = shopDao.insert(shopInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试");
+        }
+        if (file != null) {
+            uploadService.uploadImage(biz_msg, shopInfo.getShopId(), file);
         }
         return AppResponse.success("新增成功");
     }
@@ -64,60 +87,76 @@ public class ShopService {
     /**
      * shop 删除门店
      *
-     * @param shopInfo
+     * @param shopId
      * @return
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteShopId(ShopInfo shopInfo) {
-        AppResponse appResponse = AppResponse.success("删除成功！");
-        shopInfo = shopDao.selectById(shopInfo.getUserId());
-        if (shopInfo == null) {
-            appResponse = AppResponse.bizError("查询不到该门店，请重试！");
-            return appResponse;
+    public AppResponse deleteShop(String shopId) {
+        List<String> idList = Arrays.asList(shopId.split(","));
+        List<ShopInfo> shopInfoList = shopDao.selectBatchIds(idList);
+        if (shopInfoList != null && shopInfoList.size() <= 0) {
+            return AppResponse.bizError("查询不到该数据，请重试！");
         }
-        shopInfo.setIsDelete(1);
-        int count = shopDao.updateById(shopInfo);
-        if (0 == count) {
-            appResponse = AppResponse.bizError("删除失败，请重试！");
+        int count = 0;
+        for (ShopInfo userInfo : shopInfoList) {
+            userInfo.setUpdateUser(SecurityUtils.getCurrentUserId());
+            userInfo.setUpdateTime(new Date());
+            userInfo.setIsDelete(1);
+            count = shopDao.updateById(userInfo);
+            if (0 == count) {
+                return AppResponse.bizError("删除失败，请重试！");
+            }
         }
-        return appResponse;
+        return AppResponse.success("删除成功！");
     }
 
     /**
      * shop 修改门店
      *
-     * @param shopInfo
+     * @param shopInfoVO
      * @return
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateShop(ShopInfo shopInfo) {
+    public AppResponse updateShop(ShopInfoVO shopInfoVO) {
         AppResponse appResponse = AppResponse.success("修改成功");
         // 校验账号是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ShopInfo::getIsDelete, 0);
-        queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
-        queryWrapper.lambda().ne(ShopInfo::getShopId, shopInfo.getUserId());
+        queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfoVO.getShopName());
+        queryWrapper.lambda().ne(ShopInfo::getShopId, shopInfoVO.getShopId());
         Integer countShopAcct = shopDao.selectCount(queryWrapper);
         if (0 != countShopAcct) {
             return AppResponse.bizError("门店账号已存在，请重新输入！");
         }
-        ShopInfo shopInfoOld = shopDao.selectById(shopInfo.getUserId());
+        QueryWrapper<ShopInfo> shopTel = new QueryWrapper<>();
+        shopTel.lambda().ne(ShopInfo::getShopId, shopInfoVO.getShopId());
+        queryWrapper.lambda().eq(ShopInfo::getIsDelete, 0);
+        shopTel.lambda().eq(ShopInfo::getShopTel, shopInfoVO.getShopTel());
+        int countTel = shopDao.selectCount(shopTel);
+        if (0 != countTel) {
+            return AppResponse.bizError("门店电话号码已存在，请重新输入！");
+        }
+        ShopInfo shopInfoOld = shopDao.selectById(shopInfoVO.getShopId());
         if (shopInfoOld == null) {
             appResponse = AppResponse.bizError("查询不到该门店，请重试！");
             return appResponse;
         }
+        ShopInfo shopInfo = new ShopInfo();
+        BeanUtils.copyProperties(shopInfoVO, shopInfo);
         shopInfo.setVersion(shopInfoOld.getVersion() + 1);
+        shopInfo.setUpdateTime(new Date());
+        String updateUseId = SecurityUtils.getCurrentUserId();
+        shopInfo.setUpdateUser(updateUseId);
         // 修改用户信息
         int count = shopDao.updateById(shopInfo);
         if (0 == count) {
-            appResponse = AppResponse.versionError("门店信息有变化，请刷新！");
-            return appResponse;
+            return AppResponse.bizError("修改失败，请重试");
         }
-        return appResponse;
+        return AppResponse.success("修改成功");
     }
 
     /**
@@ -130,7 +169,7 @@ public class ShopService {
      */
     public AppResponse getUserByShopNumber(ShopInfo shopInfo) {
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getShopNumber, shopInfo.getShopNumber());
+        queryWrapper.lambda().eq(ShopInfo::getShopId, shopInfo.getShopId());
         shopInfo = shopDao.selectOne(queryWrapper);
         return AppResponse.success("查询成功！", shopInfo);
     }
@@ -145,8 +184,26 @@ public class ShopService {
      */
     public AppResponse listShop(ShopInfo shopInfo) {
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getShopId, shopInfo.getShopId());
-        PageInfo<ShopInfo> pageData = PageHelper.startPage(shopInfo.getStartPage(), shopInfo.getPagesize()).doSelectPageInfo(() -> shopDao.selectList(queryWrapper));
-        return AppResponse.success("查询成功！", pageData);
+        queryWrapper.lambda().eq(ShopInfo::getIsDelete, 0);
+        if (shopInfo.getShopNumber() != null && shopInfo.getShopNumber() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getShopNumber, shopInfo.getShopNumber());
+        }
+        if (shopInfo.getShopName() != null && shopInfo.getShopName() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
+        }
+        if (shopInfo.getUserName() != null && shopInfo.getUserName() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getUserName, shopInfo.getUserName());
+        }
+        if (shopInfo.getProvince() != null && shopInfo.getProvince() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getProvince, shopInfo.getProvince());
+        }
+        if (shopInfo.getCity() != null && shopInfo.getCity() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getCity, shopInfo.getCity());
+        }
+        if (shopInfo.getDistrict() != null && shopInfo.getDistrict() != "") {
+            queryWrapper.lambda().eq(ShopInfo::getDistrict, shopInfo.getDistrict());
+        }
+        PageInfo<ShopInfo> pageData = PageHelper.startPage(shopInfo.getPageNum(), shopInfo.getPageSize()).doSelectPageInfo(() -> shopDao.selectList(queryWrapper));
+        return AppResponse.success("查询门店列表成功", pageData);
     }
 }

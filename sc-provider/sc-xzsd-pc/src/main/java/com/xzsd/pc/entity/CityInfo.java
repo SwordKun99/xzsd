@@ -7,20 +7,20 @@ import java.util.Date;
 
 
 @TableName("d_city")
-public class CityInfo{
+public class CityInfo {
 
     @TableId
     private String cityId;
     private String cityCode;
     private String cityName;
     private String proviceCode;
-    private long isDelete;
+    private Integer isDelete;
     private String createUser;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
 
 
     public String getCityId() {
@@ -59,15 +59,6 @@ public class CityInfo{
     }
 
 
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
-    }
-
-
     public String getCreateUser() {
         return createUser;
     }
@@ -94,21 +85,35 @@ public class CityInfo{
         this.createTime = createTime;
     }
 
-    public long getSoreNo() {
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getSoreNo() {
         return soreNo;
     }
 
-    public void setSoreNo(long soreNo) {
+    public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
     }
 
-
-    public long getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

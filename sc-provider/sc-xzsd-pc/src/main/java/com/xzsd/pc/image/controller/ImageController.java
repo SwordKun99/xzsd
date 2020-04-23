@@ -2,12 +2,17 @@ package com.xzsd.pc.image.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.entity.ImageInfo;
+import com.xzsd.pc.entity.VO.ImageInfoVO;
 import com.xzsd.pc.image.service.ImageService;
+import com.xzsd.pc.upload.service.UploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -26,9 +31,12 @@ public class ImageController {
     @Resource
     private ImageService imageService;
 
+    @Autowired
+    private UploadService uploadService;
+
 
     /**
-     * image 新增用户
+     * image 新增轮播图
      *
      * @param imageInfo
      * @return AppResponse
@@ -36,33 +44,29 @@ public class ImageController {
      * @Date 2020-04-13
      */
     @PostMapping("saveImage")
-    public AppResponse saveImage(@RequestBody ImageInfo imageInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveImage(ImageInfo imageInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
         try {
-            //获取用户id
-            String imageId = AuthUtils.getCurrentImageId();
-            imageInfo.setCreateSer(imageId);
-            imageInfo.setImageId(UUIDUtils.getUUID());
             AppResponse appResponse = imageService.saveImage(imageInfo, biz_msg, file);
             return appResponse;
         } catch (Exception e) {
-            logger.error("用户新增失败", e);
+            logger.error("轮播图新增失败", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * image 删除用户
+     * image 删除轮播图
      *
-     * @param imageInfo
+     * @param imageId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
     @PostMapping("deleteImage")
-    public AppResponse deleteImage(@RequestBody ImageInfo imageInfo) {
+    public AppResponse deleteImage(String imageId) {
         try {
-            return imageService.deleImage(imageInfo);
+            return imageService.deleImage(imageId);
         } catch (Exception e) {
             logger.error("轮播图删除错误", e);
             System.out.println(e.toString());
@@ -71,65 +75,60 @@ public class ImageController {
     }
 
     /**
-     * image 修改用户
+     * image 修改轮播图
      *
-     * @param imageInfo
+     * @param imageInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
     @PostMapping("updateImage")
-    public AppResponse updateImage(@RequestBody ImageInfo imageInfo) {
+    public AppResponse updateImage(ImageInfoVO imageInfoVO) {
         try {
-            //获取用户id
-            String imageId = AuthUtils.getCurrentImageId();
-            imageInfo.setCreateSer(imageId);
-            imageInfo.setUpdateUser(imageId);
-            return imageService.updateImage(imageInfo);
+            return imageService.updateImage(imageInfoVO);
         } catch (Exception e) {
-            logger.error("修改用户信息错误", e);
+            logger.error("修改轮播图信息错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * image 查询用户详情
+     * image 分页查询轮播图详情
      *
      * @param imageInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
-    @RequestMapping(value = "getImageByImageCode")
-    public AppResponse getImageByImageCode(@RequestBody ImageInfo imageInfo, String biz_id) {
+    @RequestMapping(value = "getImageByImageType")
+    public AppResponse getImageByImageType(ImageInfo imageInfo) {
         try {
-            return imageService.getImageByImageCode(imageInfo, biz_id);
+            return imageService.getImageByImageType(imageInfo);
         } catch (Exception e) {
-            logger.error("用户查询错误", e);
+            logger.error("轮播图查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * image 用户列表(分页)
+     * commodity 查询商品详情
      *
-     * @param imageInfo
+     * @param imageId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
-    @RequestMapping(value = "listImages")
-    public AppResponse listImages(@RequestBody ImageInfo imageInfo) {
+    @RequestMapping(value = "getComByCommodityInfo")
+    public AppResponse getComByCommodityInfo(String imageId) {
         try {
-            return imageService.listImages(imageInfo);
+            return imageService.getComByCommodityInfo(imageId);
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("商品查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
-
 
 }

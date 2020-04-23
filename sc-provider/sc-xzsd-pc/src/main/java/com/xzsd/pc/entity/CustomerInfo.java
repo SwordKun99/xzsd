@@ -12,6 +12,7 @@ import java.util.Date;
 public class CustomerInfo implements Serializable {
     @TableId
     private String customerId;
+    private String invitation;
     private String customerNumber;
     private String customerName;
     private String custormerSex;
@@ -21,19 +22,21 @@ public class CustomerInfo implements Serializable {
     private String custormerNo;
     private String customerPassword;
     private String customerAddress;
-    private long isDelete;
+    private Integer isDelete;
     private String createUser;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
     private String customerScore;
 
     @TableField(exist = false)
     private int pageSize;
     @TableField(exist = false)
     private int pageNum;
+    @TableField(exist = false)
+    private String path;
 
 
     public String getCustomerId() {
@@ -116,14 +119,6 @@ public class CustomerInfo implements Serializable {
         this.customerAddress = customerAddress;
     }
 
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -156,21 +151,6 @@ public class CustomerInfo implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public long getSoreNo() {
-        return soreNo;
-    }
-
-    public void setSoreNo(long soreNo) {
-        this.soreNo = soreNo;
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
 
     public String getCustomerScore() {
         return customerScore;
@@ -194,6 +174,46 @@ public class CustomerInfo implements Serializable {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getSoreNo() {
+        return soreNo;
+    }
+
+    public void setSoreNo(String soreNo) {
+        this.soreNo = soreNo;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public String getInvitation() {
+        return invitation;
+    }
+
+    public void setInvitation(String invitation) {
+        this.invitation = invitation;
     }
 
     @Override

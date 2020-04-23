@@ -2,18 +2,22 @@ package com.xzsd.pc.commodity.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.commodity.service.CommodityService;
+import com.xzsd.pc.dao.CommodityDao;
 import com.xzsd.pc.entity.CommodityInfo;
+import com.xzsd.pc.entity.FileInfo;
+import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -41,13 +45,9 @@ public class CommodityController {
      * @Date 2020-03-29
      */
     @PostMapping("saveCommodity")
-    public AppResponse saveCommodity(@RequestBody CommodityInfo commodityInfo) {
+    public AppResponse saveCommodity(CommodityInfo commodityInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
         try {
-            //获取商品分类id
-            String commodityId = AuthUtils.getCurrentCommodityId();
-            commodityInfo.setCreateUser(commodityId);
-            commodityInfo.setCommodityId(UUIDUtils.getUUID());
-            AppResponse appResponse = commodityService.saveCommodity(commodityInfo);
+            AppResponse appResponse = commodityService.saveCommodity(commodityInfo, biz_msg, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("商品分类新增失败", e);
@@ -60,15 +60,15 @@ public class CommodityController {
     /**
      * commodity 删除商品
      *
-     * @param commodityInfo
+     * @param commodityId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
     @PostMapping("deleteCommodity")
-    public AppResponse deleteCommodity(@RequestBody CommodityInfo commodityInfo) {
+    public AppResponse deleteCommodity(String commodityId) {
         try {
-            return commodityService.updateCommodityById(commodityInfo);
+            return commodityService.deleteCommodity(commodityId);
         } catch (Exception e) {
             logger.error("商品分类删除错误", e);
             System.out.println(e.toString());
@@ -79,19 +79,15 @@ public class CommodityController {
     /**
      * commodity 修改商品
      *
-     * @param commodityInfo
+     * @param commodityInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-25
      */
     @PostMapping("updateCommodity")
-    public AppResponse updateCommodity(@RequestBody CommodityInfo commodityInfo) {
+    public AppResponse updateCommodity(CommodityInfoVO commodityInfoVO) {
         try {
-            //获取商品分类id
-            String commodityId = AuthUtils.getCurrentCommodityId();
-            commodityInfo.setCreateUser(commodityId);
-            commodityInfo.setUpdateUser(commodityId);
-            return commodityService.updateCommodity(commodityInfo);
+            return commodityService.updateCommodity(commodityInfoVO);
         } catch (Exception e) {
             logger.error("修改商品分类信息错误", e);
             System.out.println(e.toString());
@@ -103,17 +99,17 @@ public class CommodityController {
     /**
      * commodity 查询商品详情
      *
-     * @param commodityInfo
+     * @param commodityId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-25
      */
     @RequestMapping(value = "getCommodityByInfo")
-    public AppResponse getCommodityByInfo(@RequestBody CommodityInfo commodityInfo) {
+    public AppResponse getCommodityByInfo(String commodityId) {
         try {
-            return commodityService.getCommodityByInfo(commodityInfo);
+            return commodityService.getCommodityByInfo(commodityId);
         } catch (Exception e) {
-            logger.error("商品分类查询错误", e);
+            logger.error("商品查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -129,11 +125,11 @@ public class CommodityController {
      * @Date 2020-03-29
      */
     @RequestMapping(value = "listCommodity")
-    public AppResponse listCommodity(@RequestBody CommodityInfo commodityInfo, long time) {
+    public AppResponse listCommodity(CommodityInfo commodityInfo) {
         try {
-            return commodityService.listCommodity(commodityInfo, time);
+            return commodityService.listCommodity(commodityInfo);
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询商品列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -153,14 +149,14 @@ public class CommodityController {
         try {
             return commodityService.listCommodityStone();
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询商家列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * commodity 一级分类列表
+     * commodity 查询上级分类列表
      *
      * @param
      * @return AppResponse
@@ -172,29 +168,66 @@ public class CommodityController {
         try {
             return commodityService.listCommodityFirst();
         } catch (Exception e) {
-            logger.error("查询一级分类列表异常", e);
+            logger.error("查询上级分类列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * commodity 二级分类列表
+     * commodity 查询二级分类列表
      *
-     * @param commodityInfo
+     * @param
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    /*@RequestMapping(value = "listCommoditySecond")
-    public AppResponse listCommoditySecond(@RequestBody CommodityInfo commodityInfo, long time) {
+    @RequestMapping(value = "listCommoditySencond")
+    public AppResponse listCommoditySencond(String parentCode) {
         try {
-            return commodityService.listCommodity(commodityInfo, time);
+            return commodityService.listCommoditySencond(parentCode);
         } catch (Exception e) {
-            logger.error("查询二级分类列表异常", e);
+            logger.error("区查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
-    }*/
+    }
 
+    /**
+     * commodity 商品上下架
+     *
+     * @param commodityInfoVO
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-03-29
+     */
+    @PostMapping("updateComState")
+    public AppResponse updateComState(CommodityInfoVO commodityInfoVO) {
+        try {
+            return commodityService.updateComState(commodityInfoVO);
+        } catch (Exception e) {
+            logger.error("商品修改上下架错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * user 修改商品图片
+     *
+     * @param fileInfo
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-15
+     */
+    @PostMapping("updateImage")
+    public AppResponse updateImage(FileInfo fileInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+        try {
+            return commodityService.updateImage(fileInfo, biz_msg, file);
+        } catch (Exception e) {
+            logger.error("修改商品图片错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

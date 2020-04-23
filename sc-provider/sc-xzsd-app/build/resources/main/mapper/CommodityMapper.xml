@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.dao.CommodityDao">
+
+    <!--查询热门商品列表-->
+    <select id="getGoodsList" parameterType="com.xzsd.app.entity.CommodityInfo"
+            resultType="com.xzsd.app.entity.CommodityInfo">
+      select
+        a.*,
+        (select f.path from t_file f where f.biz_id = a.commodity_id order by f.create_time asc limit 1) as path
+      from t_commodity a
+      where a.is_delete = 0
+        <if test="systematicCode != null and systematicCode != ''">
+            and a.systematic_code = #{systematicCode}
+        </if>
+    </select>
+
+
+</mapper>

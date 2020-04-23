@@ -96,7 +96,7 @@ public class UploadService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteimage(String filId) throws Exception {
-        AppResponse appResponse = AppResponse.success("删除成功！");
+        AppResponse appResponse = AppResponse.success("删除成功!");
         //数据库删除
         FileInfo fileInfo = fileDao.selectById(filId);
         if (fileInfo == null) {

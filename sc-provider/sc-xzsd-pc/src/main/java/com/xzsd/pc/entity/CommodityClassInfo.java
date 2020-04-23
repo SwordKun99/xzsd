@@ -14,17 +14,16 @@ public class CommodityClassInfo implements Serializable {
     private String systematicId;
     private String systematicCode;
     private String systematicName;
-    private String commodityId;
     private String parentCode;
     private String parentName;
     private String systematicRemark;
-    private long isDelete;
+    private Integer isDelete;
     private String createSer;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
     private String soreNo;
-    private long version;
+    private Integer version;
 
     @TableField(exist = false)
     private int pageSize;
@@ -66,15 +65,6 @@ public class CommodityClassInfo implements Serializable {
     }
 
 
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-
-
     public String getParentName() {
         return parentName;
     }
@@ -89,15 +79,6 @@ public class CommodityClassInfo implements Serializable {
 
     public void setSystematicRemark(String systematicRemark) {
         this.systematicRemark = systematicRemark;
-    }
-
-
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
     }
 
 
@@ -144,14 +125,6 @@ public class CommodityClassInfo implements Serializable {
     }
 
 
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
     public int getPageSize() {
         return pageSize;
     }
@@ -166,5 +139,21 @@ public class CommodityClassInfo implements Serializable {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

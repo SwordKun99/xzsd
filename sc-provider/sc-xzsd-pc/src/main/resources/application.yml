@@ -65,7 +65,8 @@ mybatis:
   type-aliases-package: com.entity
 sc:
   cloud:
-    dev: true
+#    dev: true
+    debug: true
     task:
       core-pool-size: 20
       max-pool-size: 50
@@ -82,3 +83,9 @@ mvc:
   thymeleaf:
     #关闭thymeleaf缓存 开发时使用 否则没有实时画面
     cache: false
+# 打印sql
+logging:
+  level:
+    jdbc.sqltiming: DEBUG
+    com.xzsd.pc.dao: DEBUG
+

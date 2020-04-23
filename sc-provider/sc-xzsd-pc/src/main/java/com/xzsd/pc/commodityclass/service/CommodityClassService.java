@@ -2,13 +2,16 @@ package com.xzsd.pc.commodityclass.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
+import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CommodityClassDao;
 import com.xzsd.pc.entity.CommodityClassInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,6 +40,11 @@ public class CommodityClassService {
         }
         commodityclassInfo.setSystematicCode(StringUtil.getCommonCode(2));
         commodityclassInfo.setIsDelete(0);
+        commodityclassInfo.setVersion(0);
+        commodityclassInfo.setCreateTime(new Date());
+        String createUserId = SecurityUtils.getCurrentUserId();
+        commodityclassInfo.setCreateSer(createUserId);
+        commodityclassInfo.setSystematicId(UUIDUtils.getUUID());
         // 新增商品分类
         Integer count = commodityClassDao.insert(commodityclassInfo);
         if (0 == count) {
@@ -44,26 +52,6 @@ public class CommodityClassService {
         }
         return AppResponse.success("新增成功！");
     }
-
-
-    /**
-     * commodityclass 查询用户列表-
-     *
-     * @param
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-03-29
-     */
-    public AppResponse listCommodityClass() {
-        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.lambda().eq(CommodityClassInfo::getSystematicId, commodityclassInfo.getSystematicId());
-        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
-//        PageInfo<CommodityClassInfo> pageData = PageHelper.startPage(commodityclassInfo.getPageNum(), commodityclassInfo.getPageSize()).doSelectPageInfo(() -> commodityClassDao.selectList(queryWrapper));
-//        redisUtils.set(commodityclassInfo.getSystematicId(),pageData.getList().get(0),time);
-//        Object o = redisUtils.get(commodityclassInfo.getSystematicId());
-        return AppResponse.success("查询成功！", list);
-    }
-
 
     /**
      * commodityclass 删除商品分类
@@ -89,7 +77,6 @@ public class CommodityClassService {
         }
         return appResponse;
     }
-
 
     /**
      * commodityclass 修改商品分类
@@ -128,7 +115,7 @@ public class CommodityClassService {
 
 
     /**
-     * commodityclass 查询用户详情
+     * commodityclass 查询分类详情
      *
      * @param commodityclassInfo
      * @return
@@ -142,5 +129,17 @@ public class CommodityClassService {
         return AppResponse.success("查询成功！", info);
     }
 
-
+    /**
+     * commodityclass 查询商品分类列表-
+     *
+     * @param
+     * @return
+     * @Author SwordKun.
+     * @Date 2020-03-29
+     */
+    public AppResponse listCommodityClass() {
+        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
+        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
+        return AppResponse.success("查询成功！", list);
+    }
 }

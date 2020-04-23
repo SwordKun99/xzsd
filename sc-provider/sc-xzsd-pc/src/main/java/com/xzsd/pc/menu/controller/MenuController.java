@@ -2,13 +2,12 @@ package com.xzsd.pc.menu.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.entity.MenuInfo;
+import com.xzsd.pc.entity.VO.MenuInfoVO;
 import com.xzsd.pc.menu.service.MenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,12 +35,8 @@ public class MenuController {
      * @Date 2020-03-28
      */
     @PostMapping("saveMenu")
-    public AppResponse saveMenu(@RequestBody MenuInfo menuInfo) {
+    public AppResponse saveMenu(MenuInfo menuInfo) {
         try {
-            //获取菜单id
-            String menuId = AuthUtils.getCurrentUserId();
-            menuInfo.setCreateUser(menuId);
-            menuInfo.setMenuId(UUIDUtils.getUUID());
             AppResponse appResponse = menuService.saveMenu(menuInfo);
             return appResponse;
         } catch (Exception e) {
@@ -60,7 +55,7 @@ public class MenuController {
      * @Date 2020-03-28
      */
     @PostMapping("deleteMenu")
-    public AppResponse deleteMenu(@RequestBody MenuInfo menuInfo) {
+    public AppResponse deleteMenu(MenuInfo menuInfo) {
         try {
             return menuService.updateMenuById(menuInfo);
         } catch (Exception e) {
@@ -73,19 +68,15 @@ public class MenuController {
     /**
      * menu 修改菜单
      *
-     * @param menuInfo
+     * @param menuInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
     @PostMapping("updateMenu")
-    public AppResponse updateMenu(@RequestBody MenuInfo menuInfo) {
-        try {
-            //获取菜单id
-            String menuId = AuthUtils.getCurrentUserId();
-            menuInfo.setCreateUser(menuId);
-            menuInfo.setUpdateUser(menuId);
-            return menuService.updateMenu(menuInfo);
+    public AppResponse updateMenu(MenuInfoVO menuInfoVO) {
+        try {;
+            return menuService.updateMenu(menuInfoVO);
         } catch (Exception e) {
             logger.error("修改菜单信息失败", e);
             System.out.println(e.toString());
@@ -102,7 +93,7 @@ public class MenuController {
      * @Date 2020-03-28
      */
     @RequestMapping(value = "getMenuByInfo")
-    public AppResponse getMenuByInfo(@RequestBody MenuInfo menuInfo) {
+    public AppResponse getMenuByInfo(MenuInfo menuInfo) {
         try {
             return menuService.getMenuByInfo(menuInfo);
         } catch (Exception e) {
@@ -121,9 +112,9 @@ public class MenuController {
      * @Date 2020-03-28
      */
     @RequestMapping(value = "listMenus")
-    public AppResponse listMenus() {
+    public AppResponse listMenus(MenuInfo menuInfo) {
         try {
-            return menuService.listMenus();
+            return menuService.listMenus(menuInfo);
         } catch (Exception e) {
             logger.error("查询菜单列表异常", e);
             System.out.println(e.toString());

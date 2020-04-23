@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.app.entity.CustCartInfo;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * @ClassName CutCartDao
  * @Description CutCart
@@ -12,4 +14,11 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface CustCartDao extends BaseMapper<CustCartInfo> {
+    /**
+     * 查询购物车列表
+     *
+     * @param userId
+     * @return
+     */
+    List<CustCartInfo> listCustCart(String userId);
 }

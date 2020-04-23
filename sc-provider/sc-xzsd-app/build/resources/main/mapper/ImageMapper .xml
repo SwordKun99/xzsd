@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.dao.ImageDao">
+
+    <!--轮播图列表-->
+    <select id="listImage" parameterType="com.xzsd.app.entity.ImageInfo"
+            resultType="com.xzsd.app.entity.ImageInfo">
+        select
+        a.image_type imageType,
+        b.path,
+        a.commodity_id commodityId
+        from t_focus_rotations a left join t_file b on b.biz_id = a.commodity_id
+        where a.is_delete = 0
+        and a.image_type = 0
+        and a.period_strat <![CDATA[ <= ]]> now()
+        and a.period_over <![CDATA[ >= ]]> now()
+        order by a.image_no desc
+    </select>
+</mapper>

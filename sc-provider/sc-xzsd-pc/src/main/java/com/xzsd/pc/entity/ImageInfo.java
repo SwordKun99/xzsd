@@ -12,6 +12,7 @@ public class ImageInfo {
 
     @TableId
     private String imageId;
+    private String fileId;
     private String imageNumber;
     private String imageNo;
     private String imageUr1;
@@ -20,20 +21,22 @@ public class ImageInfo {
     private String imageType;
     private String secondarDirectory;
     private String imageTitle;
-    private java.sql.Timestamp periodStrat;
-    private java.sql.Timestamp periodValidtyOver;
-    private long isDelete;
+    private Date periodStrat;
+    private Date periodOver;
+    private Integer isDelete;
     private String createSer;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
 
     @TableField(exist = false)
-    private int startPage;
+    private int PageNum;
     @TableField(exist = false)
-    private int pagesize;
+    private int pageSize;
+    @TableField(exist = false)
+    private String path;
 
 
     public String getImageId() {
@@ -44,6 +47,13 @@ public class ImageInfo {
         this.imageId = imageId;
     }
 
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
 
     public String getImageNumber() {
         return imageNumber;
@@ -70,16 +80,6 @@ public class ImageInfo {
     public void setImageUr1(String imageUr1) {
         this.imageUr1 = imageUr1;
     }
-
-
-    public String getCommodityNumber() {
-        return commodityId;
-    }
-
-    public void setCommodityNumber(String commodityId) {
-        this.commodityId = commodityId;
-    }
-
 
     public String getCommodityName() {
         return commodityName;
@@ -117,30 +117,28 @@ public class ImageInfo {
     }
 
 
-    public java.sql.Timestamp getPeriodStrat() {
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
+    }
+
+    public Date getPeriodStrat() {
         return periodStrat;
     }
 
-    public void setPeriodStrat(java.sql.Timestamp periodStrat) {
+    public void setPeriodStrat(Date periodStrat) {
         this.periodStrat = periodStrat;
     }
 
-
-    public java.sql.Timestamp getPeriodValidtyOver() {
-        return periodValidtyOver;
+    public Date getPeriodOver() {
+        return periodOver;
     }
 
-    public void setPeriodValidtyOver(java.sql.Timestamp periodValidtyOver) {
-        this.periodValidtyOver = periodValidtyOver;
-    }
-
-
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
+    public void setPeriodOver(Date periodOver) {
+        this.periodOver = periodOver;
     }
 
 
@@ -178,36 +176,52 @@ public class ImageInfo {
         this.updateTime = updateTime;
     }
 
-    public long getSoreNo() {
+
+    public int getPageNum() {
+        return PageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        PageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getSoreNo() {
         return soreNo;
     }
 
-    public void setSoreNo(long soreNo) {
+    public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
     }
 
-
-    public long getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public int getStartPage() {
-        return startPage;
-    }
-
-    public void setStartPage(int startPage) {
-        this.startPage = startPage;
-    }
-
-    public int getPagesize() {
-        return pagesize;
-    }
-
-    public void setPagesize(int pagesize) {
-        this.pagesize = pagesize;
     }
 }

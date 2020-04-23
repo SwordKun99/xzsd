@@ -1,18 +1,18 @@
 package com.xzsd.pc.shop.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.entity.ShopInfo;
+import com.xzsd.pc.entity.VO.ShopInfoVO;
 import com.xzsd.pc.shop.service.ShopService;
 import com.xzsd.pc.user.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Description增删改查Shop
@@ -38,13 +38,9 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @PostMapping("saveShop")
-    public AppResponse saveShop(@RequestBody ShopInfo shopInfo) {
-        try {
-            //获取门店id
-            String shopId = AuthUtils.getCurrentShopId();
-            shopInfo.setCreateSer(shopId);
-            shopInfo.setShopId(UUIDUtils.getUUID());
-            AppResponse appResponse = shopService.saveShop(shopInfo);
+    public AppResponse saveShop(ShopInfo shopInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+        try { ;
+            AppResponse appResponse = shopService.saveShop(shopInfo, biz_msg, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("门店新增失败", e);
@@ -62,9 +58,9 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @PostMapping("deleteShop")
-    public AppResponse deleteShop(@RequestBody ShopInfo shopInfo) {
+    public AppResponse deleteShop(String shopId) {
         try {
-            return shopService.deleteShopId(shopInfo);
+            return shopService.deleteShop(shopId);
         } catch (Exception e) {
             logger.error("门店删除失败", e);
             System.out.println(e.toString());
@@ -75,19 +71,15 @@ public class ShopContorller {
     /**
      * shop 修改门店
      *
-     * @param shopInfo
+     * @param shopInfoVO
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @PostMapping("updateShop")
-    public AppResponse updateShop(@RequestBody ShopInfo shopInfo) {
+    public AppResponse updateShop(ShopInfoVO shopInfoVO) {
         try {
-            //获取门店id
-            String shopId = AuthUtils.getCurrentShopId();
-            shopInfo.setCreateSer(shopId);
-            shopInfo.setUpdateUser(shopId);
-            return shopService.updateShop(shopInfo);
+            return shopService.updateShop(shopInfoVO);
         } catch (Exception e) {
             logger.error("修改门店信息错误", e);
             System.out.println(e.toString());
@@ -104,7 +96,7 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @RequestMapping(value = "getShopByShopNumber")
-    public AppResponse getShopByShopNumber(@RequestBody ShopInfo shopInfo) {
+    public AppResponse getShopByShopNumber(ShopInfo shopInfo) {
         try {
             return shopService.getUserByShopNumber(shopInfo);
         } catch (Exception e) {
@@ -123,7 +115,7 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @RequestMapping(value = "listShop")
-    public AppResponse listShop(@RequestBody ShopInfo shopInfo) {
+    public AppResponse listShop(ShopInfo shopInfo) {
         try {
             return shopService.listShop(shopInfo);
         } catch (Exception e) {

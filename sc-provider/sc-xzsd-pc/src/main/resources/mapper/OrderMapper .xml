@@ -2,5 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.dao.OrderDao">
 
-
+    <!--查询用户列表信息-->
+    <select id="listOrder" parameterType="com.xzsd.pc.entity.OrderInfo"
+            resultType="com.xzsd.pc.entity.OrderInfo">
+        select
+        a.order_id orderId,
+        a.order_money orderMoney,
+        a.order_status orderStatus,
+        a.pay_status payStatus,
+        a.shop_id shopId,
+        a.customer_name customerName,
+        a.customer_phone customerPhone,
+        a.pay_time payTime,
+        b.commodity_id commodityId,
+        b.commodity_name commodityname,
+        b.cost_price costPrice,
+        b.sell_price sellPrice
+        from
+        t_order_master a
+        left join t_commodity b on b.commodity_id = a.commodity_Id
+        where
+        a.is_delete = 0
+        <if test="customerName != null and customerName != ''">
+            and a.customer_name like concat('%',#{customerName},'%')
+        </if>
+        <if test="customerPhone != null and customerPhone != ''">
+            and a.customer_phone like concat('%',#{customerPhone},'%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+            and a.order_id = #{orderId}
+        </if>
+        <if test="orderStatus == null and orderStatus == ''">
+            and a.order_status in (1,2)
+        </if>
+        <if test="payTime == null and payTime == ''">
+            and a.pay_time in (pay_timestart,pay_timeend)
+        </if>
+        order by a.create_time desc
+    </select>
 </mapper>

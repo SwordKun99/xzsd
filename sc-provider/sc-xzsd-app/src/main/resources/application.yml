@@ -1,3 +1,84 @@
+#security:
+#  oauth2:
+#    resource:
+#      prefer-token-info: true
+#      token-info-uri: http://sc-security-uaa/oauth/token
+#      jwt:
+#        key-value: secret
+##        key-uri: http://sc-security-uaa/oauth/token_key
+#    client:
+#      client-id: client
+#      client-secret: client
+#      grant-type: client_credentials
+#      access-token-uri: http://sc-security-uaa/oauth/token
+#      user-authorization-uri: http://sc-security-uaa/oauth/authorize
+#  sessions: stateless
+#spring:
+#  redis:
+#    host: 47.92.101.6
+#    password: dnc.2009
+#    database: 9
+#  datasource:
+#    name: dataSource
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/walk_bookstore?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    username: root
+#    password: 123456
+#    druid:
+#      initialSize: 1
+#      minIdle: 1
+#      maxActive: 20
+#      maxWait: 60000
+#      validationQuery: select 'x' from dual
+#      timeBetweenEvictionRunsMillis: 60000
+#      minEvictableIdleTimeMillis: 300000
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      filters: stat,slf4j
+#      web-stat-filter:
+#        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.woff2,*.ico,/druid/*,/swagger*,/v2/api-docs'
+#      stat-view-servlet:
+#        enabled: true
+#        login-username: admin
+#        login-password: dnc.2009
+#      filter:
+#        stat:
+#          enabled: true
+#          log-slow-sql: true
+#          slow-sql-millis: 1000
+#          merge-sql: true
+#        slf4j:
+#          enabled: true
+#          statement-executable-sql-log-enable: false
+#          connection-log-enabled: false
+#          result-set-log-enabled: false
+#mybatis:
+#  mapper-locations: classpath:/mapper/*.xml
+#  config-location: classpath:mybatis/mybatis-config.xml
+#  #扫描映射文件
+#  type-aliases-package: com.entity
+#sc:
+#  cloud:
+#    dev: true
+#    task:
+#      core-pool-size: 20
+#      max-pool-size: 50
+#      queue-capacity: 200
+#      keep-alive-seconds: 3000
+#      thread-name-prefix: sc-task-executor-
+#    swagger:
+#      enabled: true
+#      description: 'spring cloud 模板项目'
+#
+#mvc:
+#  #过滤静态资源
+#  static-path-pattern: /**
+#  thymeleaf:
+#    #关闭thymeleaf缓存 开发时使用 否则没有实时画面
+#    cache: false
+
 security:
   oauth2:
     resource:
@@ -5,7 +86,7 @@ security:
       token-info-uri: http://sc-security-uaa/oauth/token
       jwt:
         key-value: secret
-#        key-uri: http://sc-security-uaa/oauth/token_key
+    #        key-uri: http://sc-security-uaa/oauth/token_key
     client:
       client-id: client
       client-secret: client
@@ -54,6 +135,10 @@ spring:
           statement-executable-sql-log-enable: false
           connection-log-enabled: false
           result-set-log-enabled: false
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   config-location: classpath:mybatis/mybatis-config.xml
@@ -61,7 +146,8 @@ mybatis:
   type-aliases-package: com.entity
 sc:
   cloud:
-    dev: true
+    #    dev: true
+    debug: true
     task:
       core-pool-size: 20
       max-pool-size: 50
@@ -78,3 +164,9 @@ mvc:
   thymeleaf:
     #关闭thymeleaf缓存 开发时使用 否则没有实时画面
     cache: false
+# 打印sql
+logging:
+  level:
+    jdbc.sqltiming: DEBUG
+    com.xzsd.pc.dao: DEBUG
+

@@ -79,4 +79,12 @@ public class AuthUtils {
     public static String getCurrentImageId(){
         return "1";
     }
+
+    /**
+     * 获取当前订单id
+     * @return 订单id
+     */
+    public static String getCurrentOrderId(){
+        return "1";
+    }
 }

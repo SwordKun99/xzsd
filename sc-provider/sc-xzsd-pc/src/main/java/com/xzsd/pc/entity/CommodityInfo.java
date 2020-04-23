@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
+import java.util.List;
 
 @TableName("t_commodity")
 public class CommodityInfo {
@@ -17,36 +18,37 @@ public class CommodityInfo {
     private String stoneId;
     private String stoneName;
     private String commodityImage;
-    private String codeSortsecond;
-    private String codeNamesecond;
-    private String codeSortinfirst;
-    private String codeNamefirst;
+    private String parentCode;
+    private String systematicCode;
     private double pringting;
     private double costPrice;
     private double sellPrice;
-    private long soldNumber;
-    private long channel;
+    private String soldNumber;
+    private String channel;
     private String repertory;
     private String introduce;
-    private long svaluationStar;
+    private String svaluationStar;
     private Date dataIssued;
-    private long upDownstate;
-    private long pageView;
+    private Integer upDownstate;
+    private String pageView;
     private String author;
     private String message;
     private String press;
-    private long isDelete;
+    private Integer isDelete;
     private String createUser;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
 
     @TableField(exist = false)
-    private int startPage;
+    private int pageNum;
     @TableField(exist = false)
-    private int pagesize;
+    private int pageSize;
+
+    @TableField(exist = false)
+    private List<FileInfo> filePath;
 
 
     public String getCommodityId() {
@@ -102,37 +104,20 @@ public class CommodityInfo {
         this.commodityImage = commodityImage;
     }
 
-
-    public String getCodeSortsecond() {
-        return codeSortsecond;
+    public String getParentCode() {
+        return parentCode;
     }
 
-    public void setCodeSortsecond(String codeSortsecond) {
-        this.codeSortsecond = codeSortsecond;
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
     }
 
-    public String getCodeNamesecond() {
-        return codeNamesecond;
+    public String getSystematicCode() {
+        return systematicCode;
     }
 
-    public void setCodeNamesecond(String codeNamesecond) {
-        this.codeNamesecond = codeNamesecond;
-    }
-
-    public String getCodeSortinfirst() {
-        return codeSortinfirst;
-    }
-
-    public void setCodeSortinfirst(String codeSortinfirst) {
-        this.codeSortinfirst = codeSortinfirst;
-    }
-
-    public String getCodeNamefirst() {
-        return codeNamefirst;
-    }
-
-    public void setCodeNamefirst(String codeNamefirst) {
-        this.codeNamefirst = codeNamefirst;
+    public void setSystematicCode(String systematicCode) {
+        this.systematicCode = systematicCode;
     }
 
     public double getPringting() {
@@ -162,24 +147,6 @@ public class CommodityInfo {
     }
 
 
-    public long getSoldNumber() {
-        return soldNumber;
-    }
-
-    public void setSoldNumber(long soldNumber) {
-        this.soldNumber = soldNumber;
-    }
-
-
-    public long getChannel() {
-        return channel;
-    }
-
-    public void setChannel(long channel) {
-        this.channel = channel;
-    }
-
-
     public String getRepertory() {
         return repertory;
     }
@@ -198,38 +165,12 @@ public class CommodityInfo {
     }
 
 
-    public long getSvaluationStar() {
-        return svaluationStar;
-    }
-
-    public void setSvaluationStar(long svaluationStar) {
-        this.svaluationStar = svaluationStar;
-    }
-
-
     public Date getDataIssued() {
         return dataIssued;
     }
 
     public void setDataIssued(Date dataIssued) {
         this.dataIssued = dataIssued;
-    }
-
-    public long getUpDownstate() {
-        return upDownstate;
-    }
-
-    public void setUpDownstate(long upDownstate) {
-        this.upDownstate = upDownstate;
-    }
-
-
-    public long getPageView() {
-        return pageView;
-    }
-
-    public void setPageView(long pageView) {
-        this.pageView = pageView;
     }
 
 
@@ -257,15 +198,6 @@ public class CommodityInfo {
 
     public void setPress(String press) {
         this.press = press;
-    }
-
-
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
     }
 
 
@@ -303,36 +235,92 @@ public class CommodityInfo {
         this.updateTime = updateTime;
     }
 
-    public long getSoreNo() {
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public List<FileInfo> getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(List<FileInfo> filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getSoldNumber() {
+        return soldNumber;
+    }
+
+    public void setSoldNumber(String soldNumber) {
+        this.soldNumber = soldNumber;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getSvaluationStar() {
+        return svaluationStar;
+    }
+
+    public void setSvaluationStar(String svaluationStar) {
+        this.svaluationStar = svaluationStar;
+    }
+
+    public Integer getUpDownstate() {
+        return upDownstate;
+    }
+
+    public void setUpDownstate(Integer upDownstate) {
+        this.upDownstate = upDownstate;
+    }
+
+    public String getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(String pageView) {
+        this.pageView = pageView;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getSoreNo() {
         return soreNo;
     }
 
-    public void setSoreNo(long soreNo) {
+    public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
     }
 
-
-    public long getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public int getStartPage() {
-        return startPage;
-    }
-
-    public void setStartPage(int startPage) {
-        this.startPage = startPage;
-    }
-
-    public int getPagesize() {
-        return pagesize;
-    }
-
-    public void setPagesize(int pagesize) {
-        this.pagesize = pagesize;
     }
 }

@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @TableName("t_sys_user")
 public class UserInfo {
@@ -16,20 +18,20 @@ public class UserInfo {
     private String userNo;
     private String userPassword;
     private String userName;
-    private long userSex;
+    private String userSex;
     private String userPhone;
     private String userEmail;
-    private long userIdcard;
-    private String role;
+    private String userIdcard;
+    private Integer role;
     private String frontScore;
     private String isAdmin;
-    private long isDeleted;
+    private Integer isDeleted;
     private String createUser;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
     private String remark;
 
 
@@ -38,7 +40,7 @@ public class UserInfo {
     @TableField(exist = false)
     private int PageSize;
     @TableField(exist = false)
-    private String path;
+    private List<FileInfo> fileInfo;
 
     public String getUserId() {
         return userId;
@@ -85,14 +87,13 @@ public class UserInfo {
     }
 
 
-    public long getUserSex() {
+    public String getUserSex() {
         return userSex;
     }
 
-    public void setUserSex(long userSex) {
+    public void setUserSex(String userSex) {
         this.userSex = userSex;
     }
-
 
     public String getUserPhone() {
         return userPhone;
@@ -112,23 +113,22 @@ public class UserInfo {
     }
 
 
-    public long getUserIdcard() {
+    public String getUserIdcard() {
         return userIdcard;
     }
 
-    public void setUserIdcard(long userIdcard) {
+    public void setUserIdcard(String userIdcard) {
         this.userIdcard = userIdcard;
     }
 
 
-    public String getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
-
 
     public String getFrontScore() {
         return frontScore;
@@ -148,14 +148,13 @@ public class UserInfo {
     }
 
 
-    public long getIsDeleted() {
+    public Integer getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(long isDeleted) {
+    public void setIsDeleted(Integer isDeleted) {
         this.isDeleted = isDeleted;
     }
-
 
     public String getCreateUser() {
         return createUser;
@@ -193,20 +192,19 @@ public class UserInfo {
     }
 
 
-    public long getSoreNo() {
-        return soreNo;
-    }
-
-    public void setSoreNo(long soreNo) {
+    public void setSoreNo(String soreNo) {
         this.soreNo = soreNo;
     }
 
+    public String getSoreNo() {
+        return soreNo;
+    }
 
-    public long getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(long version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -234,11 +232,11 @@ public class UserInfo {
         this.remark = remark;
     }
 
-    public String getPath() {
-        return path;
+    public List<FileInfo> getFileInfo() {
+        return fileInfo;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFileInfo(List<FileInfo> fileInfo) {
+        this.fileInfo = fileInfo;
     }
 }

@@ -25,18 +25,18 @@ public class ShopInfo {
     private String province;
     private String city;
     private String district;
-    private long isDelete;
+    private Integer isDelete;
     private String createSer;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
 
     @TableField(exist = false)
-    private int startPage;
+    private int pageNum;
     @TableField(exist = false)
-    private int pagesize;
+    private int pageSize;
 
 
     public String getShopId() {
@@ -174,15 +174,6 @@ public class ShopInfo {
     }
 
 
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
-    }
-
-
     public String getCreateSer() {
         return createSer;
     }
@@ -192,14 +183,6 @@ public class ShopInfo {
     }
 
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getUpdateUser() {
         return updateUser;
     }
@@ -208,44 +191,61 @@ public class ShopInfo {
         this.updateUser = updateUser;
     }
 
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+
+    public String getSoreNo() {
+        return soreNo;
+    }
+
+    public void setSoreNo(String soreNo) {
+        this.soreNo = soreNo;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public long getSoreNo() {
-        return soreNo;
-    }
-
-    public void setSoreNo(long soreNo) {
-        this.soreNo = soreNo;
-    }
-
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public int getStartPage() {
-        return startPage;
-    }
-
-    public void setStartPage(int startPage) {
-        this.startPage = startPage;
-    }
-
-    public int getPagesize() {
-        return pagesize;
-    }
-
-    public void setPagesize(int pagesize) {
-        this.pagesize = pagesize;
     }
 }

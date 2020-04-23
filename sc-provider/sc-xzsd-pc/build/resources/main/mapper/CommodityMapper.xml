@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dao.CommodityDao">
+<mapper namespace="com.xzsd.pc.dao.CommodityDao">
 
+    <!--商品详情-->
+    <select id="getCommodityByInfo" parameterType="com.xzsd.pc.entity.CommodityInfo"
+            resultType="com.xzsd.pc.entity.CommodityInfo">
+        select
+        a.commodity_id commodityId,
+        a.commodity_name commodityName,
+        a.cost_price costPrice,
+        a.sell_price sellPrice,
+        a.sold_number soldNumber,
+        a.parent_code parentCode,
+        a.systematic_code systematicCode,
+        a.message message,
+        a.introduce introduction,
+        a.up_downstate upDownstate,
+        a.data_issued dataIssued,
+        a.page_view pageView,
+        a.stone_id stoneId,
+        a.stone_name stoneName,
+        a.repertory repertory,
+        b.path path,
+        a.version
+        from t_commodity a,
+        t_file b
+        <where>
+            a.is_delete = 0
+            and a.commodity_id = #{commodityId}
+            and b.biz_id = #{commodityId}
+        </where>
+    </select>
+
+    <!--商品列表-->
+    <select id="listCommodity" parameterType="com.xzsd.pc.entity.VO.CommodityInfoVO"
+            resultType="com.xzsd.pc.entity.VO.CommodityInfoVO">
+        select
+        a.commodity_id commodityId,
+        a.commodity_name commodityName,
+        a.cost_price cost_Price,
+        a.sell_price sell_Price,
+        a.sold_number soldNumber,
+        b.parent_name parentName,
+        b.systematic_name systematicName,
+        a.message,
+        a.introduce,
+        a.up_downstate upDownstate,
+        a.data_issued dataIssued,
+        a.page_view pageView,
+        a.stone_name stoneName,
+        a.repertory,
+        a.commodity_nunmer commodityNunmer,
+        a.version
+        from t_commodity a
+        left join t_commodity_classification b on b.systematic_code = a.systematic_code
+        where a.is_delete = 0
+        <if test="commodityName != null and commodityName != ''">
+            and a.commodity_name like concat('%', #{commodityName}, '%')
+        </if>
+        <if test="upDownstate != null and upDownstate != ''">
+            and a.up_downstate like concat('%',#{upDownstate},'%')
+        </if>
+        <if test="message != null and message != ''">
+            and a.message like concat('%',#{message},'%')
+        </if>
+        <if test="author != null and author != ''">
+            and a.author like concat('%',#{author},'%')
+        </if>
+        <if test="press != null and press != ''">
+            and a.press like concat('%',#{press},'%')
+        </if>
+        order by a.create_user desc
+    </select>
 </mapper>

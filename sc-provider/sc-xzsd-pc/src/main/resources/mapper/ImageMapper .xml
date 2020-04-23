@@ -2,5 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.dao.ImageDao">
 
+    <!--轮播图分页详情-->
+    <select id="getImageByImageType" parameterType="com.xzsd.pc.entity.ImageInfo"
+            resultType="com.xzsd.pc.entity.ImageInfo">
+        select
+        a.image_id imageId,
+        a.image_type imageType,
+        a.image_no imageNo,
+        b.path path,
+        a.period_over periodOver,
+        a.period_strat periodStrat,
+        a.version version
+        from t_focus_rotations a left join t_file b on b.biz_id = a.image_id
+        <where> a.is_delete = 0
+            <if test="imageType != null and imageType != ''">
+                and a.image_type = #{imageType}
+            </if>
+        </where>
+        order by image_no desc
+    </select>
 
+    <!--商品详情-->
+    <select id="getComByCommodityInfo" parameterType="com.xzsd.pc.entity.ImageInfo"
+            resultType="com.xzsd.pc.entity.VO.ImageInfoVO">
+        select
+        b.commodity_id commodityId,
+        b.commodity_name commodityName,
+        b.up_downstate upDownstate,
+        b.parent_code parentCode,
+        b.systematic_code systematicCode
+        from t_commodity b left join t_focus_rotations a
+        on a.commodity_id = b.commodity_Id
+        <where>
+            b.is_delete = 0
+            and a.image_id = #{imageId}
+            and up_downstate = 1
+        </where>
+    </select>
 </mapper>

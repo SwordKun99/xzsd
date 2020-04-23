@@ -18,13 +18,13 @@ public class GoodsHotInfo {
     private String commodityName;
     private String goodshotNun;
     private String goodshotSum;
-    private long isDelete;
+    private Integer isDelete;
     private String createSer;
     private Date createTime;
     private String updateUser;
     private Date updateTime;
-    private long soreNo;
-    private long version;
+    private String soreNo;
+    private Integer version;
 
     @TableField(exist = false)
     private int pageSize;
@@ -95,15 +95,6 @@ public class GoodsHotInfo {
     }
 
 
-    public long getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(long isDelete) {
-        this.isDelete = isDelete;
-    }
-
-
     public String getCreateSer() {
         return createSer;
     }
@@ -136,23 +127,6 @@ public class GoodsHotInfo {
         this.updateTime = updateTime;
     }
 
-    public long getSoreNo() {
-        return soreNo;
-    }
-
-    public void setSoreNo(long soreNo) {
-        this.soreNo = soreNo;
-    }
-
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
 
     public int getPageSize() {
         return pageSize;
@@ -168,5 +142,29 @@ public class GoodsHotInfo {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getSoreNo() {
+        return soreNo;
+    }
+
+    public void setSoreNo(String soreNo) {
+        this.soreNo = soreNo;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
