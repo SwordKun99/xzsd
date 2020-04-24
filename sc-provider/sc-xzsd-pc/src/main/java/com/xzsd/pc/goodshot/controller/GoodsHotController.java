@@ -58,9 +58,9 @@ public class GoodsHotController {
      * @Date 2020-04-01
      */
     @PostMapping("deleteGoodsHot")
-    public AppResponse deleteGoodsHot(String goodhotId) {
+    public AppResponse deleteGoodsHot(String goodshotId) {
         try {
-            return goodshotService.deleteGoodsHot(goodhotId);
+            return goodshotService.deleteGoodsHot(goodshotId);
         } catch (Exception e) {
             logger.error("热门商品删除失败", e);
             System.out.println(e.toString());

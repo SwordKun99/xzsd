@@ -72,4 +72,16 @@
         </if>
         order by a.create_user desc
     </select>
+
+    <!--删除商品轮播图-->
+    <update id="deletedImageInfo" parameterType="com.xzsd.pc.entity.CommodityInfo">
+        update t_focus_rotations r set r.is_delete = 0
+        where r.commodity_id = #{commodityId}
+    </update>
+
+    <!--删除商品热门商品-->
+    <update id="deletedGoodsHot" parameterType="com.xzsd.pc.entity.CommodityInfo">
+        update t_goods_hot r set r.is_delete = 0
+        where r.commodity_id = #{commodityId}
+    </update>
 </mapper>

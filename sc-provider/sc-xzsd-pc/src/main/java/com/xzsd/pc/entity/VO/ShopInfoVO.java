@@ -5,6 +5,7 @@ public class ShopInfoVO {
 
     private String shopId;
     private String shopNumber;
+    private String driveId;
     private String userId;
     private String userPhone;
     private String userEmail;
@@ -47,6 +48,13 @@ public class ShopInfoVO {
         this.shopNumber = shopNumber;
     }
 
+    public String getDriveId() {
+        return driveId;
+    }
+
+    public void setDriveId(String driveId) {
+        this.driveId = driveId;
+    }
 
     public String getUserId() {
         return userId;

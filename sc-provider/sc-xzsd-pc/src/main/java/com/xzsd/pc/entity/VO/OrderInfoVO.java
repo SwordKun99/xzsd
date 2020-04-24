@@ -8,7 +8,7 @@ public class OrderInfoVO {
     private String customerId;
     private double orderMoney;
     private double distnctMoney;
-    private String goodsCnt;
+    private Integer goodsCnt;
     private String orderNumber;
     private String channelType;
     private double feeMoney;
@@ -89,14 +89,13 @@ public class OrderInfoVO {
     }
 
 
-    public String getGoodsCnt() {
+    public Integer getGoodsCnt() {
         return goodsCnt;
     }
 
-    public void setGoodsCnt(String goodsCnt) {
+    public void setGoodsCnt(Integer goodsCnt) {
         this.goodsCnt = goodsCnt;
     }
-
 
     public String getOrderNumber() {
         return orderNumber;

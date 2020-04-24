@@ -90,4 +90,23 @@ public class CustomerController {
             throw e;
         }
     }
+
+    /**
+     * customer 修改客户密码
+     *
+     * @param oldPassword,newPassword
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-15
+     */
+    @PostMapping("updatePassword")
+    public AppResponse updatePassword(String oldPassword, String newPassword) {
+        try {
+            return customerService.updatePassword(oldPassword, newPassword);
+        } catch (Exception e) {
+            logger.error("修改客户密码错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

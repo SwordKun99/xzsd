@@ -40,9 +40,9 @@ public class DriveController {
      * @Date 2020-03-28
      */
     @PostMapping("saveDrive")
-    public AppResponse saveDrive(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveDrive(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            AppResponse appResponse = driveService.saveDrive(driveInfo, biz_msg, file);
+            AppResponse appResponse = driveService.saveDrive(driveInfo,file);
             return appResponse;
         } catch (Exception e) {
             logger.error("司机新增失败", e);

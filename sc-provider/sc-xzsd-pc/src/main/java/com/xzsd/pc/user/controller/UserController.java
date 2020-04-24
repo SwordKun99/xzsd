@@ -41,9 +41,9 @@ public class UserController {
      * @Date 2020-03-25
      */
     @PostMapping("saveUser")
-    public AppResponse saveUser(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveUser(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            AppResponse appResponse = userService.saveUser(userInfo, biz_msg, file);
+            AppResponse appResponse = userService.saveUser(userInfo, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("用户新增失败", e);

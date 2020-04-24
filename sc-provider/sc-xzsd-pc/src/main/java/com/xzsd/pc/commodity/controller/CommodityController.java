@@ -45,9 +45,9 @@ public class CommodityController {
      * @Date 2020-03-29
      */
     @PostMapping("saveCommodity")
-    public AppResponse saveCommodity(CommodityInfo commodityInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveCommodity(CommodityInfo commodityInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            AppResponse appResponse = commodityService.saveCommodity(commodityInfo, biz_msg, file);
+            AppResponse appResponse = commodityService.saveCommodity(commodityInfo, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("商品分类新增失败", e);

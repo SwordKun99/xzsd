@@ -61,7 +61,7 @@ public class CommodityService {
      * @Date 2020-03-29
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveCommodity(CommodityInfo commodityInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse saveCommodity(CommodityInfo commodityInfo, MultipartFile file) throws Exception {
         // 校验商品是否存在
         QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CommodityInfo::getCommodityName, commodityInfo.getCommodityName());
@@ -81,7 +81,7 @@ public class CommodityService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         if (file != null) {
-            uploadService.uploadImage(biz_msg, commodityInfo.getCommodityId(), file);
+            uploadService.uploadImage("commodity", commodityInfo.getCommodityId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -111,6 +111,18 @@ public class CommodityService {
             commodityInfo.setIsDelete(1);
             count = commodityDao.updateById(commodityInfo);
             if (0 == count) {
+                appResponse = AppResponse.bizError("删除失败，请重试！");
+                break;
+            }
+            //删除轮播图
+            int count1 = commodityDao.deletedImageInfo(commodityInfo);
+            if (0 == count1) {
+                appResponse = AppResponse.bizError("删除失败，请重试！");
+                break;
+            }
+            //删除热门商品
+            int count2 = commodityDao.deletedGoodsHot(commodityInfo);
+            if (0 == count2) {
                 appResponse = AppResponse.bizError("删除失败，请重试！");
                 break;
             }

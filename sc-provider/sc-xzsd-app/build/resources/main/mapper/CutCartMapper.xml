@@ -17,4 +17,5 @@
       where a.customer_id = #{customerId}
       and a.is_delete = 0
     </select>
+
 </mapper>

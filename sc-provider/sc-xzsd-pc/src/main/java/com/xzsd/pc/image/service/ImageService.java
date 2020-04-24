@@ -13,10 +13,8 @@ import com.xzsd.pc.dao.CommodityDao;
 import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.ImageDao;
 import com.xzsd.pc.dao.UserDao;
-import com.xzsd.pc.entity.DriveInfo;
-import com.xzsd.pc.entity.FileInfo;
-import com.xzsd.pc.entity.ImageInfo;
-import com.xzsd.pc.entity.UserInfo;
+import com.xzsd.pc.entity.*;
+import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.TencentCosUtil;
@@ -58,7 +56,7 @@ public class ImageService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveImage(ImageInfo imageInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse saveImage(ImageInfo imageInfo, MultipartFile file) throws Exception {
         // 校验轮播图是否存在
         QueryWrapper<ImageInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ImageInfo::getImageNo, imageInfo.getImageNo());
@@ -78,7 +76,7 @@ public class ImageService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         if (file != null) {
-            uploadService.uploadImage(biz_msg, imageInfo.getImageId(), file);
+            uploadService.uploadImage("image", imageInfo.getImageId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -86,7 +84,7 @@ public class ImageService {
     /**
      * image 删除轮播图
      *
-     * @param imageInfo
+     * @param imageId
      * @return
      * @Author SwordKun.
      * @Date 2020-03-28
@@ -181,14 +179,24 @@ public class ImageService {
     /**
      * commodity 查询商品详情
      *
-     * @param imageId
+     * @param commodityInfo
      * @return
      * @Author SwordKun.
      * @Date 2020-04-01
      */
-    public AppResponse getComByCommodityInfo(String imageId) {
-        ImageInfoVO imageInfo = imageDao.getComByCommodityInfo(imageId);
-        return AppResponse.success("查询成功！", imageInfo);
+    public AppResponse getComByCommodityInfo(CommodityInfo commodityInfo) {
+        //判断当前操作者
+        String userId = SecurityUtils.getCurrentUserId();
+        UserInfo userInfo = userDao.getUserByUserId(userId);
+        Integer userRole = userInfo.getRole();
+        CommodityInfoVO commodityInfoVO = new CommodityInfoVO();
+        BeanUtils.copyProperties(commodityInfo,commodityInfoVO);
+        if (userRole != null && userRole != 1) {
+            return AppResponse.success("无操作权限");
+        }
+        // 包装Page对象
+        PageInfo<CommodityInfoVO> pageData = PageHelper.startPage(commodityInfoVO.getPageNum(), commodityInfoVO.getPageSize()).doSelectPageInfo(() -> imageDao.getComByCommodityInfo(commodityInfoVO));
+        return AppResponse.success("查询商品列表成功",pageData);
     }
 }
 

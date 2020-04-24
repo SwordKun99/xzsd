@@ -32,4 +32,8 @@ public interface CommodityDao extends BaseMapper<CommodityInfo> {
      * @return 所有商品信息
      */
     List<CommodityInfoVO> listCommodity(CommodityInfoVO commodityInfo);
+
+    int deletedImageInfo(CommodityInfo commodityInfo);
+
+    int deletedGoodsHot(CommodityInfo commodityInfo);
 }

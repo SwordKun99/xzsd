@@ -28,7 +28,7 @@ public class ValidateController {
     private ValidateService validateService;
 
     /**
-     * customer 新增客户
+     * customer 注册用户
      *
      * @param userInfo
      * @return AppResponse
@@ -41,7 +41,7 @@ public class ValidateController {
             AppResponse appResponse = validateService.Validate(userInfo, biz_msg, file);
             return appResponse;
         } catch (Exception e) {
-            logger.error("新增失败", e);
+            logger.error("注册失败", e);
             System.out.println(e.toString());
             throw e;
         }

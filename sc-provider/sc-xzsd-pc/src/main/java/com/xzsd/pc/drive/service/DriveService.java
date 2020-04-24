@@ -17,6 +17,7 @@ import com.xzsd.pc.entity.VO.DriveInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.PasswordUtils;
 import com.xzsd.pc.util.TencentCosUtil;
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class DriveService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveDrive(DriveInfo driveInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse saveDrive(DriveInfo driveInfo, MultipartFile file) throws Exception {
         //判断当前操作人，管理员才拥有权限
         String createUserId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.getUserByUserId(createUserId);
@@ -91,7 +92,25 @@ public class DriveService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         if (file != null) {
-            uploadService.uploadImage(biz_msg, driveInfo.getDriveId(), file);
+            uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
+        }
+        //同时，新增user表数据
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setCreateTime(new Date());
+        userInfo1.setCreateUser(createUserId);
+        userInfo1.setUserPassword(PasswordUtils.generatePassword(driveInfo.getDrivePassword()));
+        userInfo1.setVersion(0);
+        userInfo1.setIsDeleted(0);
+        userInfo1.setRole(4);
+        userInfo1.setUserEmail(driveInfo.getDriveEmail());
+        userInfo1.setUserPhone(driveInfo.getDrivePhone());
+        userInfo1.setUserIdcard(driveInfo.getDriveIdcard());
+        userInfo1.setUserCode(driveInfo.getDriveCode());
+        userInfo1.setUserName(driveInfo.getDriveName());
+        userInfo1.setUserNo(driveInfo.getDriveNo());
+        Integer count1 = userDao.insert(userInfo);
+        if (0 == count1) {
+            return AppResponse.bizError("注册失败，请重试！");
         }
         return AppResponse.success("新增成功！");
     }

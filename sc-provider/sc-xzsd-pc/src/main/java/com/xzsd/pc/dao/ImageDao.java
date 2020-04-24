@@ -3,6 +3,7 @@ package com.xzsd.pc.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.pc.entity.ImageInfo;
+import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
 import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
@@ -31,5 +32,5 @@ public interface ImageDao extends BaseMapper<ImageInfo> {
      * @param imageId 商品id
      * @return 修改结果
      */
-    ImageInfoVO getComByCommodityInfo(@Param("imageId") String imageId);
+    List<CommodityInfoVO> getComByCommodityInfo(CommodityInfoVO commodityInfo);
 }

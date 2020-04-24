@@ -7,9 +7,11 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
+import com.xzsd.pc.dao.CommodityDao;
 import com.xzsd.pc.dao.GhsDao;
 import com.xzsd.pc.dao.GoodsHotDao;
 import com.xzsd.pc.dao.UserDao;
+import com.xzsd.pc.entity.CommodityInfo;
 import com.xzsd.pc.entity.GhsInfo;
 import com.xzsd.pc.entity.GoodsHotInfo;
 import com.xzsd.pc.entity.UserInfo;
@@ -36,6 +38,9 @@ public class GoodsHotService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private CommodityDao commodityDao;
+
     /**
      * GoodsHot 新增热门位商品
      *
@@ -54,7 +59,7 @@ public class GoodsHotService {
         }
         // 校验热门商品是否存在
         QueryWrapper<GoodsHotInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(GoodsHotInfo::getCommodityName, goodshotInfo.getCommodityName());
+        queryWrapper.lambda().eq(GoodsHotInfo::getCommodityId, goodshotInfo.getCommodityId());
         int countUGoodsHotNo = goodshotDao.selectCount(queryWrapper);
         if (0 != countUGoodsHotNo) {
             return AppResponse.bizError("热门商品已存在，请重新输入！");
@@ -65,7 +70,10 @@ public class GoodsHotService {
         if (0 != countNum) {
             return AppResponse.bizError("热门商品序号已存在，请重新输入！");
         }
-        goodshotInfo.setCommodityName(StringUtil.getCommonCode(2));
+        CommodityInfo commodityInfo = commodityDao.selectById(goodshotInfo.getCommodityId());
+        goodshotInfo.setCommodityName(commodityInfo.getCommodityName());
+        goodshotInfo.setCommodityNumber(commodityInfo.getCommodityNunmer());
+        goodshotInfo.setGoodshotNumber(StringUtil.getCommonCode(2));
         goodshotInfo.setIsDelete(0);
         goodshotInfo.setVersion(0);
         goodshotInfo.setCreateTime(new Date());
@@ -83,25 +91,23 @@ public class GoodsHotService {
     /**
      * goodshot 删除热门位商品
      *
-     * @param goodhotId
+     * @param goodshotId
      * @return
      * @Author SwordKun.
      * @Date 2020-04-01
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteGoodsHot(String goodhotId) {
+    public AppResponse deleteGoodsHot(String goodshotId) {
         String createUserId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.getUserByUserId(createUserId);
         Integer userRole = userInfo.getRole();
         if (userRole != null && userRole != 1) {
             return AppResponse.bizError("无操作权限");
         }
-        AppResponse appResponse = AppResponse.success("删除成功！");
-        List<String> idList = Arrays.asList(goodhotId.split(","));
+        List<String> idList = Arrays.asList(goodshotId.split(","));
         List<GoodsHotInfo> goodsHotInfoList = goodshotDao.selectBatchIds(idList);
         if (goodsHotInfoList != null && goodsHotInfoList.size() <= 0) {
-            appResponse = AppResponse.bizError("查询不到该数据，请重试！");
-            return appResponse;
+            return AppResponse.bizError("查询不到该数据，请重试！");
         }
         int count = 0;
         for (GoodsHotInfo goodsHotInfo : goodsHotInfoList) {
@@ -110,11 +116,10 @@ public class GoodsHotService {
             goodsHotInfo.setIsDelete(1);
             count = goodshotDao.updateById(goodsHotInfo);
             if (0 == count) {
-                appResponse = AppResponse.bizError("删除失败，请重试！");
-                break;
+                return AppResponse.bizError("删除失败，请重试！");
             }
         }
-        return appResponse;
+        return AppResponse.success("删除成功！");
     }
 
     /**

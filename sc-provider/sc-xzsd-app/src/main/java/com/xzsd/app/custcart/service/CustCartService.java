@@ -21,10 +21,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 购物车
- *
- * @author SwordKun.
- * @date 2020-04-16
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
  */
 @Service
 public class CustCartService {
@@ -41,7 +40,7 @@ public class CustCartService {
      * @param custcartInfo
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-20
+     * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse saveUser(CustCartInfo custcartInfo) {
@@ -53,7 +52,7 @@ public class CustCartService {
         queryWrapper.lambda().eq(CustCartInfo::getCommodityId, custcartInfo.getCommodityId());
         CustCartInfo custCartInfo = custCartDao.selectOne(queryWrapper);
         if (null != custCartInfo) {
-            custCartInfo.setCnt(custCartInfo.getCnt()+1);
+            custCartInfo.setCnt(custCartInfo.getCnt() + 1);
             Integer count = custCartDao.updateById(custCartInfo);
             if (0 == count) {
                 return AppResponse.bizError("添加购物车失败，请重试！");
@@ -79,7 +78,7 @@ public class CustCartService {
      * @param shopcarId
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-21
+     * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteUserById(String shopcarId) {
@@ -107,7 +106,7 @@ public class CustCartService {
      * @param custCartInfoVO
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-21
+     * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateUser(CustCartInfoVO custCartInfoVO) {
@@ -130,7 +129,7 @@ public class CustCartService {
         CustCartInfo custCartInfo = new CustCartInfo();
         BeanUtils.copyProperties(custCartInfoVO, custCartInfo);
         custCartInfo.setVersion(carInfoOld.getVersion() + 1);
-        custCartInfo.setCnt(carInfoOld.getCnt()+1);
+        custCartInfo.setCnt(carInfoOld.getCnt() + 1);
         custCartInfo.setUpdateTime(new Date());
         custCartInfo.setUpdateUser(SecurityUtils.getCurrentUserId());
         // 修改
@@ -147,7 +146,7 @@ public class CustCartService {
      * @param custCartInfo
      * @return
      * @Author SwordKun.
-     * @Date 2020-04-21
+     * @Date 2020-04-22
      */
     public AppResponse listCustCart(CustCartInfo custCartInfo) {
         String userId = SecurityUtils.getCurrentUserId();

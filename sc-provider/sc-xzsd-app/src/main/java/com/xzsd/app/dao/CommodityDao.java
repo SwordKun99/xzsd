@@ -18,5 +18,11 @@ import java.util.List;
 @Mapper
 public interface CommodityDao extends BaseMapper<CommodityInfo> {
 
+    /**
+     * 查询商品列表
+     *
+     * @param commodityInfo
+     * @return
+     */
     List<CommodityInfo> getGoodsList(CommodityInfo commodityInfo);
 }

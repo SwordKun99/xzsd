@@ -53,7 +53,7 @@ public class UserService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveUser(UserInfo userInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse saveUser(UserInfo userInfo,MultipartFile file) throws Exception {
         // 校验账号是否存在
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UserInfo::getUserNo, userInfo.getUserNo());
@@ -81,7 +81,7 @@ public class UserService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         if (file != null) {
-            uploadService.uploadImage(biz_msg, userInfo.getUserId(), file);
+            uploadService.uploadImage("user", userInfo.getUserId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -174,7 +174,7 @@ public class UserService {
         }
         UserInfo userInfo = userDao.selectById(userId);
         QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().like(FileInfo::getBizId, userId);
+        queryWrapper.lambda().eq(FileInfo::getBizId, userId);
         List<FileInfo> fileInfo = fileDao.selectList(queryWrapper);
         userInfo.setFileInfo(fileInfo);
         return AppResponse.success("查询成功！", userInfo);

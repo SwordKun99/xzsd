@@ -22,21 +22,25 @@
         order by image_no desc
     </select>
 
-    <!--商品详情-->
-    <select id="getComByCommodityInfo" parameterType="com.xzsd.pc.entity.ImageInfo"
-            resultType="com.xzsd.pc.entity.VO.ImageInfoVO">
+    <!--商品详情列表-->
+    <select id="getComByCommodityInfo" parameterType="com.xzsd.pc.entity.VO.CommodityInfoVO"
+            resultType="com.xzsd.pc.entity.VO.CommodityInfoVO">
         select
-        b.commodity_id commodityId,
-        b.commodity_name commodityName,
-        b.up_downstate upDownstate,
-        b.parent_code parentCode,
-        b.systematic_code systematicCode
-        from t_commodity b left join t_focus_rotations a
-        on a.commodity_id = b.commodity_Id
-        <where>
-            b.is_delete = 0
-            and a.image_id = #{imageId}
-            and up_downstate = 1
-        </where>
+        a.commodity_id commodityId,
+        a.commodity_name commodityName,
+        b.parent_name parentName,
+        b.systematic_name systematicName,
+        a.up_downstate upDownstate
+        from t_commodity a
+        left join t_commodity_classification b on b.systematic_code = a.systematic_code
+        where a.is_delete = 0
+        and a.up_downstate = 1
+        <if test="commodityName != null and commodityName != ''">
+            and a.commodity_name like concat('%', #{commodityName}, '%')
+        </if>
+        <if test="commodityId != null and commodityId != ''">
+            and a.commodity_id = {#commodityId}
+        </if>
+        order by a.create_time desc
     </select>
 </mapper>

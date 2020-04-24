@@ -52,7 +52,27 @@ public class CommodityInfo {
 
     @TableField(exist = false)
     private String path;
+    @TableField(exist = false)
+    private Double commodityTotalpri;
+    @TableField(exist = false)
+    private int commodityNum;
 
+
+    public Double getCommodityTotalpri() {
+        return commodityTotalpri;
+    }
+
+    public void setCommodityTotalpri(Double commodityTotalpri) {
+        this.commodityTotalpri = commodityTotalpri;
+    }
+
+    public int getCommodityNum() {
+        return commodityNum;
+    }
+
+    public void setCommodityNum(int commodityNum) {
+        this.commodityNum = commodityNum;
+    }
 
     public String getCommodityId() {
         return commodityId;

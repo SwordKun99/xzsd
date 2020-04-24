@@ -12,13 +12,15 @@ public class OrderInfo {
     @TableId
     private String orderId;
     private String commodityId;
+    private String shopAddress;
     private String shopId;
-    private String customerId;
-    private String customerName;
     private String customerPhone;
+    private String customerName;
+    private String customerId;
     private double orderMoney;
-    private double distnctMoney;
-    private String goodsCnt;
+    //单价
+    private String distnctMoney;
+    private Integer goodsCnt;
     private String orderNumber;
     private long channelType;
     private double feeMoney;
@@ -42,18 +44,9 @@ public class OrderInfo {
     private String remark;
 
     @TableField(exist = false)
-    private int pageSize;
-    @TableField(exist = false)
     private int pageNum;
-
-
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
+    @TableField(exist = false)
+    private int pageSize;
 
 
     public String getOrderId() {
@@ -65,12 +58,46 @@ public class OrderInfo {
     }
 
 
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
+    }
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
+    }
+
     public String getShopId() {
         return shopId;
     }
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
 
@@ -82,21 +109,6 @@ public class OrderInfo {
         this.customerId = customerId;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCustomerPhone() {
-        return customerPhone;
-    }
-
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
-    }
 
     public double getOrderMoney() {
         return orderMoney;
@@ -106,24 +118,21 @@ public class OrderInfo {
         this.orderMoney = orderMoney;
     }
 
-
-    public double getDistnctMoney() {
+    public String getDistnctMoney() {
         return distnctMoney;
     }
 
-    public void setDistnctMoney(double distnctMoney) {
+    public void setDistnctMoney(String distnctMoney) {
         this.distnctMoney = distnctMoney;
     }
 
-
-    public String getGoodsCnt() {
+    public Integer getGoodsCnt() {
         return goodsCnt;
     }
 
-    public void setGoodsCnt(String goodsCnt) {
+    public void setGoodsCnt(Integer goodsCnt) {
         this.goodsCnt = goodsCnt;
     }
-
 
     public String getOrderNumber() {
         return orderNumber;
@@ -187,6 +196,7 @@ public class OrderInfo {
         this.payTimeend = payTimeend;
     }
 
+
     public Date getPayTimestart() {
         return payTimestart;
     }
@@ -195,61 +205,6 @@ public class OrderInfo {
         this.payTimestart = payTimestart;
     }
 
-    public Date getShoppingTime() {
-        return shoppingTime;
-    }
-
-    public void setShoppingTime(Date shoppingTime) {
-        this.shoppingTime = shoppingTime;
-    }
-
-    public Date getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(Date payTime) {
-        this.payTime = payTime;
-    }
-
-    public Date getReceiveTime() {
-        return receiveTime;
-    }
-
-    public void setReceiveTime(Date receiveTime) {
-        this.receiveTime = receiveTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
 
     public String getPayStatus() {
         return payStatus;
@@ -260,7 +215,29 @@ public class OrderInfo {
     }
 
 
-    public void setReceiveTime(java.sql.Timestamp receiveTime) {
+    public Date getShoppingTime() {
+        return shoppingTime;
+    }
+
+    public void setShoppingTime(Date shoppingTime) {
+        this.shoppingTime = shoppingTime;
+    }
+
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
         this.receiveTime = receiveTime;
     }
 
@@ -292,12 +269,30 @@ public class OrderInfo {
     }
 
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+
     public String getUpdateUser() {
         return updateUser;
     }
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
+    }
+
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
 
@@ -327,4 +322,19 @@ public class OrderInfo {
         this.remark = remark;
     }
 
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }

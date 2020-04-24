@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.app.dao.DriveDao">
 
+    <!--查询司机负责门店列表-->
+    <select id="listDrive" parameterType="java.lang.String"
+            resultType="com.xzsd.app.entity.DriveInfo">
+        select
+        b.shop_id shopId,
+        b.shop_addrees shopAddress,
+        b.shop_tel shopTel,
+        b.user_id userId,
+        b.user_name userName
+        from t_drive a
+        left join t_shop b on b.drive_id = a.drive_id
+        where a.is_delete = 0
+        and a.drive_id = #{driveId}
+        order by b.create_time desc
+    </select>
+
 </mapper>

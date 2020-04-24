@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/customerevalution")
 public class CustEvaController {
@@ -32,6 +34,44 @@ public class CustEvaController {
             return cusEvaService.listCusEva(customerEvaluationInfo);
         } catch (Exception e) {
             logger.error("查询订单列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * order 新增订单评价
+     *
+     * @param orderId,evaList
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-10
+     */
+    @RequestMapping(value = "saveEvaluationInfo")
+    public AppResponse saveEvaluationInfo(String orderId, List<CustomerEvaluationInfo> evaList) {
+        try {
+            return cusEvaService.saveEvaluationInfo(orderId,evaList);
+        } catch (Exception e) {
+            logger.error("订单评价异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * order 新增订单评价
+     *
+     * @param orderId
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-10
+     */
+    @RequestMapping(value = "listEvalution")
+    public AppResponse listEvalution(String orderId) {
+        try {
+            return cusEvaService.listEvalution(orderId);
+        } catch (Exception e) {
+            logger.error("查询订单商品信息列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

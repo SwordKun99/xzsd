@@ -2,6 +2,7 @@ package com.xzsd.pc.image.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.AuthUtils;
+import com.xzsd.pc.entity.CommodityInfo;
 import com.xzsd.pc.entity.ImageInfo;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
 import com.xzsd.pc.image.service.ImageService;
@@ -44,9 +45,9 @@ public class ImageController {
      * @Date 2020-04-13
      */
     @PostMapping("saveImage")
-    public AppResponse saveImage(ImageInfo imageInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveImage(ImageInfo imageInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            AppResponse appResponse = imageService.saveImage(imageInfo, biz_msg, file);
+            AppResponse appResponse = imageService.saveImage(imageInfo, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("轮播图新增失败", e);
@@ -115,15 +116,15 @@ public class ImageController {
     /**
      * commodity 查询商品详情
      *
-     * @param imageId
+     * @param commodityInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
     @RequestMapping(value = "getComByCommodityInfo")
-    public AppResponse getComByCommodityInfo(String imageId) {
+    public AppResponse getComByCommodityInfo(CommodityInfo commodityInfo) {
         try {
-            return imageService.getComByCommodityInfo(imageId);
+            return imageService.getComByCommodityInfo(commodityInfo);
         } catch (Exception e) {
             logger.error("商品查询错误", e);
             System.out.println(e.toString());

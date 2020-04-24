@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.util.Date;
+
 @TableName("t_user_evaluation")
 public class CustomerEvaluationInfo {
 
     @TableId
     private String eveluationId;
     private String customerId;
+    private String commodityId;
     private String customerName;
     private String orderId;
     private String stoneId;
@@ -19,9 +22,9 @@ public class CustomerEvaluationInfo {
     private String evaContent;
     private long isDelete;
     private String createSer;
-    private java.sql.Timestamp createTime;
+    private Date createTime;
     private String updateUser;
-    private java.sql.Timestamp updateTime;
+    private Date updateTime;
     private String soreNo;
     private long version;
 
@@ -50,6 +53,13 @@ public class CustomerEvaluationInfo {
         this.customerId = customerId;
     }
 
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
+    }
 
     public String getCustomerName() {
         return customerName;
@@ -131,27 +141,30 @@ public class CustomerEvaluationInfo {
     }
 
 
-    public java.sql.Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(java.sql.Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-
-    public String getUpdateUser() {
-        return updateUser;
     }
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
     }
 
-
-    public java.sql.Timestamp getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
 
     public void setUpdateTime(java.sql.Timestamp updateTime) {
         this.updateTime = updateTime;

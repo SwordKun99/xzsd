@@ -12,5 +12,4 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface CustomerDao extends BaseMapper<CustomerInfo> {
-
 }

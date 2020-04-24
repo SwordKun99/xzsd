@@ -21,4 +21,17 @@ public class PasswordUtils {
         return bCryptPasswordEncoder.encode(rawPassword);
     }
 
+    /**
+     * 密码比较
+     *
+     * @param rawPassword 原密码
+     * @return 加密后的密码
+     */
+    public static boolean validatePassword (String oldPassword,String rawPassword) {
+        boolean flag = true;
+        if (!generatePassword(oldPassword).equals(rawPassword)) {
+            flag = false;
+        }
+        return flag;
+    }
 }

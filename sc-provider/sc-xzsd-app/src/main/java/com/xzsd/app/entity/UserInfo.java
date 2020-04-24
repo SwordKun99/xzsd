@@ -42,6 +42,52 @@ public class UserInfo {
     private List<FileInfo> fileInfo;
     @TableField(exist = false)
     private String invitation;
+    @TableField(exist = false)
+    private String provinceId;
+    @TableField(exist = false)
+    private String cityId;
+    @TableField(exist = false)
+    private String districtId;
+    @TableField(exist = false)
+    private String path;
+    @TableField(exist = false)
+    private String shopId;
+    @TableField(exist = false)
+    private String shopName;
+    @TableField(exist = false)
+    private String shopAddress;
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public String getUserId() {
         return userId;
@@ -247,5 +293,29 @@ public class UserInfo {
 
     public void setInvitation(String invitation) {
         this.invitation = invitation;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 }
