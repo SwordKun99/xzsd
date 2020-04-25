@@ -12,11 +12,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 司机实现类
  * @Author SwordKun.
  * @Date 2020-04-23
  */
-
 @Service
 public class DriveService {
 
@@ -24,10 +23,10 @@ public class DriveService {
     private DriveDao driveDao;
 
     /**
-     * custcart 查询购物车列表
+     * custcart 查询司机信息列表
      *
      * @param driveInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-23
      */
@@ -37,6 +36,6 @@ public class DriveService {
         PageHelper.startPage(driveInfo.getPageNum(), driveInfo.getPageSize());
         List<DriveInfo> listDrive = driveDao.listDrive(driveInfo.getDriveId());
         PageInfo<DriveInfo> pageData = new PageInfo<>(listDrive);
-        return AppResponse.success("查询成功", pageData);
+        return AppResponse.success("查询司机负责门店信息成功", pageData);
     }
 }

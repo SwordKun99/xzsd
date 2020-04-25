@@ -1,6 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
-
+/**
+ * @DescriptionDemo 门店VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class ShopInfoVO {
 
     private String shopId;

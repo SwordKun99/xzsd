@@ -8,6 +8,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 商品信息实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_commodity")
 public class CommodityInfo {
 
@@ -56,7 +61,6 @@ public class CommodityInfo {
     private Double commodityTotalpri;
     @TableField(exist = false)
     private int commodityNum;
-
 
     public Double getCommodityTotalpri() {
         return commodityTotalpri;

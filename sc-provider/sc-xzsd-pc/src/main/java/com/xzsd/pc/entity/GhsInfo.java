@@ -5,6 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 热门商品展示数量实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_ghs")
 public class GhsInfo {
 

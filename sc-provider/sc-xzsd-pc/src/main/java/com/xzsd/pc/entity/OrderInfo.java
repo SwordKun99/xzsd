@@ -6,6 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 订单实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_order_master")
 public class OrderInfo {
 
@@ -47,7 +52,6 @@ public class OrderInfo {
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
-
 
     public String getOrderId() {
         return orderId;

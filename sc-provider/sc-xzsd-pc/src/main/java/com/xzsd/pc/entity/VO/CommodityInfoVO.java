@@ -1,10 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
-
-import com.xzsd.pc.entity.FileInfo;
-
-import java.util.List;
-
+/**
+ * @DescriptionDemo 商品信息VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class CommodityInfoVO {
 
     private String commodityId;

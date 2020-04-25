@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface UserDao extends BaseMapper<UserInfo> {
+
     /**
      * 查询用户信息
      *

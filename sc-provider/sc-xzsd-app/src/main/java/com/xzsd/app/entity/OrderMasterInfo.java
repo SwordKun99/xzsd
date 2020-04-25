@@ -7,6 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 订单实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_order_master")
 public class OrderMasterInfo {
 
@@ -18,9 +23,11 @@ public class OrderMasterInfo {
     private String customerPhone;
     private String customerName;
     private String customerId;
+    //订单总价
     private double orderMoney;
     //单价
     private String distnctMoney;
+    //订单各个商品数量
     private Integer goodsCnt;
     private String orderNumber;
     private long channelType;
@@ -28,10 +35,14 @@ public class OrderMasterInfo {
     private String goosNum;
     private String orderStatus;
     private double paymentMoney;
+    //支付时间起
     private Date payTimeend;
+    //支付时间至
     private Date payTimestart;
+    //支付状态
     private String payStatus;
     private Date shoppingTime;
+    //支付时间
     private Date payTime;
     private Date receiveTime;
     private String stoneNumber;

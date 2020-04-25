@@ -136,13 +136,9 @@ public class DriveController {
      * @Date 2020-04-15
      */
     @PostMapping("updateDImage")
-    public AppResponse updateDImage(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse updateDImage(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            //获取司机id
-            String driveId = AuthUtils.getCurrentUserId();
-            driveInfo.setCreateUser(driveId);
-            driveInfo.setUpdateUser(driveId);
-            return driveService.updateDImage(driveInfo, biz_msg, file);
+            return driveService.updateDImage(driveInfo, file);
         } catch (Exception e) {
             logger.error("修改司机头像错误", e);
             System.out.println(e.toString());

@@ -106,7 +106,7 @@ public class MenuController {
     /**
      * menu 菜单列表
      *
-     * @param
+     * @param menuInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28

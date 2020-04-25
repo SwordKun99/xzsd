@@ -14,6 +14,4 @@
             and a.systematic_code = #{systematicCode}
         </if>
     </select>
-
-
 </mapper>

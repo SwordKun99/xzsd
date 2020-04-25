@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 购物车实现类
  * @Author SwordKun.
  * @Date 2020-03-28
  */
@@ -38,12 +38,12 @@ public class CustCartService {
      * custcart 新增购物车
      *
      * @param custcartInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveUser(CustCartInfo custcartInfo) {
+    public AppResponse saveCustCart(CustCartInfo custcartInfo) {
         //获取当前客户id
         String customerId = SecurityUtils.getCurrentUserId();
         // 校验购物车是否存在
@@ -76,12 +76,12 @@ public class CustCartService {
      * custcart 删除购物车
      *
      * @param shopcarId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteUserById(String shopcarId) {
+    public AppResponse deleteCustCart(String shopcarId) {
         List<String> idList = Arrays.asList(shopcarId.split(","));
         List<CustCartInfo> carInfoList = custCartDao.selectBatchIds(idList);
         if (carInfoList != null && carInfoList.size() <= 0) {
@@ -109,7 +109,7 @@ public class CustCartService {
      * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateUser(CustCartInfoVO custCartInfoVO) {
+    public AppResponse updateCustCart(CustCartInfoVO custCartInfoVO) {
         // 校验购物车是否存在
         QueryWrapper<CustCartInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CustCartInfo::getIsDelete, 0);

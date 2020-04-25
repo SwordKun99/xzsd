@@ -5,8 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
-import com.neusoft.util.AuthUtils;
-import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.*;
 import com.xzsd.pc.entity.*;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +53,7 @@ public class CommodityService {
      * Commodity 新增商品
      *
      * @param commodityInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -86,12 +83,11 @@ public class CommodityService {
         return AppResponse.success("新增成功！");
     }
 
-
     /**
      * commodity 删除商品
      *
      * @param commodityId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -135,7 +131,7 @@ public class CommodityService {
      * commodity 修改商品
      *
      * @param commodityInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -177,7 +173,7 @@ public class CommodityService {
      * commodity 查询商品详情
      *
      * @param commodityId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -195,7 +191,7 @@ public class CommodityService {
      * commodity 查询商品列表（分页）
      *
      * @param commodityInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -218,7 +214,7 @@ public class CommodityService {
      * commodity 查询商家列表
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -232,7 +228,7 @@ public class CommodityService {
      * commodity 查询上级分类列表
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -245,8 +241,8 @@ public class CommodityService {
     /**
      * commodity 查询二级分类列表
      *
-     * @param
-     * @return
+     * @param parentCode
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -261,7 +257,7 @@ public class CommodityService {
      * commodity 商品上下架
      *
      * @param commodityInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -294,13 +290,13 @@ public class CommodityService {
     /**
      * commodity 修改商品图片
      *
-     * @param
-     * @return
+     * @param fileInfo,file
+     * @return parentCode
      * @Author SwordKun.
      * @Date 2020-04-15
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateImage(FileInfo fileInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse updateImage(FileInfo fileInfo, MultipartFile file) throws Exception {
         FileInfo fileInfoOld = fileDao.selectById(fileInfo.getFileId());
         //删除file
         if (fileInfoOld == null) {
@@ -315,7 +311,7 @@ public class CommodityService {
         TencentCosUtil.del(key);
         //然后新增file
         if (file != null) {
-            uploadService.uploadImage(biz_msg, fileInfo.getBizId(), file);
+            uploadService.uploadImage("commodity", fileInfo.getBizId(), file);
         }
         return AppResponse.success("图片修改成功!");
     }

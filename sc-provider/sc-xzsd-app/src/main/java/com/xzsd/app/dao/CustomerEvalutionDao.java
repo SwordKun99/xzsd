@@ -3,14 +3,13 @@ package com.xzsd.app.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.app.entity.CustomerEvaluationInfo;
-import com.xzsd.app.entity.UserInfo;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 /**
- * @ClassName CommodityDao
- * @Description Commodity
+ * @ClassName CustomerEvalutionDao
+ * @Description CustomerEvalution
  * @Author SwordKun.
  * @Date 2020-03-29
  */

@@ -1,33 +1,20 @@
 package com.xzsd.pc.customer.service;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
-import com.neusoft.util.StringUtil;
-import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CustomerDao;
 import com.xzsd.pc.dao.FileDao;
-import com.xzsd.pc.dao.ShopDao;
 import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.CustomerInfo;
-import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.CustomerInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
-import com.xzsd.pc.util.PasswordUtils;
-import com.xzsd.pc.util.TencentCosUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -35,7 +22,6 @@ import java.util.List;
  * @Author SwordKun.
  * @Date 2020-03-28
  */
-
 @Service
 public class CustomerService {
 
@@ -51,14 +37,11 @@ public class CustomerService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private ShopDao shopDao;
-
     /**
      * customer 查询客户列表（分页）
      *
      * @param customerInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */

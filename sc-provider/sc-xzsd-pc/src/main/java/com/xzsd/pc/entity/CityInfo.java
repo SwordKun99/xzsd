@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
-
+/**
+ * @DescriptionDemo 城市实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("d_city")
 public class CityInfo {
 

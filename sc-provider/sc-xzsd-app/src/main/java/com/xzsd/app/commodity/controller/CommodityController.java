@@ -3,7 +3,6 @@ package com.xzsd.app.commodity.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.app.commodity.service.CommodityService;
-import com.xzsd.app.entity.CommodityInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Description增删改查Commodity
+ * @DescriptionDemo 商品控制类
  * @Author SwordKun.
- * @Date 2020-03-29
+ * @Date 2020-04-23
  */
-
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {

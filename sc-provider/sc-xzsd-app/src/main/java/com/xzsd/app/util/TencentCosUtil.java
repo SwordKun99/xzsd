@@ -12,15 +12,16 @@ import java.io.File;
 import java.util.UUID;
 
 /**
- * @ClassName
+ * @ClassName 上传图片腾讯云
  * @Description
- * @Author quan
+ * @Author SwordKun.
  * @Date 2020/4/9 18:44
  */
 public class TencentCosUtil {
-    //    private static final String bucketName = "xzbook-1258231676";
     private static final String secretId = "AKIDYcrqXMpDOIDwUklOlqkDxQFHqhLinknY";
+
     private static final String secretKey = "d091bsftqWv8XeVHo32qNdcJ8i00jwsW";
+
     private static final String localhost = "https://walking-bookstore-1301826795.cos.ap-guangzhou.myqcloud.com";
 
     public static String upload( MultipartFile localFile, String key) throws Exception {
@@ -29,7 +30,6 @@ public class TencentCosUtil {
         Region region = new Region("ap-guangzhou");
         ClientConfig clientConfig = new ClientConfig(region);
         COSClient cosClient = new COSClient(cred, clientConfig);
-
         String bucketName = "walking-bookstore-1301826795";
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
         cosClient.putObject(putObjectRequest);
@@ -48,6 +48,14 @@ public class TencentCosUtil {
         return file;
     }
 
+    /**
+     * file 删除腾讯云云端图片
+     *
+     * @param key
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-24
+     */
     public static void del(String key){
         String bucketName = "walking-bookstore-1301826795";
         COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @DescriptionDemo 注册用户实现类
+ * @DescriptionDemo 店长实现类
  * @Author SwordKun.
  * @Date 2020-04-23
  */
@@ -27,7 +27,7 @@ public class MessageService {
      * custcart 查询门店下司机信息列表
      *
      * @param shopInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-23
      */
@@ -37,6 +37,6 @@ public class MessageService {
         PageHelper.startPage(shopInfo.getPageNum(), shopInfo.getPageSize());
         List<ShopInfo> listShop = shopDao.listShop(shopInfo.getUserId());
         PageInfo<ShopInfo> pageData = new PageInfo<>(listShop);
-        return AppResponse.success("查询成功", pageData);
+        return AppResponse.success("查询司机信息成功", pageData);
     }
 }

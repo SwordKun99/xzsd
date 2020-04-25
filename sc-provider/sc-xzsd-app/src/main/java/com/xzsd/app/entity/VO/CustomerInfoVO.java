@@ -3,6 +3,11 @@ package com.xzsd.app.entity.VO;
 
 import java.io.Serializable;
 
+/**
+ * @DescriptionDemo 客户信息VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class CustomerInfoVO implements Serializable {
     private String customerId;
     private String invitation;
@@ -24,12 +29,9 @@ public class CustomerInfoVO implements Serializable {
     private Integer version;
     private String customerScore;
     private String userId;
-
-
     private int pageSize;
     private int pageNum;
     private String path;
-
 
     public String getCustomerId() {
         return customerId;

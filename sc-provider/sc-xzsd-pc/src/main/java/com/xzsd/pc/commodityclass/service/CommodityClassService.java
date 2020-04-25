@@ -14,18 +14,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @Service
 public class CommodityClassService {
 
     @Autowired(required = true)
     private CommodityClassDao commodityClassDao;
 
-
     /**
      * CommodityClass 新增商品分类
      *
      * @param commodityclassInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -57,7 +61,7 @@ public class CommodityClassService {
      * commodityclass 删除商品分类
      *
      * @param commodityclassInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -82,7 +86,7 @@ public class CommodityClassService {
      * commodityclass 修改商品分类
      *
      * @param commodityclassInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -104,6 +108,10 @@ public class CommodityClassService {
             appResponse = AppResponse.bizError("查询不到该数据，请重试！");
             return appResponse;
         }
+        //获取用户id
+        String commodityclassId = SecurityUtils.getCurrentUserId();
+        commodityclassInfo.setCreateSer(commodityclassId);
+        commodityclassInfo.setUpdateUser(commodityclassId);
         commodityclassInfo.setVersion(commodityclassInfoOld.getVersion() + 1);
         int count = commodityClassDao.updateById(commodityclassInfo);
         if (0 == count) {
@@ -118,7 +126,7 @@ public class CommodityClassService {
      * commodityclass 查询分类详情
      *
      * @param commodityclassInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -133,7 +141,7 @@ public class CommodityClassService {
      * commodityclass 查询商品分类列表-
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */

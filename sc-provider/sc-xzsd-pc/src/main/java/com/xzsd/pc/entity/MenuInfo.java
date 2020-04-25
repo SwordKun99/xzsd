@@ -7,6 +7,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 菜单实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_menu")
 public class MenuInfo {
 

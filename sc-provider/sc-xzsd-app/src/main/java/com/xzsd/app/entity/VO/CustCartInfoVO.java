@@ -1,6 +1,11 @@
 package com.xzsd.app.entity.VO;
 
 
+/**
+ * @DescriptionDemo 购物车VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class CustCartInfoVO {
 
     private String shopcarId;
@@ -17,11 +22,9 @@ public class CustCartInfoVO {
     private String updateTime;
     private String soreNo;
     private Integer version;
-
     private int pageSize;
     private int pageNum;
     private String path;
-
 
     public String getShopcarId() {
         return shopcarId;

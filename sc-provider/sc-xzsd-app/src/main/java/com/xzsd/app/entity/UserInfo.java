@@ -8,6 +8,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 用户信息实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_sys_user")
 public class UserInfo {
 
@@ -32,7 +37,6 @@ public class UserInfo {
     private String soreNo;
     private Integer version;
     private String remark;
-
 
     @TableField(exist = false)
     private int PageNum;

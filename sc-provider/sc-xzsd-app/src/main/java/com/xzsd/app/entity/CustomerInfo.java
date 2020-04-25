@@ -8,8 +8,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 客户信息实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_customer_information")
 public class CustomerInfo implements Serializable {
+
     @TableId
     private String customerId;
     private String invitation;

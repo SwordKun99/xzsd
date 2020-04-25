@@ -54,23 +54,4 @@
         </if>
         order by create_time desc
     </select>
-
-    <!--顶部栏-->
-    <select id="getTop" parameterType="com.xzsd.pc.entity.UserInfo"
-            resultType="com.xzsd.pc.entity.UserInfo">
-        select
-        a.user_Id userId,
-        a.user_No userNo,
-        b.path path,
-        a.role role,
-        from t_sys_user a,
-        t_file b
-        <where>
-            a.is_deleted = 0
-            and a.user_Id = #{userId}
-            and b.biz_id = #{userId}
-        </where>
-    </select>
-
-
 </mapper>

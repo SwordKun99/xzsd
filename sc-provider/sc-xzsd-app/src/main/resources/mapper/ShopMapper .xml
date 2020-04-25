@@ -14,5 +14,4 @@
         and a.user_id = #{userId}
         order by b.create_time desc
     </select>
-
 </mapper>

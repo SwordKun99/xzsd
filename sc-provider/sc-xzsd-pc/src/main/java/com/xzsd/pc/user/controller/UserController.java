@@ -31,7 +31,6 @@ public class UserController {
     @Resource
     private UserService userService;
 
-
     /**
      * user 新增用户
      *
@@ -129,25 +128,6 @@ public class UserController {
     }
 
     /**
-     * user 查询顶部栏
-     *
-     * @param
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-03-25
-     */
-    @RequestMapping(value = "getTop")
-    public AppResponse getTop() {
-        try {
-            return userService.getTop();
-        } catch (Exception e) {
-            logger.error("顶部栏信息错误", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
      * user 修改用户头像
      *
      * @param userInfo
@@ -156,13 +136,13 @@ public class UserController {
      * @Date 2020-04-15
      */
     @PostMapping("updateImage")
-    public AppResponse updateImage(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse updateImage(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
             //获取用户Id
             String userId = AuthUtils.getCurrentUserId();
             userInfo.setCreateUser(userId);
             userInfo.setUpdateUser(userId);
-            return userService.updateImage(userInfo, biz_msg, file);
+            return userService.updateImage(userInfo, file);
         } catch (Exception e) {
             logger.error("修改用户头像错误", e);
             System.out.println(e.toString());

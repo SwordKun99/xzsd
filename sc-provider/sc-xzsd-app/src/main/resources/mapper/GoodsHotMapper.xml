@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.app.dao.GoodsHotDao">
 
-    <!--热门商品列表-->
+    <!--查询热门商品列表-->
     <select id="listGoodsHot" parameterType="com.xzsd.app.entity.GoodsHotInfo"
             resultType="com.xzsd.app.entity.GoodsHotInfo">
         select
@@ -16,5 +16,4 @@
         where a.is_delete = 0
         order by a.goodshot_nun desc
     </select>
-
 </mapper>

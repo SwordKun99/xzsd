@@ -38,9 +38,9 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @PostMapping("saveShop")
-    public AppResponse saveShop(ShopInfo shopInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse saveShop(ShopInfo shopInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try { ;
-            AppResponse appResponse = shopService.saveShop(shopInfo, biz_msg, file);
+            AppResponse appResponse = shopService.saveShop(shopInfo, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("门店新增失败", e);
@@ -52,7 +52,7 @@ public class ShopContorller {
     /**
      * shop 删除门店
      *
-     * @param shopInfo
+     * @param shopId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10

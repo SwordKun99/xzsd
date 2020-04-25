@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 注册用户
- *
+ * @DescriptionDemo 注册用户控制类
  * @Author SwordKun.
  * @Date 2020-03-28
  */
-
 @RestController
 @RequestMapping("/validate")
 public class ValidateController {
@@ -28,7 +26,7 @@ public class ValidateController {
     private ValidateService validateService;
 
     /**
-     * customer 注册用户
+     * user 注册用户
      *
      * @param userInfo
      * @return AppResponse
@@ -36,9 +34,9 @@ public class ValidateController {
      * @Date 2020-03-28
      */
     @PostMapping("/Validate")
-    public AppResponse Validate(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse Validate(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            AppResponse appResponse = validateService.Validate(userInfo, biz_msg, file);
+            AppResponse appResponse = validateService.Validate(userInfo, file);
             return appResponse;
         } catch (Exception e) {
             logger.error("注册失败", e);

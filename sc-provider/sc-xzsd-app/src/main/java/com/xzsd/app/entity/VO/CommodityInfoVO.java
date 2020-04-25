@@ -1,11 +1,15 @@
 package com.xzsd.app.entity.VO;
 
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.xzsd.app.entity.FileInfo;
 
 import java.util.List;
 
+/**
+ * @DescriptionDemo 商品信息VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class CommodityInfoVO {
 
     private String commodityId;
@@ -37,15 +41,9 @@ public class CommodityInfoVO {
     private String updateTime;
     private String soreNo;
     private Integer version;
-
-    @TableField(exist = false)
     private int pageNum;
-    @TableField(exist = false)
     private int pageSize;
-
-    @TableField(exist = false)
     private List<FileInfo> filePath;
-
 
     public String getCommodityId() {
         return commodityId;

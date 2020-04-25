@@ -3,6 +3,11 @@ package com.xzsd.pc.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+/**
+ * @DescriptionDemo 图片实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_file")
 public class FileInfo {
     @TableId

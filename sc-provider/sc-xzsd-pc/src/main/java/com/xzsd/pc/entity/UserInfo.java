@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 用户实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_sys_user")
 public class UserInfo {
 
@@ -34,7 +38,6 @@ public class UserInfo {
     private Integer version;
     private String remark;
 
-
     @TableField(exist = false)
     private int PageNum;
     @TableField(exist = false)
@@ -49,7 +52,6 @@ public class UserInfo {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 
     public String getUserCode() {
         return userCode;

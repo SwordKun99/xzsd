@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * @DescriptionDemo 客户订单评价控制类
+ * @Author SwordKun.
+ * @Date 2020-04-23
+ */
 @RestController
 @RequestMapping("/customerevalution")
 public class CustEvaController {

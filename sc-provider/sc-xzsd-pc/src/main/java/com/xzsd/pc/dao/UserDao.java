@@ -29,12 +29,4 @@ public interface UserDao extends BaseMapper<UserInfo> {
      * @return
      */
     List<UserInfo> listUsers(UserInfo userInfo);
-
-    /**
-     * 顶部栏
-     *
-     * @param
-     * @return 修改结果
-     */
-    UserInfo getTop();
 }

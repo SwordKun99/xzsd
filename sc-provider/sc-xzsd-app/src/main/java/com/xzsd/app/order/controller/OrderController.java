@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 订单
- *
- * @author SwordKun.
- * @date 2020-04-23
+ * @DescriptionDemo 订单控制类
+ * @Author SwordKun.
+ * @Date 2020-04-23
  */
 @RequestMapping("/order")
 @RestController
 public class OrderController {
+
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Resource

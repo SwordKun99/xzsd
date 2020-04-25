@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 门店下司机实现类
- *
- * @author SwordKun.
- * @date 2020-04-23
+ * @DescriptionDemo 店长控制类
+ * @Author SwordKun.
+ * @Date 2020-04-23
  */
 @RequestMapping("/message")
 @RestController
@@ -26,7 +25,7 @@ public class MessageController {
     private MessageService messageService;
 
     /**
-     * commodity 查询购物车列表(分页)
+     * commodity 查询门店下司机信息列表
      *
      * @param shopInfo
      * @return AppResponse

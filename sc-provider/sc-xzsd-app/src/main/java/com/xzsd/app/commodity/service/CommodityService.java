@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 商品实现类
  * @Author SwordKun.
  * @Date 2020-03-21
  */
@@ -34,7 +34,7 @@ public class CommodityService {
      * commodity 查询商品详情
      *
      * @param commodityId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -51,7 +51,7 @@ public class CommodityService {
      * commodity 查询上级分类列表
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -65,7 +65,7 @@ public class CommodityService {
      * commodity 查询二级分类列表
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */

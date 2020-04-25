@@ -6,6 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 司机实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_drive")
 public class DriveInfo {
 

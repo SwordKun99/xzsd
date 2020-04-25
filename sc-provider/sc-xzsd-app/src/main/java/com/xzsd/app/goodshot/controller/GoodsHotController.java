@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Description增删改查Commodity
+ * @DescriptionDemo 热门商品控制类
  * @Author SwordKun.
- * @Date 2020-03-29
+ * @Date 2020-04-23
  */
-
 @RestController
 @RequestMapping("/goodshot")
 public class GoodsHotController {

@@ -47,7 +47,7 @@ public class OrderService {
      * order 新增订单
      *
      * @param orderMasterInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-23
      */
@@ -83,6 +83,7 @@ public class OrderService {
             }
             totlePrice = totlePrice + Double.parseDouble(goodNum[i])*Double.parseDouble(goodMoney[i]);
             goodCnt += Integer.parseInt(goodNum[i]);
+            //添加订单商品表
             OrderCommodityInfo orderCommodityInfo = new OrderCommodityInfo();
             orderCommodityInfo.setOrdercomId(UUIDUtils.getUUID());
             orderCommodityInfo.setCommodityId(commodityInfo.getCommodityId());
@@ -95,11 +96,13 @@ public class OrderService {
             orderCommodityInfo.setOrderId(orderId);
             orderCommodityDao.insert(orderCommodityInfo);
         }
+        //判断客户是否绑定邀请码及邀请码是否过期
         ShopInfo shopInfo = shopDao.selectById(orderMasterInfo.getShopId());
         CustomerInfo customerInfo = customerDao.selectById(customerId);
         if (customerInfo.getInvitation() == null || customerInfo.getInvitation() != shopInfo.getInvitation()) {
             return AppResponse.bizError("请前往绑定或更新邀请码！");
         }
+        //添加订单表
         orderMasterInfo.setOrderMoney(totlePrice);
         orderMasterInfo.setGoodsCnt(goodCnt);
         orderMasterInfo.setOrderId(orderId);
@@ -126,7 +129,7 @@ public class OrderService {
      * order 修改订单状态
      *
      * @param orderMasterInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-24
      */
@@ -163,7 +166,7 @@ public class OrderService {
      * order 查询订单详情
      *
      * @param orderId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-24
      */
@@ -186,7 +189,7 @@ public class OrderService {
      * order 查询订单列表
      *
      * @param orderMasterInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-24
      */

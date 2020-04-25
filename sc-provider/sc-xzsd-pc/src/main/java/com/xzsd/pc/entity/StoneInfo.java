@@ -5,6 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 商家实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_stone")
 public class StoneInfo {
 
@@ -18,7 +23,6 @@ public class StoneInfo {
     private Date updateTime;
     private String soreNo;
     private long version;
-
 
     public String getStoneId() {
         return stoneId;

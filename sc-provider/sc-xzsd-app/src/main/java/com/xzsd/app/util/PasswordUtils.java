@@ -26,6 +26,8 @@ public class PasswordUtils {
      *
      * @param rawPassword 原密码
      * @return 加密后的密码
+     * @Author SwordKun.
+     * @Date 2020-04-24
      */
     public static boolean validatePassword (String oldPassword,String rawPassword) {
         boolean flag = true;

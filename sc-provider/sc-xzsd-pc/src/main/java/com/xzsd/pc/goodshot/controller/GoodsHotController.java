@@ -52,7 +52,7 @@ public class GoodsHotController {
     /**
      * goodshot 删除热门位商品
      *
-     * @param goodhotId
+     * @param goodshotId
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01

@@ -5,6 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 区实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("d_district")
 public class DistrictInfo {
 

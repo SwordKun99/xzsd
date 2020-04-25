@@ -26,7 +26,7 @@ import java.util.Date;
 
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 客户实现类
  * @Author SwordKun.
  * @Date 2020-03-28
  */
@@ -53,7 +53,7 @@ public class CustomerService {
      * customer 注销客户
      *
      * @param customerInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -87,13 +87,13 @@ public class CustomerService {
      * customer 修改客户邀请码
      *
      * @param customerInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateCustomer(CustomerInfoVO customerInfoVO) {
-        // 校验客户是否存在
+        // 校验门店邀请码
         QueryWrapper<CustomerInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CustomerInfo::getIsDelete, 0);
         queryWrapper.lambda().eq(CustomerInfo::getInvitation, customerInfoVO.getInvitation());
@@ -131,13 +131,13 @@ public class CustomerService {
     /**
      * customer 修改头像
      *
-     * @param
-     * @return
+     * @param customerInfo,file
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-15
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateCImage(CustomerInfo customerInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse updateCImage(CustomerInfo customerInfo, MultipartFile file) throws Exception {
         //通过customerId找到一下头像file表
         AppResponse appResponse = AppResponse.success("头像修改成功!");
         QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
@@ -155,10 +155,9 @@ public class CustomerService {
         }
         //服务器删除path
         TencentCosUtil.del(key);
-
         //然后新增file
         if (file != null) {
-            uploadService.uploadImage(biz_msg, customerInfo.getCustomerId(), file);
+            uploadService.uploadImage("customer", customerInfo.getCustomerId(), file);
         }
         return appResponse;
     }
@@ -166,8 +165,8 @@ public class CustomerService {
     /**
      * customer 修改密码
      *
-     * @param
-     * @return
+     * @param oldPassword,newPassword
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-15
      */
@@ -196,7 +195,7 @@ public class CustomerService {
      * customer 查询用户个人信息
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-15
      */

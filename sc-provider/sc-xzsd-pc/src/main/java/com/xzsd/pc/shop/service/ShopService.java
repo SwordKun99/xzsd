@@ -26,7 +26,6 @@ import java.util.List;
  * @Author SwordKun.
  * @Date 2020-04-10
  */
-
 @Service
 public class ShopService {
 
@@ -41,12 +40,12 @@ public class ShopService {
      * shop 新增门店
      *
      * @param shopInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveShop(ShopInfo shopInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse saveShop(ShopInfo shopInfo, MultipartFile file) throws Exception {
         // 校验门店是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
@@ -79,7 +78,7 @@ public class ShopService {
             return AppResponse.bizError("新增失败，请重试");
         }
         if (file != null) {
-            uploadService.uploadImage(biz_msg, shopInfo.getShopId(), file);
+            uploadService.uploadImage("shop", shopInfo.getShopId(), file);
         }
         return AppResponse.success("新增成功");
     }
@@ -88,7 +87,7 @@ public class ShopService {
      * shop 删除门店
      *
      * @param shopId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
@@ -116,7 +115,7 @@ public class ShopService {
      * shop 修改门店
      *
      * @param shopInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
@@ -163,7 +162,7 @@ public class ShopService {
      * shop 查询门店详情
      *
      * @param shopInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -178,7 +177,7 @@ public class ShopService {
      * shop 分页查询门店列表
      *
      * @param shopInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */

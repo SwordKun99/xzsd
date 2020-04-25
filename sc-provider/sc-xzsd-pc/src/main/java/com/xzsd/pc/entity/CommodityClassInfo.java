@@ -7,6 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 商品分类实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_commodity_classification")
 public class CommodityClassInfo implements Serializable {
 

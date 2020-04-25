@@ -6,6 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 用户评价实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_user_evaluation")
 public class CustomerEvaluationInfo {
 
@@ -34,7 +39,6 @@ public class CustomerEvaluationInfo {
     private int pageNum;
     @TableField(exist = false)
     private int path;
-
 
     public String getEveluationId() {
         return eveluationId;

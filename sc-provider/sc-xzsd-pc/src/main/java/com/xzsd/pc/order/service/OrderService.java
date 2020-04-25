@@ -12,7 +12,6 @@ import com.xzsd.pc.entity.OrderInfo;
 import com.xzsd.pc.entity.ShopInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.OrderInfoVO;
-import com.xzsd.pc.shop.service.ShopService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class OrderService {
      * order 修改订单
      *
      * @param orderInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
@@ -81,7 +80,7 @@ public class OrderService {
      * order 查询订单详情
      *
      * @param orderInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -96,7 +95,7 @@ public class OrderService {
      * order 分页查询订单列表
      *
      * @param orderInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */

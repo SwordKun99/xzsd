@@ -1,11 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.util.Date;
-
+/**
+ * @DescriptionDemo 菜单VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class MenuInfoVO {
 
     private String menuId;

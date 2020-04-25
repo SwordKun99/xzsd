@@ -1,6 +1,7 @@
 package com.xzsd.pc.commodityclass.controller;
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.commodityclass.service.CommodityClassService;
 import com.xzsd.pc.entity.CommodityClassInfo;
@@ -18,15 +19,14 @@ import javax.annotation.Resource;
  * @Author SwordKun.
  * @Date 2020-03-29
  */
-
 @RestController
 @RequestMapping("/commodityclass")
 public class CommodityClassController {
+
     private static final Logger logger = LoggerFactory.getLogger(CommodityClassController.class);
 
     @Resource
     private CommodityClassService commodityclassService;
-
 
     /**
      * commodityclass 新增商品分类
@@ -78,10 +78,6 @@ public class CommodityClassController {
     @PostMapping("updateCommodityClass")
     public AppResponse updateCommodityClass(CommodityClassInfo commodityclassInfo) {
         try {
-            //获取商品分类id
-            String commodityclassId = AuthUtils.getCurrentCommodityClassrId();
-            commodityclassInfo.setCreateSer(commodityclassId);
-            commodityclassInfo.setUpdateUser(commodityclassId);
             return commodityclassService.updateCommodityClass(commodityclassInfo);
         } catch (Exception e) {
             logger.error("修改商品分类信息错误", e);

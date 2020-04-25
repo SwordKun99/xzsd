@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 热门商品实现类
  * @Author SwordKun.
  * @Date 2020-04-22
  */
@@ -25,8 +25,8 @@ public class GoodsHotService {
     /**
      * goodshot 查询热门商品列表
      *
-     * @param
-     * @return
+     * @param goodsHotInfo
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-22
      */

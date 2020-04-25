@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 购物车实现类
- *
- * @author SwordKun.
- * @date 2020-04-23
+ * @DescriptionDemo 司机控制类
+ * @Author SwordKun.
+ * @Date 2020-04-23
  */
 @RequestMapping("/drive")
 @RestController
@@ -25,9 +24,12 @@ public class DriveController {
     private DriveService driveService;
 
     /**
-     * 查询购物车列表
+     * drive 查询司机负责门店信息列表
      *
-     * @return
+     * @param driveInfo
+     * @return AppResponse
+     * @author SwordKun.
+     * @Date 2020-04-23
      */
     @RequestMapping("listDrive")
     public AppResponse listDrive(DriveInfo driveInfo) {

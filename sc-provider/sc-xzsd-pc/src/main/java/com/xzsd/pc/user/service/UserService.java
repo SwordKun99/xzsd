@@ -20,7 +20,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -48,7 +47,7 @@ public class UserService {
      * user 新增用户
      *
      * @param userInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -90,7 +89,7 @@ public class UserService {
      * user 删除用户
      *
      * @param userId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -118,7 +117,7 @@ public class UserService {
      * user 修改用户
      *
      * @param userInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -164,7 +163,7 @@ public class UserService {
      * user 查询用户详情
      *
      * @param userId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -183,8 +182,8 @@ public class UserService {
     /**
      * user 查询用户列表（分页）
      *
-     * @param
-     * @return
+     * @param userInfo
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -197,19 +196,6 @@ public class UserService {
     }
 
     /**
-     * user 顶部栏
-     *
-     * @param
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-03-28
-     */
-    public AppResponse getTop() {
-        UserInfo userInfo = userDao.getTop();
-        return AppResponse.success("查询成功！", userInfo);
-    }
-
-    /**
      * user 修改头像
      *
      * @param
@@ -218,7 +204,7 @@ public class UserService {
      * @Date 2020-04-15
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateImage(UserInfo userInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse updateImage(UserInfo userInfo, MultipartFile file) throws Exception {
         //通过userId找到一下头像file表
         QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(FileInfo::getBizId, userInfo.getUserId());
@@ -236,7 +222,7 @@ public class UserService {
         TencentCosUtil.del(key);
         //然后新增file
         if (file != null) {
-            uploadService.uploadImage(biz_msg, userInfo.getUserId(), file);
+            uploadService.uploadImage("user", userInfo.getUserId(), file);
         }
         return AppResponse.success("头像修改成功!");
     }

@@ -33,7 +33,19 @@ public interface CommodityDao extends BaseMapper<CommodityInfo> {
      */
     List<CommodityInfoVO> listCommodity(CommodityInfoVO commodityInfo);
 
+    /**
+     * 删除商品轮播图
+     *
+     * @param commodityInfo 商品信息
+     * @return 所有商品信息
+     */
     int deletedImageInfo(CommodityInfo commodityInfo);
 
+    /**
+     * 删除商品热门商品
+     *
+     * @param commodityInfo 商品信息
+     * @return 所有商品信息
+     */
     int deletedGoodsHot(CommodityInfo commodityInfo);
 }

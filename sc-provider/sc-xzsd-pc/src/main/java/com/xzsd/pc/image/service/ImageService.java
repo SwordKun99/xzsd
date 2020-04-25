@@ -6,18 +6,18 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
-import com.neusoft.util.AuthUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CommodityDao;
 import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.ImageDao;
 import com.xzsd.pc.dao.UserDao;
-import com.xzsd.pc.entity.*;
+import com.xzsd.pc.entity.CommodityInfo;
+import com.xzsd.pc.entity.ImageInfo;
+import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
-import com.xzsd.pc.util.TencentCosUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @Service
 public class ImageService {
 
@@ -51,7 +56,7 @@ public class ImageService {
      * image 新增轮播图
      *
      * @param imageInfo
-     * @return
+     * @return  AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -85,7 +90,7 @@ public class ImageService {
      * image 删除轮播图
      *
      * @param imageId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -121,7 +126,7 @@ public class ImageService {
      * image 修改轮播图状态
      *
      * @param imageInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -157,7 +162,7 @@ public class ImageService {
      * image 查询轮播图分页详情
      *
      * @param imageInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -180,7 +185,7 @@ public class ImageService {
      * commodity 查询商品详情
      *
      * @param commodityInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */

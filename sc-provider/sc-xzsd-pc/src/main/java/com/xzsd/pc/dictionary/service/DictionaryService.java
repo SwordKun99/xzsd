@@ -33,7 +33,7 @@ public class DictionaryService {
     /**
      * shop 省份列表
      *
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
@@ -46,7 +46,7 @@ public class DictionaryService {
     /**
      * shop 查询市列表
      *
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */
@@ -60,7 +60,7 @@ public class DictionaryService {
     /**
      * shop 查询区列表
      *
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-10
      */

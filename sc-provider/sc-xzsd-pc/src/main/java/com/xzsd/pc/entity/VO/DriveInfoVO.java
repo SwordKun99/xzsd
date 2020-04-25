@@ -1,9 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
+/**
+ * @DescriptionDemo 司机VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class DriveInfoVO {
 
     private String driveId;

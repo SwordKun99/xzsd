@@ -7,6 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 购物车实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_cust_cart")
 public class CustCartInfo {
 
@@ -32,7 +37,6 @@ public class CustCartInfo {
     private int pageNum;
     @TableField(exist = false)
     private String path;
-
 
     public String getShopcarId() {
         return shopcarId;

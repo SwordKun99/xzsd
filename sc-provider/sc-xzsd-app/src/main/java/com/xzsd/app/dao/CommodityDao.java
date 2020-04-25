@@ -3,8 +3,6 @@ package com.xzsd.app.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.app.entity.CommodityInfo;
-import com.xzsd.app.entity.VO.CommodityInfoVO;
-import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;

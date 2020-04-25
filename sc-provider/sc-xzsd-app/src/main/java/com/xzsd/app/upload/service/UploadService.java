@@ -5,7 +5,6 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.app.dao.FileDao;
 import com.xzsd.app.entity.FileInfo;
-import com.xzsd.app.upload.controller.UploadController;
 import com.xzsd.app.util.TencentCosUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 图片实现类
  * @Author SwordKun.
  * @Date 2020-04-12
  */
-
 @Service
 public class UploadService {
 
@@ -116,5 +114,4 @@ public class UploadService {
         return appResponse;
 
     }
-
 }

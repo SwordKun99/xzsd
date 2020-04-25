@@ -1,9 +1,7 @@
 package com.xzsd.pc.commodity.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.commodity.service.CommodityService;
-import com.xzsd.pc.dao.CommodityDao;
 import com.xzsd.pc.entity.CommodityInfo;
 import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.VO.CommodityInfoVO;
@@ -16,16 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 /**
  * @Description增删改查Commodity
  * @Author SwordKun.
  * @Date 2020-03-29
  */
-
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
@@ -221,9 +215,9 @@ public class CommodityController {
      * @Date 2020-04-15
      */
     @PostMapping("updateImage")
-    public AppResponse updateImage(FileInfo fileInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse updateImage(FileInfo fileInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
-            return commodityService.updateImage(fileInfo, biz_msg, file);
+            return commodityService.updateImage(fileInfo, file);
         } catch (Exception e) {
             logger.error("修改商品图片错误", e);
             System.out.println(e.toString());

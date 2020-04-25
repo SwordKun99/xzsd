@@ -8,6 +8,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 商品分类实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_commodity_classification")
 public class CommodityClassInfo implements Serializable {
 
@@ -32,7 +37,6 @@ public class CommodityClassInfo implements Serializable {
     private int pageNum;
     @TableField(exist = false)
     private List<CommodityInfo> goodsList;
-
 
     public String getSystematicId() {
         return systematicId;

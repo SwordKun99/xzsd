@@ -6,8 +6,8 @@ import com.xzsd.app.entity.OrderCommodityInfo;
 import org.mapstruct.Mapper;
 
 /**
- * @ClassName DriveDao
- * @Description Drive
+ * @ClassName  OrderCommodityDao
+ * @Description  OrderCommodity
  * @Author SwordKun.
  * @Date 2020-04-23
  */

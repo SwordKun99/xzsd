@@ -1,5 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
+/**
+ * @DescriptionDemo 订单VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class OrderInfoVO {
 
     private String commodityId;

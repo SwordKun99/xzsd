@@ -5,6 +5,11 @@ import com.xzsd.pc.entity.FileInfo;
 
 import java.util.List;
 
+/**
+ * @DescriptionDemo 用户VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class UserInfoVO {
 
     private String userId;

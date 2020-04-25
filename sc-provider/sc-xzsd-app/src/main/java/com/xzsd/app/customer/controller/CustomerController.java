@@ -16,12 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 /**
- * 增删改查customer
- *
+ * @DescriptionDemo 客户控制类
  * @Author SwordKun.
- * @Date 2020-03-28
+ * @Date 2020-04-23
  */
-
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -77,13 +75,13 @@ public class CustomerController {
      * @Date 2020-04-15
      */
     @PostMapping("updateCImage")
-    public AppResponse updateCImage(CustomerInfo customerInfo, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "biz_msg", required = false) String biz_msg) throws Exception {
+    public AppResponse updateCImage(CustomerInfo customerInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         try {
             //获取客户id
             String customerId = AuthUtils.getCurrentUserId();
             customerInfo.setCreateUser(customerId);
             customerInfo.setUpdateUser(customerId);
-            return customerService.updateCImage(customerInfo, biz_msg, file);
+            return customerService.updateCImage(customerInfo, file);
         } catch (Exception e) {
             logger.error("修改客户头像错误", e);
             System.out.println(e.toString());

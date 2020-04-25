@@ -5,6 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 订单商品实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_order_commodity")
 public class OrderCommodityInfo {
 
@@ -20,7 +25,6 @@ public class OrderCommodityInfo {
     private Date updateTime;
     private String updateUser;
     private long vaersion;
-
 
     public String getOrdercomId() {
         return ordercomId;

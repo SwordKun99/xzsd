@@ -26,6 +26,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @Service
 public class GoodsHotService {
 
@@ -45,7 +50,7 @@ public class GoodsHotService {
      * GoodsHot 新增热门位商品
      *
      * @param goodshotInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -92,7 +97,7 @@ public class GoodsHotService {
      * goodshot 删除热门位商品
      *
      * @param goodshotId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -126,7 +131,7 @@ public class GoodsHotService {
      * goodshot 修改热门位商品
      *
      * @param goodsHotInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -171,7 +176,7 @@ public class GoodsHotService {
      * goodshot 查询热门位商品详情
      *
      * @param goodshotInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-29
      */
@@ -186,7 +191,7 @@ public class GoodsHotService {
      * goodshot 查询热门位商品列表（分页）
      *
      * @param goodshotInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-01
      */
@@ -206,8 +211,8 @@ public class GoodsHotService {
     /**
      * goodshot 修改热门位商品数量设定
      *
-     * @param
-     * @return
+     * @param ghsInfoVO
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */
@@ -249,7 +254,7 @@ public class GoodsHotService {
      * goodshot 查询热门商品展示数量
      *
      * @param
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-13
      */

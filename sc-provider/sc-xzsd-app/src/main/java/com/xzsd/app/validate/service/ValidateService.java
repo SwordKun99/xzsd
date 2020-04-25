@@ -45,15 +45,15 @@ public class ValidateService {
     private DriveDao driveDao;
 
     /**
-     * customer 新增客户
+     * user 注册用户
      *
      * @param userInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse Validate(UserInfo userInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse Validate(UserInfo userInfo, MultipartFile file) throws Exception {
         //判断角色
         if (userInfo.getRole() != null && userInfo.getRole() == 3) {//客户
             AppResponse customerRe = this.validateCustomer(userInfo);
@@ -73,22 +73,28 @@ public class ValidateService {
                 if (0 == count) {
                     return AppResponse.bizError("注册失败，请重试！");
                 }
-                //2、添加客户表
+                //2、添加客户表，用户表信息同步至客户表
                 CustomerInfo customerInfo = new CustomerInfo();
                 customerInfo.setCustomerPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
-                customerInfo.setCustomerNumber(StringUtil.getCommonCode(2));
+                customerInfo.setCustomerNumber(userInfo.getUserCode());
+                customerInfo.setCustormerNo(userInfo.getUserNo());
+                customerInfo.setCustomerIdcode(userInfo.getUserIdcard());
+                customerInfo.setCustormerSex(userInfo.getUserSex());
+                customerInfo.setCustomerName(userInfo.getUserName());
+                customerInfo.setCustomerPhone(userInfo.getUserPhone());
+                customerInfo.setCustomerEmail(userInfo.getUserEmail());
                 customerInfo.setIsDelete(0);
                 customerInfo.setVersion(0);
                 customerInfo.setCreateTime(new Date());
                 customerInfo.setCreateUser(userId);
                 customerInfo.setCustomerId(userId);
-                // 新增客户
+                // 注册客户
                 Integer count1 = customerDao.insert(customerInfo);
                 if (0 == count1) {
                     return AppResponse.bizError("注册失败，请重试！");
                 }
                 if (file != null) {
-                    uploadService.uploadImage(biz_msg, customerInfo.getCustomerId(), file);
+                    uploadService.uploadImage("customer", customerInfo.getCustomerId(), file);
                 }
             }
         } else if (userInfo.getRole() != null && userInfo.getRole() == 2) {//店长
@@ -97,7 +103,7 @@ public class ValidateService {
             queryWrapper.lambda().eq(UserInfo::getUserId, userInfo.getUserNo());
             int countUUserNo = userDao.selectCount(queryWrapper);
             if (0 != countUUserNo) {
-                return AppResponse.bizError("账号已存在，请重新输入！");
+                return AppResponse.bizError("该账号已存在，请重新输入！");
             }
             QueryWrapper<UserInfo> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.lambda().eq(UserInfo::getUserPhone, userInfo.getUserPhone());
@@ -119,7 +125,7 @@ public class ValidateService {
                 return AppResponse.bizError("注册失败，请重试！");
             }
             if (file != null) {
-                uploadService.uploadImage(biz_msg, userInfo.getUserId(), file);
+                uploadService.uploadImage("message", userInfo.getUserId(), file);
             }
         } else if (userInfo.getRole() != null && userInfo.getRole() == 4) {//司机
             String userId = UUIDUtils.getUUID();
@@ -135,22 +141,30 @@ public class ValidateService {
             if (0 == count) {
                 return AppResponse.bizError("注册失败，请重试！");
             }
-            //2、添加司机表
+            //2、添加司机表,同步用户表至司机表
             DriveInfo driveInfo = new DriveInfo();
             driveInfo.setDrivePassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
-            driveInfo.setDriveCode(StringUtil.getCommonCode(2));
+            driveInfo.setDriveCode(userInfo.getUserCode());
+            driveInfo.setDistrictId(userInfo.getDistrictId());
+            driveInfo.setCityId(userInfo.getCityId());
+            driveInfo.setProvinceId(userInfo.getProvinceId());
+            driveInfo.setDriveName(userInfo.getUserName());
+            driveInfo.setDrivePhone(userInfo.getUserPhone());
+            driveInfo.setDriveNo(userInfo.getUserNo());
+            driveInfo.setDriveIdcard(userInfo.getUserIdcard());
+            driveInfo.setDriveEmail(userInfo.getUserEmail());
             driveInfo.setIsDelete(0);
             driveInfo.setVersion(0);
             driveInfo.setCreateTime(new Date());
             driveInfo.setCreateUser(userId);
             driveInfo.setDriveId(userId);
-            // 新增司机
+            // 注册司机
             Integer count1 = driveDao.insert(driveInfo);
             if (0 == count1) {
                 return AppResponse.bizError("注册失败，请重试！");
             }
             if (file != null) {
-                uploadService.uploadImage(biz_msg, driveInfo.getDriveId(), file);
+                uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
             }
         } else {
             return AppResponse.bizError("注册失败，角色有误！");
@@ -162,7 +176,7 @@ public class ValidateService {
      * customer 客户校验
      *
      * @param userInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -174,12 +188,14 @@ public class ValidateService {
         if (0 != countUCustomerNo) {
             return AppResponse.bizError("客户账号已存在，请重新输入！");
         }
+        // 校验客户手机号码是否存在
         QueryWrapper<CustomerInfo> queryWrapper1 = new QueryWrapper<>();
         queryWrapper1.lambda().eq(CustomerInfo::getCustomerPhone, userInfo.getUserPhone());
         int countPhone = customerDao.selectCount(queryWrapper1);
         if (0 != countPhone) {
             return AppResponse.bizError("客户手机号码已存在，请重新输入！");
         }
+        // 校验门店邀请码是否存在
         QueryWrapper<ShopInfo> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.lambda().in(ShopInfo::getInvitation, userInfo.getInvitation());
         int countInva = shopDao.selectCount(queryWrapper2);
@@ -193,7 +209,7 @@ public class ValidateService {
      * drive 司机校验
      *
      * @param userInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -205,6 +221,7 @@ public class ValidateService {
         if (0 != countUDriveNo) {
             return AppResponse.bizError("司机账号已存在，请重新输入！");
         }
+        // 校验司机手机号码是否存在
         QueryWrapper<DriveInfo> queryWrapper1 = new QueryWrapper<>();
         queryWrapper1.lambda().eq(DriveInfo::getDrivePhone, userInfo.getUserPhone());
         int countPhone = driveDao.selectCount(queryWrapper1);

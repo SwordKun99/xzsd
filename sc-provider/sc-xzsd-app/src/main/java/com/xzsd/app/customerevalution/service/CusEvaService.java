@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @DescriptionDemo 实现类
+ * @DescriptionDemo 订单信息实现类
  * @Author SwordKun.
  * @Date 2020-04-10
  */
@@ -42,7 +42,7 @@ public class CusEvaService {
      * order 查询订单列表（分页）
      *
      * @param customerEvaluationInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -66,7 +66,7 @@ public class CusEvaService {
      * evaluation 新增订单评价
      *
      * @param orderId,evaList
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -113,7 +113,7 @@ public class CusEvaService {
      * evaluation 查询订单评价列表
      *
      * @param orderId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */

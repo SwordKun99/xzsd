@@ -17,7 +17,6 @@ import com.xzsd.pc.entity.VO.DriveInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.PasswordUtils;
 import com.xzsd.pc.util.TencentCosUtil;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class DriveService {
      * drive 新增司机
      *
      * @param driveInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -119,7 +118,7 @@ public class DriveService {
      * drive 删除司机
      *
      * @param driveId
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -153,7 +152,7 @@ public class DriveService {
      * drive 修改司机
      *
      * @param driveInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -204,7 +203,7 @@ public class DriveService {
      * drive 查询司机详情
      *
      * @param driveInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -225,7 +224,7 @@ public class DriveService {
      * drive 查询司机列表（分页）
      *
      * @param driveInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -254,13 +253,13 @@ public class DriveService {
     /**
      * drive 修改头像
      *
-     * @param
-     * @return
+     * @param driveInfo
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-15
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateDImage(DriveInfo driveInfo, String biz_msg, MultipartFile file) throws Exception {
+    public AppResponse updateDImage(DriveInfo driveInfo, MultipartFile file) throws Exception {
         //通过driveId找到一下头像file表
         String createUserId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.getUserByUserId(createUserId);
@@ -284,10 +283,13 @@ public class DriveService {
         }
         //服务器删除path
         TencentCosUtil.del(key);
-
         //然后新增file
         if (file != null) {
-            uploadService.uploadImage(biz_msg, driveInfo.getDriveId(), file);
+            //获取用户id
+            String driveId = SecurityUtils.getCurrentUserId();
+            driveInfo.setCreateUser(driveId);
+            driveInfo.setUpdateUser(driveId);
+            uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
         }
         return appResponse;
     }

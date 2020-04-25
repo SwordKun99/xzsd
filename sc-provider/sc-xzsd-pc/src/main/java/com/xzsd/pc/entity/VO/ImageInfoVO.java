@@ -1,6 +1,10 @@
 package com.xzsd.pc.entity.VO;
 
-
+/**
+ * @DescriptionDemo 轮播图VO实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 public class ImageInfoVO {
 
     private String imageId;

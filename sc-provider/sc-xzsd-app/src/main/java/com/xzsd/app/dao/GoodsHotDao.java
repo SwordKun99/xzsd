@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Mapper
 public interface GoodsHotDao extends BaseMapper<GoodsHotInfo> {
+
     /**
      * 查询热门商品列表
      * @param goodsHotInfo

@@ -29,7 +29,7 @@ public interface ImageDao extends BaseMapper<ImageInfo> {
     /**
      * 查询商品信息
      *
-     * @param imageId 商品id
+     * @param commodityInfo 商品
      * @return 修改结果
      */
     List<CommodityInfoVO> getComByCommodityInfo(CommodityInfoVO commodityInfo);

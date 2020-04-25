@@ -7,6 +7,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * @DescriptionDemo 轮播图实体类
+ * @Author SwordKun.
+ * @Date 2020-03-28
+ */
 @TableName("t_focus_rotations")
 public class ImageInfo {
 

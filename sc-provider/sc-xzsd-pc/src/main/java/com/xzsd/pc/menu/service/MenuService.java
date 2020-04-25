@@ -41,7 +41,7 @@ public class MenuService {
      * menu 新增菜单
      *
      * @param menuInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -73,7 +73,7 @@ public class MenuService {
      * menu 删除菜单
      *
      * @param menuInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -97,7 +97,7 @@ public class MenuService {
      * menu 修改菜单
      *
      * @param menuInfoVO
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -137,7 +137,7 @@ public class MenuService {
      * menu 查询菜单详情
      *
      * @param menuInfo
-     * @return
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
@@ -151,8 +151,8 @@ public class MenuService {
     /**
      * menu 查询菜单列表
      *
-     * @param
-     * @return
+     * @param menuInfo
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
