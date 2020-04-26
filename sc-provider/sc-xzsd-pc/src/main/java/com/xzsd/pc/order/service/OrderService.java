@@ -12,6 +12,8 @@ import com.xzsd.pc.entity.OrderInfo;
 import com.xzsd.pc.entity.ShopInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.OrderInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ import java.util.List;
 @Service
 public class OrderService {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
     @Autowired
     private OrderDao orderDao;
 
@@ -36,6 +40,7 @@ public class OrderService {
 
     @Autowired
     private ShopDao shopDao;
+
     /**
      * order 修改订单
      *
@@ -106,7 +111,7 @@ public class OrderService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         if (userRole != null && userRole == 2) {
-            queryWrapper.lambda().eq(ShopInfo::getUserId,userId);
+            queryWrapper.lambda().eq(ShopInfo::getUserId, userId);
             ShopInfo shopInfo = shopDao.selectOne(queryWrapper);
             String shopId = shopInfo.getShopId();
             orderInfo.setShopId(shopId);
@@ -114,6 +119,6 @@ public class OrderService {
         List<OrderInfo> userList = orderDao.listOrder(orderInfo);
         // 包装Page对象
         PageInfo<OrderInfo> pageData = new PageInfo<>(userList);
-        return AppResponse.success("查询订单列表成功",pageData);
+        return AppResponse.success("查询订单列表成功", pageData);
     }
 }

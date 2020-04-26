@@ -8,19 +8,18 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
-import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.UserDao;
-import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.UserInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.PasswordUtils;
 import com.xzsd.pc.util.TencentCosUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -34,14 +33,13 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private UploadService uploadService;
-
-    @Autowired
-    private FileDao fileDao;
 
     /**
      * user 新增用户
@@ -52,7 +50,7 @@ public class UserService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveUser(UserInfo userInfo,MultipartFile file) throws Exception {
+    public AppResponse saveUser(UserInfo userInfo) throws Exception {
         // 校验账号是否存在
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UserInfo::getUserNo, userInfo.getUserNo());
@@ -61,8 +59,8 @@ public class UserService {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
         QueryWrapper<UserInfo> userPhone = new QueryWrapper<>();
-        userPhone.lambda().eq(UserInfo::getUserPhone,userInfo.getUserPhone());
-        int countPhone= userDao.selectCount(userPhone);
+        userPhone.lambda().eq(UserInfo::getUserPhone, userInfo.getUserPhone());
+        int countPhone = userDao.selectCount(userPhone);
         if (0 != countPhone) {
             return AppResponse.bizError("手机号码已存在，请重新输入！");
         }
@@ -78,9 +76,6 @@ public class UserService {
         Integer count = userDao.insert(userInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
-        }
-        if (file != null) {
-            uploadService.uploadImage("user", userInfo.getUserId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -109,7 +104,10 @@ public class UserService {
             if (0 == count) {
                 return AppResponse.bizError("删除失败，请重试！");
             }
+            //删除用户头像在腾讯云上的图片
+            TencentCosUtil.del(userInfo.getUserImagepath());
         }
+
         return AppResponse.success("删除成功！");
     }
 
@@ -134,10 +132,10 @@ public class UserService {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
         QueryWrapper<UserInfo> userPhone = new QueryWrapper<>();
-        userPhone.lambda().eq(UserInfo::getUserPhone,userInfoVO.getUserPhone());
+        userPhone.lambda().eq(UserInfo::getUserPhone, userInfoVO.getUserPhone());
         queryWrapper.lambda().eq(UserInfo::getIsDeleted, 0);
         userPhone.lambda().ne(UserInfo::getUserId, userInfoVO.getUserId());
-        int countPhone= userDao.selectCount(userPhone);
+        int countPhone = userDao.selectCount(userPhone);
         if (0 != countPhone) {
             return AppResponse.bizError("手机号码已存在，请重新输入！");
         }
@@ -146,7 +144,7 @@ public class UserService {
             return AppResponse.bizError("查询不到该数据，请重试！");
         }
         UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(userInfoVO,userInfo);
+        BeanUtils.copyProperties(userInfoVO, userInfo);
         userInfo.setVersion(userInfoOld.getVersion() + 1);
         userInfo.setUpdateTime(new Date());
         String userId = SecurityUtils.getCurrentUserId();
@@ -172,10 +170,6 @@ public class UserService {
             userId = SecurityUtils.getCurrentUserId();
         }
         UserInfo userInfo = userDao.selectById(userId);
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, userId);
-        List<FileInfo> fileInfo = fileDao.selectList(queryWrapper);
-        userInfo.setFileInfo(fileInfo);
         return AppResponse.success("查询成功！", userInfo);
     }
 
@@ -187,45 +181,14 @@ public class UserService {
      * @Author SwordKun.
      * @Date 2020-03-28
      */
-    public AppResponse listUsers(UserInfo userInfo){
+    public AppResponse listUsers(UserInfo userInfo) {
         PageHelper.startPage(userInfo.getPageNum(), userInfo.getPageSize());
         List<UserInfo> userList = userDao.listUsers(userInfo);
         // 包装Page对象
         PageInfo<UserInfo> pageData = new PageInfo<>(userList);
-        return AppResponse.success("查询用户列表成功",pageData);
+        return AppResponse.success("查询用户列表成功", pageData);
     }
 
-    /**
-     * user 修改头像
-     *
-     * @param
-     * @return
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateImage(UserInfo userInfo, MultipartFile file) throws Exception {
-        //通过userId找到一下头像file表
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, userInfo.getUserId());
-        FileInfo fileInfo = fileDao.selectOne(queryWrapper);
-        //删除file
-        if (fileInfo == null) {
-            return AppResponse.bizError("查询不到该图片，请重试！");
-        }
-        String key = fileInfo.getPathKey();
-        int count = fileDao.deleteById(fileInfo.getFileId());
-        if (0 == count) {
-            return AppResponse.bizError("删除失败，请重试！");
-        }
-        //服务器删除path
-        TencentCosUtil.del(key);
-        //然后新增file
-        if (file != null) {
-            uploadService.uploadImage("user", userInfo.getUserId(), file);
-        }
-        return AppResponse.success("头像修改成功!");
-    }
 }
 
 

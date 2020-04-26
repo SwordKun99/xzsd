@@ -3,16 +3,13 @@ package com.xzsd.pc.commodity.controller;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.pc.commodity.service.CommodityService;
 import com.xzsd.pc.entity.CommodityInfo;
-import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -39,9 +36,9 @@ public class CommodityController {
      * @Date 2020-03-29
      */
     @PostMapping("saveCommodity")
-    public AppResponse saveCommodity(CommodityInfo commodityInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public AppResponse saveCommodity(CommodityInfo commodityInfo) throws Exception {
         try {
-            AppResponse appResponse = commodityService.saveCommodity(commodityInfo, file);
+            AppResponse appResponse = commodityService.saveCommodity(commodityInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("商品分类新增失败", e);
@@ -201,25 +198,6 @@ public class CommodityController {
             return commodityService.updateComState(commodityInfoVO);
         } catch (Exception e) {
             logger.error("商品修改上下架错误", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
-     * user 修改商品图片
-     *
-     * @param fileInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @PostMapping("updateImage")
-    public AppResponse updateImage(FileInfo fileInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        try {
-            return commodityService.updateImage(fileInfo, file);
-        } catch (Exception e) {
-            logger.error("修改商品图片错误", e);
             System.out.println(e.toString());
             throw e;
         }

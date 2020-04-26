@@ -6,6 +6,8 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.dao.DriveDao;
 import com.xzsd.app.entity.DriveInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +20,9 @@ import java.util.List;
  */
 @Service
 public class DriveService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DriveService.class);
+
 
     @Resource
     private DriveDao driveDao;

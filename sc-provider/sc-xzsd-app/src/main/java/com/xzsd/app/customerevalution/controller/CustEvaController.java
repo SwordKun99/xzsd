@@ -26,7 +26,7 @@ public class CustEvaController {
     private CusEvaService cusEvaService;
 
     /**
-     * order 订单评价列表(分页)
+     * order 查询商品评价列表(分页)
      *
      * @param customerEvaluationInfo
      * @return AppResponse
@@ -38,7 +38,7 @@ public class CustEvaController {
         try {
             return cusEvaService.listCusEva(customerEvaluationInfo);
         } catch (Exception e) {
-            logger.error("查询订单列表异常", e);
+            logger.error("查询商品评价列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -55,7 +55,7 @@ public class CustEvaController {
     @RequestMapping(value = "saveEvaluationInfo")
     public AppResponse saveEvaluationInfo(String orderId, List<CustomerEvaluationInfo> evaList) {
         try {
-            return cusEvaService.saveEvaluationInfo(orderId,evaList);
+            return cusEvaService.saveEvaluationInfo(orderId, evaList);
         } catch (Exception e) {
             logger.error("订单评价异常", e);
             System.out.println(e.toString());
@@ -64,7 +64,7 @@ public class CustEvaController {
     }
 
     /**
-     * order 新增订单评价
+     * Evalution 查询订单商品信息列表
      *
      * @param orderId
      * @return AppResponse

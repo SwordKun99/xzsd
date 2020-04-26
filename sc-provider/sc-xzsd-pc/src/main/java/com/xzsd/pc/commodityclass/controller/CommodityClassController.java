@@ -1,8 +1,6 @@
 package com.xzsd.pc.commodityclass.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.security.client.utils.SecurityUtils;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.commodityclass.service.CommodityClassService;
 import com.xzsd.pc.entity.CommodityClassInfo;
 import org.slf4j.Logger;
@@ -117,7 +115,7 @@ public class CommodityClassController {
         try {
             return commodityclassService.listCommodityClass();
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询商品分类列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

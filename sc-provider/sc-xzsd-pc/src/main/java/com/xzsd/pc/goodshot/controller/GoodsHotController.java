@@ -1,8 +1,6 @@
 package com.xzsd.pc.goodshot.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
-import com.xzsd.pc.entity.GhsInfo;
 import com.xzsd.pc.entity.GoodsHotInfo;
 import com.xzsd.pc.entity.VO.GhsInfoVO;
 import com.xzsd.pc.entity.VO.GoodsHotInfoVO;

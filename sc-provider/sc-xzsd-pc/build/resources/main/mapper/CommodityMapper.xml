@@ -21,10 +21,9 @@
         a.stone_id stoneId,
         a.stone_name stoneName,
         a.repertory repertory,
-        b.path path,
+        a.commodity_path commodityPath,
         a.version
-        from t_commodity a,
-        t_file b
+        from t_commodity a
         <where>
             a.is_delete = 0
             and a.commodity_id = #{commodityId}

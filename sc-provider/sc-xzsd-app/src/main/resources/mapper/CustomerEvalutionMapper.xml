@@ -19,8 +19,9 @@
             resultType="com.xzsd.app.entity.CustomerEvaluationInfo">
         select
         a.commodity_id commodityId,
-        (select f.path from t_file f where f.biz_id = a.commodity_id order by f.create_time asc limit 1) as path
+        b.commodity_path as commodityPath
         from t_user_evaluation a
+        left join t_commodity b on b.commodity_id = a.commodity_id
         where a.is_delete = 0
         <if test="orderId != null and orderId != ''">
             and a.order_id = #{orderId}

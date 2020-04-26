@@ -5,21 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.dao.CustomerDao;
-import com.xzsd.app.dao.FileDao;
 import com.xzsd.app.dao.ShopDao;
 import com.xzsd.app.dao.UserDao;
 import com.xzsd.app.entity.CustomerInfo;
-import com.xzsd.app.entity.FileInfo;
 import com.xzsd.app.entity.ShopInfo;
 import com.xzsd.app.entity.UserInfo;
 import com.xzsd.app.entity.VO.CustomerInfoVO;
 import com.xzsd.app.upload.service.UploadService;
 import com.xzsd.app.util.PasswordUtils;
-import com.xzsd.app.util.TencentCosUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -34,14 +32,14 @@ import java.util.Date;
 @Service
 public class CustomerService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+
+
     @Resource
     private CustomerDao customerDao;
 
     @Resource
     private UploadService uploadService;
-
-    @Resource
-    private FileDao fileDao;
 
     @Resource
     private UserDao userDao;
@@ -128,39 +126,6 @@ public class CustomerService {
         return AppResponse.success("邀请码修改成功");
     }
 
-    /**
-     * customer 修改头像
-     *
-     * @param customerInfo,file
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateCImage(CustomerInfo customerInfo, MultipartFile file) throws Exception {
-        //通过customerId找到一下头像file表
-        AppResponse appResponse = AppResponse.success("头像修改成功!");
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, customerInfo.getCustomerId());
-        FileInfo fileInfo = fileDao.selectOne(queryWrapper);
-        //删除file
-        if (fileInfo == null) {
-            appResponse = AppResponse.bizError("查询不到该图片，请重试！");
-            return appResponse;
-        }
-        String key = fileInfo.getPathKey();
-        int count = fileDao.deleteById(fileInfo.getFileId());
-        if (0 == count) {
-            appResponse = AppResponse.bizError("删除失败，请重试！");
-        }
-        //服务器删除path
-        TencentCosUtil.del(key);
-        //然后新增file
-        if (file != null) {
-            uploadService.uploadImage("customer", customerInfo.getCustomerId(), file);
-        }
-        return appResponse;
-    }
 
     /**
      * customer 修改密码
@@ -176,7 +141,7 @@ public class CustomerService {
         AppResponse appResponse = AppResponse.success("密码修改成功!");
         String customerId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.selectById(customerId);
-        if (!PasswordUtils.validatePassword(oldPassword,userInfo.getUserPassword())) {
+        if (!PasswordUtils.validatePassword(oldPassword, userInfo.getUserPassword())) {
             appResponse = AppResponse.bizError("原始密码错误，请重试！");
             return appResponse;
         }
@@ -199,15 +164,9 @@ public class CustomerService {
      * @Author SwordKun.
      * @Date 2020-04-15
      */
-    public AppResponse updatePassword() {
+    public AppResponse userInfo() {
         String userId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.selectById(userId);
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, userInfo.getUserId());
-        FileInfo fileInfo = fileDao.selectOne(queryWrapper);
-        if (fileInfo != null) {
-            userInfo.setPath(fileInfo.getPath());
-        }
         if (userInfo != null && userInfo.getRole() == 2) {//店长
             QueryWrapper<ShopInfo> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.lambda().eq(ShopInfo::getUserId, userInfo.getUserId());
@@ -225,7 +184,7 @@ public class CustomerService {
             userInfo.setShopName(shopInfo.getShopName());
             userInfo.setShopAddress(shopInfo.getShopAddrees());
         }
-        return AppResponse.success("用户信息查询成功",userInfo);
+        return AppResponse.success("用户信息查询成功", userInfo);
     }
 }
 

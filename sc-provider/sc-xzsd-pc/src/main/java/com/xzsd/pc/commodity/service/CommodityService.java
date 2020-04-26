@@ -6,16 +6,23 @@ import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.UUIDUtils;
-import com.xzsd.pc.dao.*;
-import com.xzsd.pc.entity.*;
+import com.xzsd.pc.dao.CommodityClassDao;
+import com.xzsd.pc.dao.CommodityDao;
+import com.xzsd.pc.dao.StoneDao;
+import com.xzsd.pc.dao.UserDao;
+import com.xzsd.pc.entity.CommodityClassInfo;
+import com.xzsd.pc.entity.CommodityInfo;
+import com.xzsd.pc.entity.StoneInfo;
+import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.TencentCosUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -31,6 +38,8 @@ import java.util.List;
 @Service
 public class CommodityService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CommodityService.class);
+
     @Autowired(required = true)
     private CommodityDao commodityDao;
 
@@ -39,9 +48,6 @@ public class CommodityService {
 
     @Autowired
     private UploadService uploadService;
-
-    @Autowired
-    private FileDao fileDao;
 
     @Autowired
     private UserDao userDao;
@@ -58,7 +64,7 @@ public class CommodityService {
      * @Date 2020-03-29
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveCommodity(CommodityInfo commodityInfo, MultipartFile file) throws Exception {
+    public AppResponse saveCommodity(CommodityInfo commodityInfo) throws Exception {
         // 校验商品是否存在
         QueryWrapper<CommodityInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CommodityInfo::getCommodityName, commodityInfo.getCommodityName());
@@ -72,13 +78,10 @@ public class CommodityService {
         String createUserId = SecurityUtils.getCurrentUserId();
         commodityInfo.setCreateUser(createUserId);
         commodityInfo.setCommodityId(UUIDUtils.getUUID());
-        // 新增商品分类
+        // 新增商品
         Integer count = commodityDao.insert(commodityInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
-        }
-        if (file != null) {
-            uploadService.uploadImage("commodity", commodityInfo.getCommodityId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -122,6 +125,8 @@ public class CommodityService {
                 appResponse = AppResponse.bizError("删除失败，请重试！");
                 break;
             }
+            //删除腾讯云图片
+            TencentCosUtil.del(commodityInfo.getCommodityPath());
         }
         return appResponse;
     }
@@ -154,7 +159,7 @@ public class CommodityService {
             return appResponse;
         }
         CommodityInfo commodityInfo = new CommodityInfo();
-        BeanUtils.copyProperties(commodityInfoVO,commodityInfo);
+        BeanUtils.copyProperties(commodityInfoVO, commodityInfo);
         //获取商品分类id
         String commodityId = SecurityUtils.getCurrentUserId();
         commodityInfo.setUpdateUser(commodityId);
@@ -179,10 +184,6 @@ public class CommodityService {
      */
     public AppResponse getCommodityByInfo(String commodityId) {
         CommodityInfo commodityInfo = commodityDao.selectById(commodityId);
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, commodityId);
-        List<FileInfo> fileList = fileDao.selectList(queryWrapper);
-        commodityInfo.setFilePath(fileList);
         return AppResponse.success("查询成功！", commodityInfo);
     }
 
@@ -201,13 +202,13 @@ public class CommodityService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         CommodityInfoVO commodityInfoVO = new CommodityInfoVO();
-        BeanUtils.copyProperties(commodityInfo,commodityInfoVO);
+        BeanUtils.copyProperties(commodityInfo, commodityInfoVO);
         if (userRole != null && userRole == 2) {
             commodityInfoVO.setCreateUser(userId);
         }
         // 包装Page对象
         PageInfo<CommodityInfoVO> pageData = PageHelper.startPage(commodityInfoVO.getPageNum(), commodityInfoVO.getPageSize()).doSelectPageInfo(() -> commodityDao.listCommodity(commodityInfoVO));
-        return AppResponse.success("查询商品列表成功",pageData);
+        return AppResponse.success("查询商品列表成功", pageData);
     }
 
     /**
@@ -273,7 +274,7 @@ public class CommodityService {
             return appResponse;
         }
         CommodityInfo commodityInfo = new CommodityInfo();
-        BeanUtils.copyProperties(commodityInfoVO,commodityInfo);
+        BeanUtils.copyProperties(commodityInfoVO, commodityInfo);
         commodityInfo.setVersion(commodityInfo1.getVersion() + 1);
         commodityInfo.setUpdateTime(new Date());
         String updateUserId = SecurityUtils.getCurrentUserId();
@@ -287,32 +288,4 @@ public class CommodityService {
         return appResponse;
     }
 
-    /**
-     * commodity 修改商品图片
-     *
-     * @param fileInfo,file
-     * @return parentCode
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateImage(FileInfo fileInfo, MultipartFile file) throws Exception {
-        FileInfo fileInfoOld = fileDao.selectById(fileInfo.getFileId());
-        //删除file
-        if (fileInfoOld == null) {
-            return AppResponse.bizError("查询不到该图片，请重试！");
-        }
-        String key = fileInfo.getPathKey();
-        int count = fileDao.deleteById(fileInfo.getFileId());
-        if (0 == count) {
-            return AppResponse.bizError("删除失败，请重试！");
-        }
-        //服务器删除path
-        TencentCosUtil.del(key);
-        //然后新增file
-        if (file != null) {
-            uploadService.uploadImage("commodity", fileInfo.getBizId(), file);
-        }
-        return AppResponse.success("图片修改成功!");
-    }
 }

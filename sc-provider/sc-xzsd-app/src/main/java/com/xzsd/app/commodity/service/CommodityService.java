@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.app.dao.CommodityClassDao;
 import com.xzsd.app.dao.CommodityDao;
-import com.xzsd.app.dao.FileDao;
 import com.xzsd.app.entity.CommodityClassInfo;
 import com.xzsd.app.entity.CommodityInfo;
-import com.xzsd.app.entity.FileInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,11 +21,10 @@ import java.util.List;
 @Service
 public class CommodityService {
 
-    @Resource
-    private CommodityDao commodityDao;
+    private static final Logger logger = LoggerFactory.getLogger(CommodityService.class);
 
     @Resource
-    private FileDao fileDao;
+    private CommodityDao commodityDao;
 
     @Resource
     private CommodityClassDao commodityClassDao;
@@ -40,10 +39,6 @@ public class CommodityService {
      */
     public AppResponse getCommodityByInfo(String commodityId) {
         CommodityInfo commodityInfo = commodityDao.selectById(commodityId);
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, commodityId);
-        List<FileInfo> fileList = fileDao.selectList(queryWrapper);
-        commodityInfo.setFilePath(fileList);
         return AppResponse.success("查询成功！", commodityInfo);
     }
 
@@ -73,7 +68,7 @@ public class CommodityService {
         QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CommodityClassInfo::getParentCode, parentCode);
         List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
-        if (list != null && list.size() !=0) {
+        if (list != null && list.size() != 0) {
             for (CommodityClassInfo commodityClassInfo : list) {
                 CommodityInfo commodityInfo = new CommodityInfo();
                 commodityInfo.setSystematicCode(commodityClassInfo.getSystematicCode());

@@ -46,15 +46,20 @@ public class CommodityInfo {
     private Date updateTime;
     private String soreNo;
     private Integer version;
+    private String commodityPath;
 
     @TableField(exist = false)
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
 
-    @TableField(exist = false)
-    private List<FileInfo> filePath;
+    public String getCommodityPath() {
+        return commodityPath;
+    }
 
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
 
     public String getCommodityId() {
         return commodityId;
@@ -255,14 +260,6 @@ public class CommodityInfo {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-    }
-
-    public List<FileInfo> getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(List<FileInfo> filePath) {
-        this.filePath = filePath;
     }
 
     public String getSoldNumber() {

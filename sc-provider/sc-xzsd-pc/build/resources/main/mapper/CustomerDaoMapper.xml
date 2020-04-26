@@ -13,7 +13,8 @@
         a.customer_idcode customerIdcode,
         a.custormer_sex custormerSex,
         a.customer_phone customerPhone,
-        a.customer_email customerEmail
+        a.customer_email customerEmail,
+        a.customer_path customerPath
         from t_customer_information a
         left join t_shop b on b.invitation = a.invitation
         where a.is_delete = 0
@@ -28,5 +29,4 @@
         </if>
         order by a.create_user desc
     </select>
-
 </mapper>

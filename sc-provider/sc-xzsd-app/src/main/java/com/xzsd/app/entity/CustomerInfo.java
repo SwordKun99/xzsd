@@ -36,13 +36,20 @@ public class CustomerInfo implements Serializable {
     private String soreNo;
     private Integer version;
     private String customerScore;
+    private String customerPath;
+
+    public String getCustomerPath() {
+        return customerPath;
+    }
+
+    public void setCustomerPath(String customerPath) {
+        this.customerPath = customerPath;
+    }
 
     @TableField(exist = false)
     private int pageSize;
     @TableField(exist = false)
     private int pageNum;
-    @TableField(exist = false)
-    private String path;
 
 
     public String getCustomerId() {
@@ -180,14 +187,6 @@ public class CustomerInfo implements Serializable {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Integer getIsDelete() {

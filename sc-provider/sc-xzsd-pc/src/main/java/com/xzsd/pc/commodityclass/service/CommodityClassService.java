@@ -1,12 +1,15 @@
 package com.xzsd.pc.commodityclass.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CommodityClassDao;
 import com.xzsd.pc.entity.CommodityClassInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ import java.util.List;
  */
 @Service
 public class CommodityClassService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CommodityClassService.class);
 
     @Autowired(required = true)
     private CommodityClassDao commodityClassDao;
@@ -146,8 +151,17 @@ public class CommodityClassService {
      * @Date 2020-03-29
      */
     public AppResponse listCommodityClass() {
-        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
-        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
-        return AppResponse.success("查询成功！", list);
+        //查询所有的一级列表
+        List<CommodityClassInfo> commodityClassInfoList = commodityClassDao.listParentCode();
+        // 包装Page对象
+        PageInfo<CommodityClassInfo> pageData = new PageInfo<>(commodityClassInfoList);
+        if (pageData.getList() != null && pageData.getList().size() > 0) {
+            List<CommodityClassInfo> commodityClassInfoList1 = pageData.getList();
+            for (CommodityClassInfo commodityClassInfo : commodityClassInfoList1) {
+                List<CommodityClassInfo> commodityInfoList2 = commodityClassDao.listSecondCode(commodityClassInfo);
+                commodityClassInfo.setCommodityInfoList2(commodityInfoList2);
+            }
+        }
+        return AppResponse.success("查询商品分类列表成功", pageData);
     }
 }

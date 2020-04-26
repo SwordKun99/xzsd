@@ -32,7 +32,7 @@ public class ImageInfoVO {
 
     private int PageNum;
     private int pageSize;
-    private String path;
+    private String imagePath;
 
 
     public String getImageId() {
@@ -156,12 +156,12 @@ public class ImageInfoVO {
         this.pageSize = pageSize;
     }
 
-    public String getPath() {
-        return path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Integer getIsDelete() {

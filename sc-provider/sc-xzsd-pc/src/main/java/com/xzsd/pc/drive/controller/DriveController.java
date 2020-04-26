@@ -1,7 +1,6 @@
 package com.xzsd.pc.drive.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.drive.service.DriveService;
 import com.xzsd.pc.entity.DriveInfo;
 import com.xzsd.pc.entity.VO.DriveInfoVO;
@@ -9,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -40,9 +37,9 @@ public class DriveController {
      * @Date 2020-03-28
      */
     @PostMapping("saveDrive")
-    public AppResponse saveDrive(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public AppResponse saveDrive(DriveInfo driveInfo) throws Exception {
         try {
-            AppResponse appResponse = driveService.saveDrive(driveInfo,file);
+            AppResponse appResponse = driveService.saveDrive(driveInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("司机新增失败", e);
@@ -122,25 +119,6 @@ public class DriveController {
             return driveService.listDrive(driveInfo);
         } catch (Exception e) {
             logger.error("查询门店列表异常", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
-     * drive 修改司机头像
-     *
-     * @param driveInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @PostMapping("updateDImage")
-    public AppResponse updateDImage(DriveInfo driveInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        try {
-            return driveService.updateDImage(driveInfo, file);
-        } catch (Exception e) {
-            logger.error("修改司机头像错误", e);
             System.out.println(e.toString());
             throw e;
         }

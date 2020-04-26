@@ -8,6 +8,8 @@ import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.app.dao.*;
 import com.xzsd.app.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import java.util.List;
  */
 @Service
 public class CusEvaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CusEvaService.class);
 
     @Resource
     private CustomerEvalutionDao customerEvalutionDao;
@@ -39,7 +43,7 @@ public class CusEvaService {
     private CommodityDao commodityDao;
 
     /**
-     * order 查询订单列表（分页）
+     * order 查询商品评价列表（分页）
      *
      * @param customerEvaluationInfo
      * @return AppResponse
@@ -49,17 +53,18 @@ public class CusEvaService {
     public AppResponse listCusEva(CustomerEvaluationInfo customerEvaluationInfo) {
         QueryWrapper<CustomerEvaluationInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CustomerEvaluationInfo::getIsDelete, 0);
+        queryWrapper.lambda().eq(CustomerEvaluationInfo::getCommodityId, customerEvaluationInfo.getCommodityId());
         if (customerEvaluationInfo.getStarLevel() != null && customerEvaluationInfo.getStarLevel() == "5") {
-            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel,4,5);
+            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel, 4, 5);
         }
         if (customerEvaluationInfo.getStarLevel() != null && customerEvaluationInfo.getStarLevel() == "3") {
-            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel,2,3);
+            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel, 2, 3);
         }
         if (customerEvaluationInfo.getStarLevel() != null && customerEvaluationInfo.getStarLevel() == "1") {
-            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel,0,1);
+            queryWrapper.lambda().in(CustomerEvaluationInfo::getStarLevel, 0, 1);
         }
         PageInfo<CustomerEvaluationInfo> pageData = PageHelper.startPage(customerEvaluationInfo.getPageNum(), customerEvaluationInfo.getPageSize()).doSelectPageInfo(() -> customerEvalutionDao.selectList(queryWrapper));
-        return AppResponse.success("查询订单列表成功", pageData);
+        return AppResponse.success("查询商品评价列表成功", pageData);
     }
 
     /**
@@ -75,7 +80,7 @@ public class CusEvaService {
         String customerId = SecurityUtils.getCurrentUserId();
         CustomerInfo customerInfo = customerDao.selectById(customerId);
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getInvitation,customerInfo.getInvitation());
+        queryWrapper.lambda().eq(ShopInfo::getInvitation, customerInfo.getInvitation());
         ShopInfo shopInfo = shopDao.selectOne(queryWrapper);
         for (CustomerEvaluationInfo customerEvaluationInfo : evaList) {
             customerEvaluationInfo.setEveluationId(UUIDUtils.getUUID());
@@ -99,7 +104,7 @@ public class CusEvaService {
         //更新订单状态
         OrderMasterInfo orderMasterInfo = orderDao.selectById(orderId);
         orderMasterInfo.setOrderStatus("3");
-        orderMasterInfo.setVersion(orderMasterInfo.getVersion()+1);
+        orderMasterInfo.setVersion(orderMasterInfo.getVersion() + 1);
         orderMasterInfo.setUpdateTime(new Date());
         orderMasterInfo.setUpdateUser(customerId);
         Integer count = orderDao.updateById(orderMasterInfo);
@@ -117,8 +122,8 @@ public class CusEvaService {
      * @Author SwordKun.
      * @Date 2020-03-28
      */
-    public AppResponse listEvalution (String orderId) {
+    public AppResponse listEvalution(String orderId) {
         List<CustomerEvaluationInfo> evalutionList = customerEvalutionDao.listEvalution(orderId);
-        return AppResponse.success("查询订单评价列表成功",evalutionList);
+        return AppResponse.success("查询订单评价列表成功", evalutionList);
     }
 }

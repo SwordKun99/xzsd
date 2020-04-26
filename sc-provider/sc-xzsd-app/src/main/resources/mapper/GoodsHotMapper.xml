@@ -9,10 +9,9 @@
         a.commodity_id commodityId,
         b.commodity_name commodityName,
         b.sell_price sellPrice,
-		c.path
+		b.commodity_path commodityPath
         from t_goods_hot a
         left join t_commodity b on b.commodity_Id = a.commodity_id
-        left join t_file c on b.commodity_id = c.biz_id
         where a.is_delete = 0
         order by a.goodshot_nun desc
     </select>

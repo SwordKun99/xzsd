@@ -4,16 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
-import com.xzsd.app.dao.*;
+import com.xzsd.app.dao.CustomerDao;
+import com.xzsd.app.dao.DriveDao;
+import com.xzsd.app.dao.ShopDao;
+import com.xzsd.app.dao.UserDao;
 import com.xzsd.app.entity.CustomerInfo;
 import com.xzsd.app.entity.DriveInfo;
 import com.xzsd.app.entity.ShopInfo;
 import com.xzsd.app.entity.UserInfo;
-import com.xzsd.app.upload.service.UploadService;
 import com.xzsd.app.util.PasswordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -26,14 +29,10 @@ import java.util.Date;
 @Service
 public class ValidateService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ValidateService.class);
+
     @Resource
     private CustomerDao customerDao;
-
-    @Resource
-    private UploadService uploadService;
-
-    @Resource
-    private FileDao fileDao;
 
     @Resource
     private UserDao userDao;
@@ -53,7 +52,7 @@ public class ValidateService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse Validate(UserInfo userInfo, MultipartFile file) throws Exception {
+    public AppResponse Validate(UserInfo userInfo) throws Exception {
         //判断角色
         if (userInfo.getRole() != null && userInfo.getRole() == 3) {//客户
             AppResponse customerRe = this.validateCustomer(userInfo);
@@ -83,6 +82,7 @@ public class ValidateService {
                 customerInfo.setCustomerName(userInfo.getUserName());
                 customerInfo.setCustomerPhone(userInfo.getUserPhone());
                 customerInfo.setCustomerEmail(userInfo.getUserEmail());
+                customerInfo.setCustomerPath(userInfo.getUserImagepath());
                 customerInfo.setIsDelete(0);
                 customerInfo.setVersion(0);
                 customerInfo.setCreateTime(new Date());
@@ -92,9 +92,6 @@ public class ValidateService {
                 Integer count1 = customerDao.insert(customerInfo);
                 if (0 == count1) {
                     return AppResponse.bizError("注册失败，请重试！");
-                }
-                if (file != null) {
-                    uploadService.uploadImage("customer", customerInfo.getCustomerId(), file);
                 }
             }
         } else if (userInfo.getRole() != null && userInfo.getRole() == 2) {//店长
@@ -124,9 +121,6 @@ public class ValidateService {
             if (0 == count) {
                 return AppResponse.bizError("注册失败，请重试！");
             }
-            if (file != null) {
-                uploadService.uploadImage("message", userInfo.getUserId(), file);
-            }
         } else if (userInfo.getRole() != null && userInfo.getRole() == 4) {//司机
             String userId = UUIDUtils.getUUID();
             //1、添加用户表
@@ -152,19 +146,18 @@ public class ValidateService {
             driveInfo.setDrivePhone(userInfo.getUserPhone());
             driveInfo.setDriveNo(userInfo.getUserNo());
             driveInfo.setDriveIdcard(userInfo.getUserIdcard());
+            driveInfo.setDriverPath(userInfo.getUserImagepath());
             driveInfo.setDriveEmail(userInfo.getUserEmail());
             driveInfo.setIsDelete(0);
             driveInfo.setVersion(0);
             driveInfo.setCreateTime(new Date());
             driveInfo.setCreateUser(userId);
             driveInfo.setDriveId(userId);
+            driveInfo.setInvitation(userInfo.getInvitation());
             // 注册司机
             Integer count1 = driveDao.insert(driveInfo);
             if (0 == count1) {
                 return AppResponse.bizError("注册失败，请重试！");
-            }
-            if (file != null) {
-                uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
             }
         } else {
             return AppResponse.bizError("注册失败，角色有误！");

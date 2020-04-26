@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @DescriptionDemo 用户信息实体类
@@ -37,15 +36,21 @@ public class UserInfo {
     private String soreNo;
     private Integer version;
     private String remark;
+    private String invitation;
+    private String userImagepath;
+
+    public String getUserImagepath() {
+        return userImagepath;
+    }
+
+    public void setUserImagepath(String userImagepath) {
+        this.userImagepath = userImagepath;
+    }
 
     @TableField(exist = false)
     private int PageNum;
     @TableField(exist = false)
     private int PageSize;
-    @TableField(exist = false)
-    private List<FileInfo> fileInfo;
-    @TableField(exist = false)
-    private String invitation;
     @TableField(exist = false)
     private String provinceId;
     @TableField(exist = false)
@@ -281,14 +286,6 @@ public class UserInfo {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public List<FileInfo> getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(List<FileInfo> fileInfo) {
-        this.fileInfo = fileInfo;
     }
 
     public String getInvitation() {

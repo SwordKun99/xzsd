@@ -32,8 +32,15 @@ public class CustomerInfoVO implements Serializable {
 
     private int pageSize;
     private int pageNum;
-    private String path;
+    private String customerPath;
 
+    public String getCustomerPath() {
+        return customerPath;
+    }
+
+    public void setCustomerPath(String customerPath) {
+        this.customerPath = customerPath;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -155,14 +162,6 @@ public class CustomerInfoVO implements Serializable {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Integer getIsDelete() {

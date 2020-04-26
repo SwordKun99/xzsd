@@ -6,14 +6,11 @@
     <select id="getGoodsList" parameterType="com.xzsd.app.entity.CommodityInfo"
             resultType="com.xzsd.app.entity.CommodityInfo">
       select
-        a.*,
-        (select f.path from t_file f where f.biz_id = a.commodity_id order by f.create_time asc limit 1) as path
+        a.*
       from t_commodity a
       where a.is_delete = 0
         <if test="systematicCode != null and systematicCode != ''">
             and a.systematic_code = #{systematicCode}
         </if>
     </select>
-
-
 </mapper>

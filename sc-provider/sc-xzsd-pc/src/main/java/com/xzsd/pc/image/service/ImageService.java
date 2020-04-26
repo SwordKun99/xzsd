@@ -9,7 +9,6 @@ import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CommodityDao;
-import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.ImageDao;
 import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.CommodityInfo;
@@ -18,11 +17,13 @@ import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.CommodityInfoVO;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
+import com.xzsd.pc.util.TencentCosUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -36,6 +37,8 @@ import java.util.List;
 @Service
 public class ImageService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
+
     @Autowired
     private ImageDao imageDao;
 
@@ -46,9 +49,6 @@ public class ImageService {
     private CommodityDao commodityDao;
 
     @Autowired
-    private FileDao fileDao;
-
-    @Autowired
     private UserDao userDao;
 
 
@@ -56,12 +56,12 @@ public class ImageService {
      * image 新增轮播图
      *
      * @param imageInfo
-     * @return  AppResponse
+     * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveImage(ImageInfo imageInfo, MultipartFile file) throws Exception {
+    public AppResponse saveImage(ImageInfo imageInfo) throws Exception {
         // 校验轮播图是否存在
         QueryWrapper<ImageInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ImageInfo::getImageNo, imageInfo.getImageNo());
@@ -79,9 +79,6 @@ public class ImageService {
         Integer count = imageDao.insert(imageInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
-        }
-        if (file != null) {
-            uploadService.uploadImage("image", imageInfo.getImageId(), file);
         }
         return AppResponse.success("新增成功！");
     }
@@ -118,6 +115,8 @@ public class ImageService {
             if (0 == count) {
                 return AppResponse.bizError("删除失败，请重试！");
             }
+            //删除轮播图在腾讯云上的图片
+            TencentCosUtil.del(imageInfo.getImagePath());
         }
         return AppResponse.success("删除成功！");
     }
@@ -172,13 +171,13 @@ public class ImageService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         ImageInfoVO imageInfoVO = new ImageInfoVO();
-        BeanUtils.copyProperties(imageInfo,imageInfoVO);
+        BeanUtils.copyProperties(imageInfo, imageInfoVO);
         if (userRole != null && userRole == 2) {
             imageInfoVO.setCreateSer(userId);
         }
         // 包装Page对象
         PageInfo<ImageInfoVO> pageData = PageHelper.startPage(imageInfoVO.getPageNum(), imageInfoVO.getPageSize()).doSelectPageInfo(() -> imageDao.getImageByImageType(imageInfoVO));
-        return AppResponse.success("查询商品列表成功",pageData);
+        return AppResponse.success("查询商品列表成功", pageData);
     }
 
     /**
@@ -195,13 +194,13 @@ public class ImageService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         CommodityInfoVO commodityInfoVO = new CommodityInfoVO();
-        BeanUtils.copyProperties(commodityInfo,commodityInfoVO);
+        BeanUtils.copyProperties(commodityInfo, commodityInfoVO);
         if (userRole != null && userRole != 1) {
             return AppResponse.success("无操作权限");
         }
         // 包装Page对象
         PageInfo<CommodityInfoVO> pageData = PageHelper.startPage(commodityInfoVO.getPageNum(), commodityInfoVO.getPageSize()).doSelectPageInfo(() -> imageDao.getComByCommodityInfo(commodityInfoVO));
-        return AppResponse.success("查询商品列表成功",pageData);
+        return AppResponse.success("查询商品列表成功", pageData);
     }
 }
 

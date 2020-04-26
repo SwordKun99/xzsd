@@ -29,13 +29,26 @@ public class TencentCosUtil {
     private static final String secretKey = "d091bsftqWv8XeVHo32qNdcJ8i00jwsW";
     private static final String localhost = "https://walking-bookstore-1301826795.cos.ap-guangzhou.myqcloud.com";
 
-    public static String upload( MultipartFile localFile, String key) throws Exception {
+    /*public static String upload( MultipartFile localFile, String key) throws Exception {
         File file = multipartFileToFile(localFile);
         COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
         Region region = new Region("ap-guangzhou");
         ClientConfig clientConfig = new ClientConfig(region);
         COSClient cosClient = new COSClient(cred, clientConfig);
         String bucketName = "walking-bookstore-1301826795";
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
+        cosClient.putObject(putObjectRequest);
+        return localhost + "/" + key;
+    }*/
+    public static String upload(String localPackage, MultipartFile localFile) throws Exception{
+        File file = multipartFileToFile(localFile);
+        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
+        Region region = new Region("ap-guangzhou");
+        ClientConfig clientConfig = new ClientConfig(region);
+        COSClient cosClient = new COSClient(cred, clientConfig);
+
+        String bucketName = "walking-bookstore-1301826795";
+        String key = localPackage + "/" + UUID.randomUUID()+localFile.getOriginalFilename().substring(localFile.getOriginalFilename().lastIndexOf("."));
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
         cosClient.putObject(putObjectRequest);
         return localhost + "/" + key;

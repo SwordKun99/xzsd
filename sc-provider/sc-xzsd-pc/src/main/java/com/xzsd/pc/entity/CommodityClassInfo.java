@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @DescriptionDemo 商品分类实体类
@@ -34,6 +35,8 @@ public class CommodityClassInfo implements Serializable {
     private int pageSize;
     @TableField(exist = false)
     private int pageNum;
+    @TableField(exist = false)
+    private List<CommodityClassInfo> commodityInfoList2;
 
 
     public String getSystematicId() {
@@ -160,5 +163,13 @@ public class CommodityClassInfo implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public List<CommodityClassInfo> getCommodityInfoList2() {
+        return commodityInfoList2;
+    }
+
+    public void setCommodityInfoList2(List<CommodityClassInfo> commodityInfoList2) {
+        this.commodityInfoList2 = commodityInfoList2;
     }
 }

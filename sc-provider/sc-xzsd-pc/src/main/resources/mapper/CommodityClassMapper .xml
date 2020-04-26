@@ -2,4 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.dao.CommodityClassDao">
 
+    <!--查询一级分类列表-->
+    <select id="listParentCode" parameterType="com.xzsd.pc.entity.CommodityClassInfo"
+            resultType="com.xzsd.pc.entity.CommodityClassInfo">
+        select
+        a.parent_name parentName,
+        a.parent_code parentCode,
+        a.version
+        from t_commodity_classification a
+        where a.is_delete = 0
+        order by a.create_time desc
+    </select>
+
+    <!--查询二级分类列表-->
+    <select id="listSecondCode" parameterType="com.xzsd.pc.entity.CommodityClassInfo"
+            resultType="com.xzsd.pc.entity.CommodityClassInfo">
+        select
+        a.systematic_name parentName,
+        a.systematic_code parentCode,
+        a.version
+        from t_commodity_classification a
+        where a.is_delete = 0
+
+        <if test="parentCode != null and parentCode != ''">
+            and a.parent_code = #{parentCode}
+        </if>
+        order by a.create_time desc
+    </select>
 </mapper>

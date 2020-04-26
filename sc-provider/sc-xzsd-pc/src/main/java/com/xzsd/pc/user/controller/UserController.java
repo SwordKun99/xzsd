@@ -2,7 +2,6 @@ package com.xzsd.pc.user.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.UserInfoVO;
 import com.xzsd.pc.user.service.UserService;
@@ -10,9 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -40,9 +37,9 @@ public class UserController {
      * @Date 2020-03-25
      */
     @PostMapping("saveUser")
-    public AppResponse saveUser(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public AppResponse saveUser(UserInfo userInfo) throws Exception {
         try {
-            AppResponse appResponse = userService.saveUser(userInfo, file);
+            AppResponse appResponse = userService.saveUser(userInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("用户新增失败", e);
@@ -122,29 +119,6 @@ public class UserController {
             return userService.listUsers(userInfo);
         } catch (Exception e) {
             logger.error("查询用户列表异常", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
-
-    /**
-     * user 修改用户头像
-     *
-     * @param userInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @PostMapping("updateImage")
-    public AppResponse updateImage(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        try {
-            //获取用户Id
-            String userId = AuthUtils.getCurrentUserId();
-            userInfo.setCreateUser(userId);
-            userInfo.setUpdateUser(userId);
-            return userService.updateImage(userInfo, file);
-        } catch (Exception e) {
-            logger.error("修改用户头像错误", e);
             System.out.println(e.toString());
             throw e;
         }

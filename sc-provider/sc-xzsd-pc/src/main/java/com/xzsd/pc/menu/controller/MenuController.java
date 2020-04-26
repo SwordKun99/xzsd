@@ -1,7 +1,6 @@
 package com.xzsd.pc.menu.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.entity.MenuInfo;
 import com.xzsd.pc.entity.VO.MenuInfoVO;
 import com.xzsd.pc.menu.service.MenuService;
@@ -21,6 +20,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
+
     private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @Resource
@@ -75,7 +75,8 @@ public class MenuController {
      */
     @PostMapping("updateMenu")
     public AppResponse updateMenu(MenuInfoVO menuInfoVO) {
-        try {;
+        try {
+            ;
             return menuService.updateMenu(menuInfoVO);
         } catch (Exception e) {
             logger.error("修改菜单信息失败", e);

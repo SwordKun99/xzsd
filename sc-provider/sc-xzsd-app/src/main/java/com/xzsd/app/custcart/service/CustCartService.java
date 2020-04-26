@@ -11,6 +11,8 @@ import com.xzsd.app.dao.CustCartDao;
 import com.xzsd.app.entity.CommodityInfo;
 import com.xzsd.app.entity.CustCartInfo;
 import com.xzsd.app.entity.VO.CustCartInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ import java.util.List;
  */
 @Service
 public class CustCartService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustCartService.class);
 
     @Resource
     private CustCartDao custCartDao;

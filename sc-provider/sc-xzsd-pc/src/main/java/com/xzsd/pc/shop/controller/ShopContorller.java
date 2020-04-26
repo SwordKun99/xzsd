@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Description增删改查Shop
@@ -38,9 +36,10 @@ public class ShopContorller {
      * @Date 2020-04-10
      */
     @PostMapping("saveShop")
-    public AppResponse saveShop(ShopInfo shopInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        try { ;
-            AppResponse appResponse = shopService.saveShop(shopInfo, file);
+    public AppResponse saveShop(ShopInfo shopInfo) throws Exception {
+        try {
+            ;
+            AppResponse appResponse = shopService.saveShop(shopInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("门店新增失败", e);

@@ -34,12 +34,20 @@ public class DriveInfo {
     private Date updateTime;
     private String soreNo;
     private Integer version;
+    private String driverPath;
 
     @TableField(exist = false)
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
 
+    public String getDriverPath() {
+        return driverPath;
+    }
+
+    public void setDriverPath(String driverPath) {
+        this.driverPath = driverPath;
+    }
 
     public String getDriveId() {
         return driveId;

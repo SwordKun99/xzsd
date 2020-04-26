@@ -44,7 +44,7 @@
         b.introduce,
         a.commodity_totalpri as commodityTotalpri,
         a.commodity_num as commodityNum,
-        (select f.path from t_file f where f.biz_id = a.commodity_id order by f.create_time asc limit 1) as path
+        a.commodity_path as commodityPath
         from t_order_commodity a
         left join t_commodity b on b.commodity_id = a.commodity_id
         where b.is_delete = 0

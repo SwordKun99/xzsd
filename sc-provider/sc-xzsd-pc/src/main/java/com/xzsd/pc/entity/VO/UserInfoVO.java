@@ -1,10 +1,6 @@
 package com.xzsd.pc.entity.VO;
 
 
-import com.xzsd.pc.entity.FileInfo;
-
-import java.util.List;
-
 /**
  * @DescriptionDemo 用户VO实体类
  * @Author SwordKun.
@@ -32,10 +28,18 @@ public class UserInfoVO {
     private String soreNo;
     private Integer version;
     private String remark;
+    private String userImagepath;
 
     private int PageNum;
     private int PageSize;
-    private List<FileInfo> fileInfo;
+
+    public String getUserImagepath() {
+        return userImagepath;
+    }
+
+    public void setUserImagepath(String userImagepath) {
+        this.userImagepath = userImagepath;
+    }
 
     public String getUserId() {
         return userId;
@@ -205,14 +209,6 @@ public class UserInfoVO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public List<FileInfo> getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(List<FileInfo> fileInfo) {
-        this.fileInfo = fileInfo;
     }
 
     public String getCreateTime() {

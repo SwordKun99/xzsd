@@ -1,7 +1,6 @@
 package com.xzsd.pc.image.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.entity.CommodityInfo;
 import com.xzsd.pc.entity.ImageInfo;
 import com.xzsd.pc.entity.VO.ImageInfoVO;
@@ -12,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -27,6 +24,7 @@ import javax.annotation.Resource;
 @RequestMapping("/image")
 
 public class ImageController {
+
     private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
 
     @Resource
@@ -45,9 +43,9 @@ public class ImageController {
      * @Date 2020-04-13
      */
     @PostMapping("saveImage")
-    public AppResponse saveImage(ImageInfo imageInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public AppResponse saveImage(ImageInfo imageInfo) throws Exception {
         try {
-            AppResponse appResponse = imageService.saveImage(imageInfo, file);
+            AppResponse appResponse = imageService.saveImage(imageInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("轮播图新增失败", e);

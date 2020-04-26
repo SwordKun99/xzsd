@@ -8,7 +8,7 @@
         a.user_Id userId,
         a.user_No userNo,
         a.user_name userName,
-        b.path path,
+        a.user_imagepath userImagepath,
         a.user_Sex userSex,
         a.user_Phone userPhone,
         a.user_Email userEmail,
@@ -16,8 +16,7 @@
         a.user_password userPassword,
         a.role role,
         a.version
-        from t_sys_user a left join t_file b
-        on a.user_Id = b.biz_id
+        from t_sys_user a
         <where>
             a.is_Deleted = 0
             and a.user_Id = #{userId}

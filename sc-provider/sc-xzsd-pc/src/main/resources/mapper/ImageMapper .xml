@@ -9,11 +9,11 @@
         a.image_id imageId,
         a.image_type imageType,
         a.image_no imageNo,
-        b.path path,
+        a.image_path imagePath,
         a.period_over periodOver,
         a.period_strat periodStrat,
         a.version version
-        from t_focus_rotations a left join t_file b on b.biz_id = a.image_id
+        from t_focus_rotations a
         <where> a.is_delete = 0
             <if test="imageType != null and imageType != ''">
                 and a.image_type = #{imageType}

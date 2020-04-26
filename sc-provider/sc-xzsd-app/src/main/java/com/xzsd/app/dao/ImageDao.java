@@ -13,4 +13,12 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface ImageDao extends BaseMapper<ImageInfo> {
+
+    /**
+     * 查询轮播图信息
+     *
+     * @param
+     * @return
+     */
+    ImageInfo listImage();
 }

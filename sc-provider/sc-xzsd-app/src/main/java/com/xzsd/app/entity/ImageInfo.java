@@ -35,14 +35,20 @@ public class ImageInfo {
     private Date updateTime;
     private String soreNo;
     private Integer version;
+    private String imagePath;
 
     @TableField(exist = false)
     private int PageNum;
     @TableField(exist = false)
     private int pagesize;
-    @TableField(exist = false)
-    private String path;
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public String getImageId() {
         return imageId;
@@ -196,14 +202,6 @@ public class ImageInfo {
 
     public void setPagesize(int pagesize) {
         this.pagesize = pagesize;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Integer getIsDelete() {

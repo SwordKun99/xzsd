@@ -17,6 +17,8 @@ import com.xzsd.pc.entity.GoodsHotInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.GhsInfoVO;
 import com.xzsd.pc.entity.VO.GoodsHotInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ import java.util.List;
  */
 @Service
 public class GoodsHotService {
+
+    private static final Logger logger = LoggerFactory.getLogger(GoodsHotService.class);
 
     @Autowired
     private GoodsHotDao goodshotDao;
@@ -181,9 +185,7 @@ public class GoodsHotService {
      * @Date 2020-03-29
      */
     public AppResponse getGoodsHotByInfo(GoodsHotInfo goodshotInfo) {
-        QueryWrapper<GoodsHotInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(GoodsHotInfo::getGoodshotId, goodshotInfo.getGoodshotId());
-        GoodsHotInfo info = goodshotDao.selectOne(queryWrapper);
+        GoodsHotInfo info = goodshotDao.selectById(goodshotInfo.getGoodshotId());
         return AppResponse.success("查询成功！", info);
     }
 
@@ -250,6 +252,7 @@ public class GoodsHotService {
         }
         return AppResponse.success("修改成功！");
     }
+
     /**
      * goodshot 查询热门商品展示数量
      *

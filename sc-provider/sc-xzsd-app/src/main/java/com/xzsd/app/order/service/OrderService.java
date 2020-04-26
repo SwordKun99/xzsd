@@ -9,6 +9,8 @@ import com.neusoft.util.UUIDUtils;
 import com.xzsd.app.dao.*;
 import com.xzsd.app.entity.*;
 import com.xzsd.app.entity.VO.OrderMasterInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,9 @@ import java.util.List;
  */
 @Service
 public class OrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
 
     @Resource
     private OrderDao orderDao;
@@ -41,7 +46,7 @@ public class OrderService {
     private OrderCommodityDao orderCommodityDao;
 
     @Resource
-    private  UserDao userDao;
+    private UserDao userDao;
 
     /**
      * order 新增订单
@@ -60,18 +65,18 @@ public class OrderService {
         String[] goodNum = orderMasterInfo.getGoosNum().split(",");
         double totlePrice = 0;
         Integer goodCnt = 0;
-        for (int i=0;i<goodMoney.length;i++) {
+        for (int i = 0; i < goodMoney.length; i++) {
             //校验库存
             CommodityInfo commodityInfo = commodityDao.selectById(goodId[i]);
             if (commodityInfo != null) {
                 if (commodityInfo.getUpDownstate() == '0') {
-                    return AppResponse.bizError(commodityInfo.getCommodityName()+"商品已售罄，请重试！");
+                    return AppResponse.bizError(commodityInfo.getCommodityName() + "商品已售罄，请重试！");
                 } else if (commodityInfo.getUpDownstate() == '2' || commodityInfo.getUpDownstate() == '3') {
-                    return AppResponse.bizError(commodityInfo.getCommodityName()+"商品已下架，请重试！");
+                    return AppResponse.bizError(commodityInfo.getCommodityName() + "商品已下架，请重试！");
                 } else if (commodityInfo.getUpDownstate() == '1') {
                     int kc = Integer.parseInt(commodityInfo.getRepertory());
                     if (kc < Integer.parseInt(goodNum[i])) {
-                        return AppResponse.bizError(commodityInfo.getCommodityName()+"商品库存不足，请重试！");
+                        return AppResponse.bizError(commodityInfo.getCommodityName() + "商品库存不足，请重试！");
                     }
                     //更新库存
                     int newkc = kc - Integer.parseInt(goodNum[i]);
@@ -81,7 +86,7 @@ public class OrderService {
             } else {
                 return AppResponse.bizError("未找到商品，请重试！");
             }
-            totlePrice = totlePrice + Double.parseDouble(goodNum[i])*Double.parseDouble(goodMoney[i]);
+            totlePrice = totlePrice + Double.parseDouble(goodNum[i]) * Double.parseDouble(goodMoney[i]);
             goodCnt += Integer.parseInt(goodNum[i]);
             //添加订单商品表
             OrderCommodityInfo orderCommodityInfo = new OrderCommodityInfo();
@@ -89,7 +94,7 @@ public class OrderService {
             orderCommodityInfo.setCommodityId(commodityInfo.getCommodityId());
             orderCommodityInfo.setCommodityNum(Integer.parseInt(goodNum[i]));
             orderCommodityInfo.setCommodityPrice(Double.parseDouble(goodMoney[i]));
-            orderCommodityInfo.setCommodityTotalpri(Double.parseDouble(goodNum[i])*Double.parseDouble(goodMoney[i]));
+            orderCommodityInfo.setCommodityTotalpri(Double.parseDouble(goodNum[i]) * Double.parseDouble(goodMoney[i]));
             orderCommodityInfo.setCreateTime(new Date());
             orderCommodityInfo.setVaersion(0);
             orderCommodityInfo.setCreateUser(customerId);
@@ -134,18 +139,18 @@ public class OrderService {
      * @Date 2020-04-24
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateOrderStatus (OrderMasterInfoVO orderMasterInfoVO) {
+    public AppResponse updateOrderStatus(OrderMasterInfoVO orderMasterInfoVO) {
         //获取当前登录客户id
         String customerId = SecurityUtils.getCurrentUserId();
         QueryWrapper<OrderMasterInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(OrderMasterInfo::getOrderStatus, orderMasterInfoVO.getOrderStatus());
-        queryWrapper.lambda().eq(OrderMasterInfo::getIsDelete,0);
+        queryWrapper.lambda().eq(OrderMasterInfo::getIsDelete, 0);
         Integer count = orderDao.selectCount(queryWrapper);
         if (0 != count) {
             return AppResponse.bizError("订单状态已存在，请重新选择！");
         }
-        //修改订单状态  客户端：（1：已下单、2：未取货、3：已完成已评价、4：已完成未评价、5：已取消订单、6：已取消取货）
-                    // 店长端：（1：发货中、2：确认到货、3：确认取货、4、确认取货、5、取消到货、6取消取货）
+        //修改订单状态  客户端：（1：已下单、2：未取货、3：已取货、4：未评价、5：已评价、6：已取消取货、7、取消订单）
+        // 店长端：（1：发货中、2：确认到货、3：确认取货、4、确认取货、4、确认取货、6取消取货、7、取消到货）
         OrderMasterInfo orderMasterInfoVO1 = orderDao.selectById(orderMasterInfoVO.getOrderId());
         if (orderMasterInfoVO1 == null) {
             return AppResponse.bizError("查询不到该订单，请重试！");
@@ -157,7 +162,7 @@ public class OrderService {
         orderMasterInfo.setUpdateTime(new Date());
         int count1 = orderDao.updateById(orderMasterInfo);
         if (0 == count1) {
-           return AppResponse.versionError("订单状态有变化，请刷新！");
+            return AppResponse.versionError("订单状态有变化，请刷新！");
         }
         return AppResponse.success("订单状态修改成功！");
     }
@@ -170,7 +175,7 @@ public class OrderService {
      * @Author SwordKun.
      * @Date 2020-04-24
      */
-    public  AppResponse orderInfo (String orderId) {
+    public AppResponse orderInfo(String orderId) {
         //1、查询订单详情
         OrderMasterInfo orderMasterInfo = orderDao.selectById(orderId);
         if (orderMasterInfo == null) {
@@ -182,7 +187,7 @@ public class OrderService {
         //3、找到订单商品list
         List<CommodityInfo> commodityInfoList = orderDao.listOrderCommodity(orderMasterInfo);
         orderMasterInfo.setCommodityInfoList(commodityInfoList);
-        return AppResponse.success("查询订单详情成功",orderMasterInfo);
+        return AppResponse.success("查询订单详情成功", orderMasterInfo);
     }
 
     /**
@@ -193,28 +198,28 @@ public class OrderService {
      * @Author SwordKun.
      * @Date 2020-04-24
      */
-     public AppResponse listOrder (OrderMasterInfo orderMasterInfo) {
-         String customerId = SecurityUtils.getCurrentUserId();
-         UserInfo userInfo = userDao.selectById(customerId);
-         if (userInfo.getRole() == '2') {//店长
-             QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-             queryWrapper.lambda().eq(ShopInfo::getUserId,customerId);
-             ShopInfo shopInfo = shopDao.selectOne(queryWrapper);
-             orderMasterInfo.setShopId(shopInfo.getShopId());
-         } else if (userInfo.getRole() == '3') {//客户
-             orderMasterInfo.setCustomerId(customerId);
-         }
-         //根据条件找到符合条件的订单
-         List<OrderMasterInfo> orderMasterInfoList = orderDao.listOrder(orderMasterInfo);
-         // 包装Page对象
-         PageInfo<OrderMasterInfo> pageData = new PageInfo<>(orderMasterInfoList);
-         if (pageData.getList() != null && pageData.getList().size() > 0) {
-             List<OrderMasterInfo> masterInfoList = pageData.getList();
-             for (OrderMasterInfo masterInfo : masterInfoList) {
-                 List<CommodityInfo> commodityInfoList = orderDao.listOrderCommodity(masterInfo);
-                 masterInfo.setCommodityInfoList(commodityInfoList);
-             }
-         }
-         return AppResponse.success("查询订单列表成功",pageData);
-     }
+    public AppResponse listOrder(OrderMasterInfo orderMasterInfo) {
+        String customerId = SecurityUtils.getCurrentUserId();
+        UserInfo userInfo = userDao.selectById(customerId);
+        if (userInfo.getRole() == '2') {//店长
+            QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(ShopInfo::getUserId, customerId);
+            ShopInfo shopInfo = shopDao.selectOne(queryWrapper);
+            orderMasterInfo.setShopId(shopInfo.getShopId());
+        } else if (userInfo.getRole() == '3') {//客户
+            orderMasterInfo.setCustomerId(customerId);
+        }
+        //根据条件找到符合条件的订单
+        List<OrderMasterInfo> orderMasterInfoList = orderDao.listOrder(orderMasterInfo);
+        // 包装Page对象
+        PageInfo<OrderMasterInfo> pageData = new PageInfo<>(orderMasterInfoList);
+        if (pageData.getList() != null && pageData.getList().size() > 0) {
+            List<OrderMasterInfo> masterInfoList = pageData.getList();
+            for (OrderMasterInfo masterInfo : masterInfoList) {
+                List<CommodityInfo> commodityInfoList = orderDao.listOrderCommodity(masterInfo);
+                masterInfo.setCommodityInfoList(commodityInfoList);
+            }
+        }
+        return AppResponse.success("查询订单列表成功", pageData);
+    }
 }

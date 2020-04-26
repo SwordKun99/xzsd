@@ -1,7 +1,6 @@
 package com.xzsd.app.customer.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.util.AuthUtils;
 import com.xzsd.app.customer.service.CustomerService;
 import com.xzsd.app.entity.CustomerInfo;
 import com.xzsd.app.entity.VO.CustomerInfoVO;
@@ -9,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -23,6 +20,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Resource
@@ -66,28 +64,6 @@ public class CustomerController {
         }
     }
 
-    /**
-     * customer 修改客户头像
-     *
-     * @param customerInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @PostMapping("updateCImage")
-    public AppResponse updateCImage(CustomerInfo customerInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        try {
-            //获取客户id
-            String customerId = AuthUtils.getCurrentUserId();
-            customerInfo.setCreateUser(customerId);
-            customerInfo.setUpdateUser(customerId);
-            return customerService.updateCImage(customerInfo, file);
-        } catch (Exception e) {
-            logger.error("修改客户头像错误", e);
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
 
     /**
      * customer 修改客户密码
@@ -103,6 +79,25 @@ public class CustomerController {
             return customerService.updatePassword(oldPassword, newPassword);
         } catch (Exception e) {
             logger.error("修改客户密码错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * user 查询用户个人信息
+     *
+     * @param
+     * @return AppResponse
+     * @Author SwordKun.
+     * @Date 2020-04-15
+     */
+    @PostMapping("userInfo")
+    public AppResponse userInfo() {
+        try {
+            return customerService.userInfo();
+        } catch (Exception e) {
+            logger.error("查询个人用户信息错误", e);
             System.out.println(e.toString());
             throw e;
         }

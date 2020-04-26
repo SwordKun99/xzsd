@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @DescriptionDemo 商品信息实体类
@@ -46,21 +45,24 @@ public class CommodityInfo {
     private Date updateTime;
     private String soreNo;
     private Integer version;
+    private String commodityPath;
 
     @TableField(exist = false)
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
-
-    @TableField(exist = false)
-    private List<FileInfo> filePath;
-
-    @TableField(exist = false)
-    private String path;
     @TableField(exist = false)
     private Double commodityTotalpri;
     @TableField(exist = false)
     private int commodityNum;
+
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
 
     public Double getCommodityTotalpri() {
         return commodityTotalpri;
@@ -279,14 +281,6 @@ public class CommodityInfo {
         this.pageSize = pageSize;
     }
 
-    public List<FileInfo> getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(List<FileInfo> filePath) {
-        this.filePath = filePath;
-    }
-
     public String getSoldNumber() {
         return soldNumber;
     }
@@ -349,13 +343,5 @@ public class CommodityInfo {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 }

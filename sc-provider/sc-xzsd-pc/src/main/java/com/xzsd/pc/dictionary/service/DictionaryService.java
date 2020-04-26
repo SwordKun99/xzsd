@@ -8,6 +8,8 @@ import com.xzsd.pc.dao.PrviceDao;
 import com.xzsd.pc.entity.CityInfo;
 import com.xzsd.pc.entity.DistrictInfo;
 import com.xzsd.pc.entity.PrviceInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ import java.util.List;
 
 @Service
 public class DictionaryService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryService.class);
+
     @Autowired
     private PrviceDao prviceDao;
 

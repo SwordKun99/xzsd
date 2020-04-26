@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @DescriptionDemo 注册用户控制类
@@ -20,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/validate")
 public class ValidateController {
+
     private static final Logger logger = LoggerFactory.getLogger(ValidateController.class);
 
     @Autowired
@@ -34,9 +33,9 @@ public class ValidateController {
      * @Date 2020-03-28
      */
     @PostMapping("/Validate")
-    public AppResponse Validate(UserInfo userInfo, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public AppResponse Validate(UserInfo userInfo) throws Exception {
         try {
-            AppResponse appResponse = validateService.Validate(userInfo, file);
+            AppResponse appResponse = validateService.Validate(userInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("注册失败", e);

@@ -11,7 +11,7 @@
         a.shop_name shopName,
         b.sell_price sellPrice,
         b.commodity_id commodityId,
-        (select f.path from t_file f where f.biz_id = a.commodity_id order by f.create_time asc limit 1) as path
+        b.commodity_path as commodityPath
       from t_cust_cart a
         left join t_commodity b on a.commodity_id = b.commodity_id
       where a.customer_id = #{customerId}

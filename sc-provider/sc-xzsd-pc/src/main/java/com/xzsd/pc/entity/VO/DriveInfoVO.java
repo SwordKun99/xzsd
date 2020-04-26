@@ -26,10 +26,18 @@ public class DriveInfoVO {
     private String updateTime;
     private String soreNo;
     private Integer version;
+    private String driverPath;
 
     private int pageNum;
     private int pageSize;
 
+    public String getDriverPath() {
+        return driverPath;
+    }
+
+    public void setDriverPath(String driverPath) {
+        this.driverPath = driverPath;
+    }
 
     public String getDriveId() {
         return driveId;

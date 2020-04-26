@@ -38,7 +38,7 @@ public class CustCartController {
         try {
             return custCartService.saveCustCart(custCartInfo);
         } catch (Exception e) {
-            logger.error("查询购物车列表失败", e);
+            logger.error("新增购物车失败", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -57,7 +57,7 @@ public class CustCartController {
         try {
             return custCartService.deleteCustCart(shopcarId);
         } catch (Exception e) {
-            logger.error("查询购物车列表失败", e);
+            logger.error("删除购物车失败", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -76,14 +76,14 @@ public class CustCartController {
         try {
             return custCartService.updateCustCart(custCartInfoVO);
         } catch (Exception e) {
-            logger.error("查询购物车列表失败", e);
+            logger.error("修改购物车商品数量失败", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * custcart 查询购物车；列表
+     * custcart 查询购物车列表
      *
      * @param custCartInfo
      * @return AppResponse

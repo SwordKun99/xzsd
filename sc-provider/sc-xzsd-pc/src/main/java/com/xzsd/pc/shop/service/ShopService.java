@@ -11,11 +11,12 @@ import com.xzsd.pc.dao.ShopDao;
 import com.xzsd.pc.entity.ShopInfo;
 import com.xzsd.pc.entity.VO.ShopInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +29,8 @@ import java.util.List;
  */
 @Service
 public class ShopService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShopService.class);
 
     @Autowired
     private ShopDao shopDao;
@@ -45,7 +48,7 @@ public class ShopService {
      * @Date 2020-04-10
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveShop(ShopInfo shopInfo, MultipartFile file) throws Exception {
+    public AppResponse saveShop(ShopInfo shopInfo) throws Exception {
         // 校验门店是否存在
         QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ShopInfo::getShopName, shopInfo.getShopName());
@@ -76,9 +79,6 @@ public class ShopService {
         Integer count = shopDao.insert(shopInfo);
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试");
-        }
-        if (file != null) {
-            uploadService.uploadImage("shop", shopInfo.getShopId(), file);
         }
         return AppResponse.success("新增成功");
     }
@@ -167,9 +167,7 @@ public class ShopService {
      * @Date 2020-04-01
      */
     public AppResponse getUserByShopNumber(ShopInfo shopInfo) {
-        QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ShopInfo::getShopId, shopInfo.getShopId());
-        shopInfo = shopDao.selectOne(queryWrapper);
+        shopInfo = shopDao.selectById(shopInfo.getShopId());
         return AppResponse.success("查询成功！", shopInfo);
     }
 

@@ -1,10 +1,6 @@
 package com.xzsd.app.entity.VO;
 
 
-import com.xzsd.app.entity.FileInfo;
-
-import java.util.List;
-
 /**
  * @DescriptionDemo 商品信息VO实体类
  * @Author SwordKun.
@@ -43,7 +39,15 @@ public class CommodityInfoVO {
     private Integer version;
     private int pageNum;
     private int pageSize;
-    private List<FileInfo> filePath;
+    private String commodityPath;
+
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
 
     public String getCommodityId() {
         return commodityId;
@@ -218,14 +222,6 @@ public class CommodityInfoVO {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-    }
-
-    public List<FileInfo> getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(List<FileInfo> filePath) {
-        this.filePath = filePath;
     }
 
     public String getSoldNumber() {

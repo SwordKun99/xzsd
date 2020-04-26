@@ -8,20 +8,19 @@ import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.DriveDao;
-import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.DriveInfo;
-import com.xzsd.pc.entity.FileInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.DriveInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
 import com.xzsd.pc.util.PasswordUtils;
 import com.xzsd.pc.util.TencentCosUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -36,14 +35,13 @@ import java.util.List;
 @Service
 public class DriveService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DriveService.class);
+
     @Autowired
     private DriveDao driveDao;
 
     @Autowired
     private UploadService uploadService;
-
-    @Autowired
-    private FileDao fileDao;
 
     @Autowired
     private UserDao userDao;
@@ -57,7 +55,7 @@ public class DriveService {
      * @Date 2020-03-28
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveDrive(DriveInfo driveInfo, MultipartFile file) throws Exception {
+    public AppResponse saveDrive(DriveInfo driveInfo) throws Exception {
         //判断当前操作人，管理员才拥有权限
         String createUserId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.getUserByUserId(createUserId);
@@ -90,9 +88,6 @@ public class DriveService {
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
         }
-        if (file != null) {
-            uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
-        }
         //同时，新增user表数据
         UserInfo userInfo1 = new UserInfo();
         userInfo1.setCreateTime(new Date());
@@ -101,12 +96,14 @@ public class DriveService {
         userInfo1.setVersion(0);
         userInfo1.setIsDeleted(0);
         userInfo1.setRole(4);
+        userInfo1.setUserId(driveInfo.getDriveId());
         userInfo1.setUserEmail(driveInfo.getDriveEmail());
         userInfo1.setUserPhone(driveInfo.getDrivePhone());
         userInfo1.setUserIdcard(driveInfo.getDriveIdcard());
         userInfo1.setUserCode(driveInfo.getDriveCode());
         userInfo1.setUserName(driveInfo.getDriveName());
         userInfo1.setUserNo(driveInfo.getDriveNo());
+        userInfo1.setUserImagepath(driveInfo.getDriverPath());
         Integer count1 = userDao.insert(userInfo);
         if (0 == count1) {
             return AppResponse.bizError("注册失败，请重试！");
@@ -144,6 +141,16 @@ public class DriveService {
             if (0 == count) {
                 return AppResponse.bizError("删除失败，请重试！");
             }
+            //删除用户表数据
+            UserInfo userInfo1 = userDao.selectById(driveInfo.getDriveId());
+            if (userInfo1 != null) {
+                userInfo1.setUpdateUser(SecurityUtils.getCurrentUserId());
+                userInfo1.setUpdateTime(new Date());
+                userInfo1.setIsDeleted(1);
+                userDao.updateById(userInfo1);
+            }
+            //删除司机在腾讯云的图片
+            TencentCosUtil.del(driveInfo.getDriverPath());
         }
         return AppResponse.success("删除成功！");
     }
@@ -196,6 +203,21 @@ public class DriveService {
         if (0 == count) {
             return AppResponse.bizError("修改失败");
         }
+        //同步修改用户表的司机信息
+        UserInfo userInfo1 = userDao.selectById(driveInfo.getDriveId());
+        userInfo1.setUserName(driveInfo.getDriveName());
+        userInfo1.setUserIdcard(driveInfo.getDriveIdcard());
+        userInfo1.setUpdateUser(userId);
+        userInfo1.setUpdateTime(new Date());
+        userInfo1.setVersion(userInfo1.getVersion() + 1);
+        userInfo1.setUserImagepath(driveInfo.getDriverPath());
+        userInfo1.setUserEmail(driveInfo.getDriveEmail());
+        userInfo1.setUserPhone(driveInfo.getDrivePhone());
+        userInfo1.setUserId(driveInfo.getDriveName());
+        int count1 = userDao.updateById(userInfo1);
+        if (0 == count1) {
+            return AppResponse.bizError("修改失败");
+        }
         return AppResponse.success("修改成功！");
     }
 
@@ -214,9 +236,7 @@ public class DriveService {
         if (userRole != null && userRole != 1) {
             return AppResponse.bizError("无操作权限");
         }
-        QueryWrapper<DriveInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(DriveInfo::getDriveId, driveInfo.getDriveId());
-        DriveInfo info = driveDao.selectOne(queryWrapper);
+        DriveInfo info = driveDao.selectById(driveInfo.getDriveId());
         return AppResponse.success("查询成功！", info);
     }
 
@@ -250,47 +270,4 @@ public class DriveService {
         return AppResponse.success("查询司机列表成功", pageData);
     }
 
-    /**
-     * drive 修改头像
-     *
-     * @param driveInfo
-     * @return AppResponse
-     * @Author SwordKun.
-     * @Date 2020-04-15
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateDImage(DriveInfo driveInfo, MultipartFile file) throws Exception {
-        //通过driveId找到一下头像file表
-        String createUserId = SecurityUtils.getCurrentUserId();
-        UserInfo userInfo = userDao.getUserByUserId(createUserId);
-        Integer userRole = userInfo.getRole();
-        if (userRole != null && userRole != 1) {
-            return AppResponse.bizError("无操作权限");
-        }
-        AppResponse appResponse = AppResponse.success("头像修改成功!");
-        QueryWrapper<FileInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(FileInfo::getBizId, driveInfo.getDriveId());
-        FileInfo fileInfo = fileDao.selectOne(queryWrapper);
-        //删除file
-        if (fileInfo == null) {
-            appResponse = AppResponse.bizError("查询不到该图片，请重试！");
-            return appResponse;
-        }
-        String key = fileInfo.getPathKey();
-        int count = fileDao.deleteById(fileInfo.getFileId());
-        if (0 == count) {
-            appResponse = AppResponse.bizError("删除失败，请重试！");
-        }
-        //服务器删除path
-        TencentCosUtil.del(key);
-        //然后新增file
-        if (file != null) {
-            //获取用户id
-            String driveId = SecurityUtils.getCurrentUserId();
-            driveInfo.setCreateUser(driveId);
-            driveInfo.setUpdateUser(driveId);
-            uploadService.uploadImage("drive", driveInfo.getDriveId(), file);
-        }
-        return appResponse;
-    }
 }

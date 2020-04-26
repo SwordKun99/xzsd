@@ -38,7 +38,7 @@ public class CustomerEvaluationInfo {
     @TableField(exist = false)
     private int pageNum;
     @TableField(exist = false)
-    private int path;
+    private String commodityPath;
 
     public String getEveluationId() {
         return eveluationId;
@@ -183,6 +183,13 @@ public class CustomerEvaluationInfo {
         this.soreNo = soreNo;
     }
 
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
 
     public long getVersion() {
         return version;
@@ -206,13 +213,5 @@ public class CustomerEvaluationInfo {
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
-    }
-
-    public int getPath() {
-        return path;
-    }
-
-    public void setPath(int path) {
-        this.path = path;
     }
 }

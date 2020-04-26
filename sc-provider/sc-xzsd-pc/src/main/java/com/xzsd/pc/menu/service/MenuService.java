@@ -13,6 +13,8 @@ import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.MenuInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.MenuInfoVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 /**
  * @DescriptionDemo 实现类
@@ -30,6 +31,8 @@ import java.util.zip.DataFormatException;
 
 @Service
 public class MenuService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
 
     @Autowired
     private MenuDao menuDao;
@@ -120,7 +123,7 @@ public class MenuService {
             return appResponse;
         }
         MenuInfo menuInfo = new MenuInfo();
-        BeanUtils.copyProperties(menuInfoVO,menuInfo);
+        BeanUtils.copyProperties(menuInfoVO, menuInfo);
         String commodityId = SecurityUtils.getCurrentUserId();
         menuInfo.setUpdateUser(commodityId);
         menuInfo.setVersion(menuInfoOld.getVersion() + 1);
@@ -161,15 +164,15 @@ public class MenuService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         QueryWrapper<MenuInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(MenuInfo::getIsDelete,0);
+        queryWrapper.lambda().eq(MenuInfo::getIsDelete, 0);
         List<MenuInfo> menuInfoList = null;
         PageHelper.startPage(menuInfo.getPagesize(), menuInfo.getStartPage());
         MenuInfoVO menuInfoVO = new MenuInfoVO();
-        BeanUtils.copyProperties(menuInfo,menuInfoVO);
+        BeanUtils.copyProperties(menuInfo, menuInfoVO);
         if (userRole != null && userRole == 2) {//店长，2/3
-            queryWrapper.lambda().in(MenuInfo::getRole,2,3);
-        }else if (userRole != null && userRole == 1) {//管理员,1/3
-            queryWrapper.lambda().in(MenuInfo::getRole,1,3);
+            queryWrapper.lambda().in(MenuInfo::getRole, 2, 3);
+        } else if (userRole != null && userRole == 1) {//管理员,1/3
+            queryWrapper.lambda().in(MenuInfo::getRole, 1, 3);
         }
         menuInfoList = menuDao.selectList(queryWrapper);
         // 包装Page对象

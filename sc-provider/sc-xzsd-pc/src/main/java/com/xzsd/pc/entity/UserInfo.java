@@ -37,13 +37,20 @@ public class UserInfo {
     private String soreNo;
     private Integer version;
     private String remark;
+    private String userImagepath;
 
     @TableField(exist = false)
     private int PageNum;
     @TableField(exist = false)
     private int PageSize;
-    @TableField(exist = false)
-    private List<FileInfo> fileInfo;
+
+    public String getUserImagepath() {
+        return userImagepath;
+    }
+
+    public void setUserImagepath(String userImagepath) {
+        this.userImagepath = userImagepath;
+    }
 
     public String getUserId() {
         return userId;
@@ -234,11 +241,4 @@ public class UserInfo {
         this.remark = remark;
     }
 
-    public List<FileInfo> getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(List<FileInfo> fileInfo) {
-        this.fileInfo = fileInfo;
-    }
 }

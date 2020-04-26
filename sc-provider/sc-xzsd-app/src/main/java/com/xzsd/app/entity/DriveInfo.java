@@ -34,11 +34,29 @@ public class DriveInfo {
     private Date updateTime;
     private String soreNo;
     private Integer version;
+    private String invitation;
+    private String driverPath;
+
+    public String getDriverPath() {
+        return driverPath;
+    }
+
+    public void setDriverPath(String driverPath) {
+        this.driverPath = driverPath;
+    }
 
     @TableField(exist = false)
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
+
+    public String getInvitation() {
+        return invitation;
+    }
+
+    public void setInvitation(String invitation) {
+        this.invitation = invitation;
+    }
 
     public String getDriveId() {
         return driveId;

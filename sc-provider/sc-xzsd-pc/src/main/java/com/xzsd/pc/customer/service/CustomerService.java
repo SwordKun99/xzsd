@@ -6,12 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.pc.dao.CustomerDao;
-import com.xzsd.pc.dao.FileDao;
 import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.CustomerInfo;
 import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.CustomerInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+
     @Autowired
     private CustomerDao customerDao;
 
     @Autowired
     private UploadService uploadService;
-
-    @Autowired
-    private FileDao fileDao;
 
     @Autowired
     private UserDao userDao;
@@ -51,13 +51,13 @@ public class CustomerService {
         UserInfo userInfo = userDao.getUserByUserId(userId);
         Integer userRole = userInfo.getRole();
         CustomerInfoVO customerInfoVO = new CustomerInfoVO();
-        BeanUtils.copyProperties(customerInfo,customerInfoVO);
+        BeanUtils.copyProperties(customerInfo, customerInfoVO);
         if (userRole != null && userRole == 2) {
             customerInfoVO.setUserId(userId);
         }
         // 包装Page对象
         PageInfo<CustomerInfo> pageData = PageHelper.startPage(customerInfoVO.getPageNum(), customerInfoVO.getPageSize()).doSelectPageInfo(() -> customerDao.listCustomerByPage(customerInfoVO));
-        return AppResponse.success("查询客户列表成功",pageData);
+        return AppResponse.success("查询客户列表成功", pageData);
     }
 }
 

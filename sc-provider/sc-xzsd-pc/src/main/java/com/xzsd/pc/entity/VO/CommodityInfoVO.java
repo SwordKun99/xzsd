@@ -37,6 +37,7 @@ public class CommodityInfoVO {
     private String updateTime;
     private String soreNo;
     private Integer version;
+    private String commodityPath;
 
     private int pageNum;
     private int pageSize;
@@ -44,6 +45,13 @@ public class CommodityInfoVO {
     private String parentName;
     private String systematicName;
 
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
 
     public String getCommodityId() {
         return commodityId;
