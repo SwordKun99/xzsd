@@ -38,8 +38,7 @@ public class GoodsHotController {
     @PostMapping("saveGoodsHot")
     public AppResponse saveGoodsHot(GoodsHotInfo goodshotInfo) {
         try {
-            AppResponse appResponse = goodshotService.saveGoodsHot(goodshotInfo);
-            return appResponse;
+            return goodshotService.saveGoodsHot(goodshotInfo);
         } catch (Exception e) {
             logger.error("热门商品新增失败", e);
             System.out.println(e.toString());

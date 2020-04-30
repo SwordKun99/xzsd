@@ -35,7 +35,26 @@ public class GoodsHotInfo {
     private int pageSize;
     @TableField(exist = false)
     private int pageNum;
+    @TableField(exist = false)
+    private String commodityPath;
+    @TableField(exist = false)
+    private String sellPrice;
 
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
+
+    public String getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(String sellPrice) {
+        this.sellPrice = sellPrice;
+    }
 
     public String getGoodshotId() {
         return goodshotId;

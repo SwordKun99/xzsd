@@ -104,7 +104,7 @@ public class DriveService {
         userInfo1.setUserName(driveInfo.getDriveName());
         userInfo1.setUserNo(driveInfo.getDriveNo());
         userInfo1.setUserImagepath(driveInfo.getDriverPath());
-        Integer count1 = userDao.insert(userInfo);
+        Integer count1 = userDao.insert(userInfo1);
         if (0 == count1) {
             return AppResponse.bizError("注册失败，请重试！");
         }

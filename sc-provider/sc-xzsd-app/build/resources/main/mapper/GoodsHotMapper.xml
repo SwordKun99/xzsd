@@ -13,6 +13,7 @@
         from t_goods_hot a
         left join t_commodity b on b.commodity_Id = a.commodity_id
         where a.is_delete = 0
+        and a.goodshot_nun <![CDATA[ <= ]]> 6
         order by a.goodshot_nun desc
     </select>
 </mapper>

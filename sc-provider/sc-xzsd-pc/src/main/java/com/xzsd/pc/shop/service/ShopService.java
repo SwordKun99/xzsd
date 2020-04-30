@@ -8,9 +8,12 @@ import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.ShopDao;
+import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.ShopInfo;
+import com.xzsd.pc.entity.UserInfo;
 import com.xzsd.pc.entity.VO.ShopInfoVO;
 import com.xzsd.pc.upload.service.UploadService;
+import org.hibernate.validator.constraints.ModCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,8 +39,7 @@ public class ShopService {
     private ShopDao shopDao;
 
     @Autowired
-    private UploadService uploadService;
-
+    private UserDao userDao;
 
     /**
      * shop 新增门店
@@ -68,6 +70,32 @@ public class ShopService {
         if (0 != countBus) {
             return AppResponse.bizError("营业执照已存在，请重新输入！");
         }
+        QueryWrapper<UserInfo> usersNo = new QueryWrapper<>();
+        usersNo.lambda().eq(UserInfo::getIsDeleted,0);
+        usersNo.lambda().eq(UserInfo::getUserNo,shopInfo.getUserNo());
+        List<UserInfo> userInfoList = userDao.selectList(usersNo);
+        if (userInfoList == null && userInfoList.size() == 0) {
+            return AppResponse.bizError("该账号不存在，请重新输入！");
+        }
+        if (userInfoList != null && userInfoList.size() > 1) {
+            return AppResponse.bizError("该账号异常，请重新输入！");
+        }
+        UserInfo userInfo = userInfoList.get(0);
+        if (userInfo.getRole() != 2) {
+            return AppResponse.bizError("该用户不是店长，请重新输入！");
+        }
+        QueryWrapper<ShopInfo> shopQuery = new QueryWrapper<>();
+        shopQuery.lambda().eq(ShopInfo::getIsDelete,0);
+        shopQuery.lambda().eq(ShopInfo::getUserId,userInfo.getUserId());
+        List<ShopInfo> shopList = shopDao.selectList(shopQuery);
+        if (shopList != null && shopList.size() >= 1) {
+            return AppResponse.bizError("该用户时别家店铺店长，请重新输入！");
+        }
+        shopInfo.setUserId(userInfo.getUserId());
+        shopInfo.setUserName(userInfo.getUserName());
+        shopInfo.setUserPhone(userInfo.getUserPhone());
+        shopInfo.setUserEmail(userInfo.getUserEmail());
+        shopInfo.setInvitation(StringUtil.getCommonCode(1));
         shopInfo.setShopNumber(StringUtil.getCommonCode(2));
         shopInfo.setIsDelete(0);
         shopInfo.setVersion(0);
@@ -80,6 +108,9 @@ public class ShopService {
         if (0 == count) {
             return AppResponse.bizError("新增失败，请重试");
         }
+        //注入此门店邀请码至该店长信息中
+        userInfo.setInvitation(shopInfo.getInvitation());
+        userDao.updateById(userInfo);
         return AppResponse.success("新增成功");
     }
 
@@ -144,8 +175,33 @@ public class ShopService {
             appResponse = AppResponse.bizError("查询不到该门店，请重试！");
             return appResponse;
         }
+        QueryWrapper<UserInfo> usersNo = new QueryWrapper<>();
+        usersNo.lambda().eq(UserInfo::getIsDeleted,0);
+        usersNo.lambda().eq(UserInfo::getUserNo,shopInfoVO.getUserNo());
+        List<UserInfo> userInfoList = userDao.selectList(usersNo);
+        if (userInfoList == null && userInfoList.size() == 0) {
+            return AppResponse.bizError("该账号不存在，请重新输入！");
+        }
+        if (userInfoList != null && userInfoList.size() > 1) {
+            return AppResponse.bizError("该账号异常，请重新输入！");
+        }
+        UserInfo userInfo = userInfoList.get(0);
+        if (userInfo.getRole() != 2) {
+            return AppResponse.bizError("该用户不是店长，请重新输入！");
+        }
+        QueryWrapper<ShopInfo> shopQuery = new QueryWrapper<>();
+        shopQuery.lambda().eq(ShopInfo::getIsDelete,0);
+        shopQuery.lambda().eq(ShopInfo::getUserId,userInfo.getUserId());
+        List<ShopInfo> shopList = shopDao.selectList(shopQuery);
+        if (shopList != null || shopList.size() >= 1) {
+            return AppResponse.bizError("该用户时别家店铺店长，请重新输入！");
+        }
         ShopInfo shopInfo = new ShopInfo();
         BeanUtils.copyProperties(shopInfoVO, shopInfo);
+        shopInfo.setUserId(userInfo.getUserId());
+        shopInfo.setUserName(userInfo.getUserName());
+        shopInfo.setUserPhone(userInfo.getUserPhone());
+        shopInfo.setUserEmail(userInfo.getUserEmail());
         shopInfo.setVersion(shopInfoOld.getVersion() + 1);
         shopInfo.setUpdateTime(new Date());
         String updateUseId = SecurityUtils.getCurrentUserId();
@@ -155,6 +211,9 @@ public class ShopService {
         if (0 == count) {
             return AppResponse.bizError("修改失败，请重试");
         }
+        //注入此门店邀请码至该店长信息中
+        userInfo.setInvitation(shopInfo.getInvitation());
+        userDao.updateById(userInfo);
         return AppResponse.success("修改成功");
     }
 

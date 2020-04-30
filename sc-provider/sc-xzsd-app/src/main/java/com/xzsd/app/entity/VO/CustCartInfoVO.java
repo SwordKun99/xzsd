@@ -14,7 +14,7 @@ public class CustCartInfoVO {
     private String commodityId;
     private String shopId;
     private String shopName;
-    private String cnt;
+    private Integer cnt;
     private Integer isDelete;
     private String createSer;
     private String createTime;
@@ -80,14 +80,13 @@ public class CustCartInfoVO {
     }
 
 
-    public String getCnt() {
+    public Integer getCnt() {
         return cnt;
     }
 
-    public void setCnt(String cnt) {
+    public void setCnt(Integer cnt) {
         this.cnt = cnt;
     }
-
 
     public String getCreateSer() {
         return createSer;

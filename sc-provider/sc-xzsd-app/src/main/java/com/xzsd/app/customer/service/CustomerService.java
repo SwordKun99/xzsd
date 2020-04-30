@@ -165,8 +165,11 @@ public class CustomerService {
      * @Date 2020-04-15
      */
     public AppResponse userInfo() {
-        String userId = SecurityUtils.getCurrentUserId();
-        UserInfo userInfo = userDao.selectById(userId);
+        String createUserId = SecurityUtils.getCurrentUserId();
+        UserInfo userInfo = userDao.selectById(createUserId);
+        if (userInfo != null && userInfo.getRole() == 1) {//管理员
+            return AppResponse.success("角色不符合条件");
+        }
         if (userInfo != null && userInfo.getRole() == 2) {//店长
             QueryWrapper<ShopInfo> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.lambda().eq(ShopInfo::getUserId, userInfo.getUserId());
@@ -178,8 +181,11 @@ public class CustomerService {
         }
         if (userInfo != null && userInfo.getRole() == 3) {//客户
             QueryWrapper<ShopInfo> queryWrapper1 = new QueryWrapper<>();
-            queryWrapper1.lambda().eq(ShopInfo::getUserId, userInfo.getUserId());
+            queryWrapper1.lambda().eq(ShopInfo::getInvitation, userInfo.getInvitation());
             ShopInfo shopInfo = shopDao.selectOne(queryWrapper1);
+            if (shopInfo == null) {
+                return AppResponse.success("用户信息查询成功", userInfo);
+            }
             userInfo.setShopId(shopInfo.getShopId());
             userInfo.setShopName(shopInfo.getShopName());
             userInfo.setShopAddress(shopInfo.getShopAddrees());

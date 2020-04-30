@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
+import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.app.dao.CommodityDao;
 import com.xzsd.app.dao.CustCartDao;
@@ -41,39 +42,49 @@ public class CustCartService {
     /**
      * custcart 新增购物车
      *
-     * @param custcartInfo
+     * @param custCartInfo
      * @return AppResponse
      * @Author SwordKun.
      * @Date 2020-04-22
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse saveCustCart(CustCartInfo custcartInfo) {
+    public AppResponse saveCustCart(CustCartInfo custCartInfo) {
         //获取当前客户id
         String customerId = SecurityUtils.getCurrentUserId();
         // 校验购物车是否存在
         QueryWrapper<CustCartInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(CustCartInfo::getIsDelete,0);
         queryWrapper.lambda().eq(CustCartInfo::getCustomerId, customerId);
-        queryWrapper.lambda().eq(CustCartInfo::getCommodityId, custcartInfo.getCommodityId());
-        CustCartInfo custCartInfo = custCartDao.selectOne(queryWrapper);
-        if (null != custCartInfo) {
-            custCartInfo.setCnt(custCartInfo.getCnt() + 1);
-            Integer count = custCartDao.updateById(custCartInfo);
+        queryWrapper.lambda().eq(CustCartInfo::getCommodityId, custCartInfo.getCommodityId());
+        CustCartInfo custCartInfoOld = custCartDao.selectOne(queryWrapper);
+        if (null != custCartInfoOld) {
+            if (custCartInfo.getCnt() == null || custCartInfo.getCnt() == 0) {
+                custCartInfoOld.setCnt(custCartInfoOld.getCnt() + 1);
+            }
+            custCartInfoOld.setCnt(custCartInfoOld.getCnt() + custCartInfo.getCnt());
+            Integer count = custCartDao.updateById(custCartInfoOld);
             if (0 == count) {
                 return AppResponse.bizError("添加购物车失败，请重试！");
             }
-        } else {
-            custcartInfo.setIsDelete(0);
-            custcartInfo.setVersion(0);
-            custcartInfo.setCnt(1);
-            custcartInfo.setCreateTime(new Date());
-            custcartInfo.setCreateSer(customerId);
-            custcartInfo.setShopcarId(UUIDUtils.getUUID());
-            Integer count = custCartDao.insert(custcartInfo);
-            if (0 == count) {
-                return AppResponse.bizError("添加购物车失败，请重试！");
-            }
+            return AppResponse.success("添加购物车成功！");
         }
-        return AppResponse.success("添加购物车 成功！");
+        if (custCartInfo.getCnt() == null || custCartInfo.getCnt() == 0) {
+            custCartInfo.setCnt(1);
+        }
+        CommodityInfo commodityInfo = commodityDao.selectById(custCartInfo.getCommodityId());
+        custCartInfo.setCommodityName(commodityInfo.getCommodityName());
+        custCartInfo.setIsDelete(0);
+        custCartInfo.setVersion(0);
+        custCartInfo.setCnt(custCartInfo.getCnt());
+        custCartInfo.setCreateTime(new Date());
+        custCartInfo.setCreateSer(customerId);
+        custCartInfo.setShopcarId(UUIDUtils.getUUID());
+        custCartInfo.setCustomerId(customerId);
+        Integer count = custCartDao.insert(custCartInfo);
+        if (0 == count) {
+            return AppResponse.bizError("添加购物车失败，请重试！");
+        }
+        return AppResponse.success("添加购物车成功！");
     }
 
     /**
@@ -86,6 +97,9 @@ public class CustCartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteCustCart(String shopcarId) {
+        if (StringUtil.isNullOrEmpty(shopcarId)) {
+            return AppResponse.bizError("传入信息有误，请重试！");
+        }
         List<String> idList = Arrays.asList(shopcarId.split(","));
         List<CustCartInfo> carInfoList = custCartDao.selectBatchIds(idList);
         if (carInfoList != null && carInfoList.size() <= 0) {
@@ -133,7 +147,7 @@ public class CustCartService {
         CustCartInfo custCartInfo = new CustCartInfo();
         BeanUtils.copyProperties(custCartInfoVO, custCartInfo);
         custCartInfo.setVersion(carInfoOld.getVersion() + 1);
-        custCartInfo.setCnt(carInfoOld.getCnt() + 1);
+        custCartInfo.setCnt(custCartInfoVO.getCnt());
         custCartInfo.setUpdateTime(new Date());
         custCartInfo.setUpdateUser(SecurityUtils.getCurrentUserId());
         // 修改

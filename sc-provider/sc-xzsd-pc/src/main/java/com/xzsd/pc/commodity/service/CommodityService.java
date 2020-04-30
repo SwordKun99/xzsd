@@ -72,8 +72,24 @@ public class CommodityService {
         if (0 != countUCommodityNo) {
             return AppResponse.bizError("商品名称已存在，请重新输入！");
         }
+        QueryWrapper<CommodityInfo> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.lambda().eq(CommodityInfo::getCommodityNunmer, commodityInfo.getCommodityNunmer());
+        int countUCommodity = commodityDao.selectCount(queryWrapper1);
+        if (0 != countUCommodity) {
+            return AppResponse.bizError("书号已存在，请重新输入！");
+        }
+        StoneInfo stoneInfo = stoneDao.selectById(commodityInfo.getStoneId());
+        commodityInfo.setStoneName(stoneInfo.getStoneName());
+        CommodityClassInfo commodityClassInfo = commodityClassDao.selectById(commodityInfo.getSystematicCode());
+        commodityInfo.setParentName(commodityClassInfo.getParentName());
+        commodityInfo.setSystematicName(commodityClassInfo.getSystematicName());
         commodityInfo.setIsDelete(0);
         commodityInfo.setVersion(0);
+        commodityInfo.setPageView("0");
+        commodityInfo.setDataIssued(new Date());
+        commodityInfo.setSvaluationStar("0");
+        commodityInfo.setSoldNumber(0);
+        commodityInfo.setUpDownstate(1);
         commodityInfo.setCreateTime(new Date());
         String createUserId = SecurityUtils.getCurrentUserId();
         commodityInfo.setCreateUser(createUserId);

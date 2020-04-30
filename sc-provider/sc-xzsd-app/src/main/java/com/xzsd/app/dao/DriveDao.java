@@ -3,6 +3,7 @@ package com.xzsd.app.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzsd.app.entity.DriveInfo;
+import com.xzsd.app.entity.ShopInfo;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -22,5 +23,5 @@ public interface DriveDao extends BaseMapper<DriveInfo> {
      * @param driveId
      * @return
      */
-    List<DriveInfo> listDrive(String driveId);
+    List<ShopInfo> listDrive(String driveId);
 }

@@ -42,9 +42,10 @@
         b.commodity_id commodityId,
         b.commodity_name commodityName,
         b.introduce,
+        b.sell_price sellPrice,
         a.commodity_totalpri as commodityTotalpri,
         a.commodity_num as commodityNum,
-        a.commodity_path as commodityPath
+        b.commodity_path as commodityPath
         from t_order_commodity a
         left join t_commodity b on b.commodity_id = a.commodity_id
         where b.is_delete = 0

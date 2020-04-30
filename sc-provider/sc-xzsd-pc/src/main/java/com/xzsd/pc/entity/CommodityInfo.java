@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @DescriptionDemo 商品实体类
@@ -22,13 +21,14 @@ public class CommodityInfo {
     private String commodityName;
     private String stoneId;
     private String stoneName;
-    private String commodityImage;
     private String parentCode;
+    private String parentName;
     private String systematicCode;
+    private String systematicName;
     private double pringting;
     private double costPrice;
     private double sellPrice;
-    private String soldNumber;
+    private Integer soldNumber;
     private String channel;
     private String repertory;
     private String introduce;
@@ -52,6 +52,22 @@ public class CommodityInfo {
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getSystematicName() {
+        return systematicName;
+    }
+
+    public void setSystematicName(String systematicName) {
+        this.systematicName = systematicName;
+    }
 
     public String getCommodityPath() {
         return commodityPath;
@@ -103,15 +119,6 @@ public class CommodityInfo {
 
     public void setStoneName(String stoneName) {
         this.stoneName = stoneName;
-    }
-
-
-    public String getCommodityImage() {
-        return commodityImage;
-    }
-
-    public void setCommodityImage(String commodityImage) {
-        this.commodityImage = commodityImage;
     }
 
     public String getParentCode() {
@@ -262,11 +269,11 @@ public class CommodityInfo {
         this.pageSize = pageSize;
     }
 
-    public String getSoldNumber() {
+    public Integer getSoldNumber() {
         return soldNumber;
     }
 
-    public void setSoldNumber(String soldNumber) {
+    public void setSoldNumber(Integer soldNumber) {
         this.soldNumber = soldNumber;
     }
 

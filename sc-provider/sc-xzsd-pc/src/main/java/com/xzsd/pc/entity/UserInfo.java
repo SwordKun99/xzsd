@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @DescriptionDemo 用户实体类
@@ -19,6 +18,7 @@ public class UserInfo {
     @TableId
     private String userId;
     private String userCode;
+    private String invitation;
     private String userNo;
     private String userPassword;
     private String userName;
@@ -43,6 +43,16 @@ public class UserInfo {
     private int PageNum;
     @TableField(exist = false)
     private int PageSize;
+    @TableField(exist = false)
+    private String shopId;
+
+    public String getInvitation() {
+        return invitation;
+    }
+
+    public void setInvitation(String invitation) {
+        this.invitation = invitation;
+    }
 
     public String getUserImagepath() {
         return userImagepath;
@@ -241,4 +251,11 @@ public class UserInfo {
         this.remark = remark;
     }
 
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @DescriptionDemo 商品信息实体类
@@ -21,13 +22,12 @@ public class CommodityInfo {
     private String commodityName;
     private String stoneId;
     private String stoneName;
-    private String commodityImage;
     private String parentCode;
     private String systematicCode;
     private double pringting;
     private double costPrice;
     private double sellPrice;
-    private String soldNumber;
+    private Integer soldNumber;
     private String channel;
     private String repertory;
     private String introduce;
@@ -55,6 +55,16 @@ public class CommodityInfo {
     private Double commodityTotalpri;
     @TableField(exist = false)
     private int commodityNum;
+    @TableField(exist = false)
+    private List<CommodityClassInfo> commodityInfoList3;
+
+    public List<CommodityClassInfo> getCommodityInfoList3() {
+        return commodityInfoList3;
+    }
+
+    public void setCommodityInfoList3(List<CommodityClassInfo> commodityInfoList3) {
+        this.commodityInfoList3 = commodityInfoList3;
+    }
 
     public String getCommodityPath() {
         return commodityPath;
@@ -124,14 +134,6 @@ public class CommodityInfo {
         this.stoneName = stoneName;
     }
 
-
-    public String getCommodityImage() {
-        return commodityImage;
-    }
-
-    public void setCommodityImage(String commodityImage) {
-        this.commodityImage = commodityImage;
-    }
 
     public String getParentCode() {
         return parentCode;
@@ -281,11 +283,11 @@ public class CommodityInfo {
         this.pageSize = pageSize;
     }
 
-    public String getSoldNumber() {
+    public Integer getSoldNumber() {
         return soldNumber;
     }
 
-    public void setSoldNumber(String soldNumber) {
+    public void setSoldNumber(Integer soldNumber) {
         this.soldNumber = soldNumber;
     }
 

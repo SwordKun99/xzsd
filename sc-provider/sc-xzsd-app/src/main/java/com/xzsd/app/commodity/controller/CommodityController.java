@@ -3,6 +3,7 @@ package com.xzsd.app.commodity.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.app.commodity.service.CommodityService;
+import com.xzsd.app.entity.CommodityClassInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,9 +71,9 @@ public class CommodityController {
      * @Date 2020-03-29
      */
     @RequestMapping(value = "listCommoditySencond")
-    public AppResponse listCommoditySencond(String parentCode) {
+    public AppResponse listCommoditySencond(CommodityClassInfo commodityClassInfo) {
         try {
-            return commodityService.listCommoditySencond(parentCode);
+            return commodityService.listCommoditySencond(commodityClassInfo);
         } catch (Exception e) {
             logger.error("区查询错误", e);
             System.out.println(e.toString());

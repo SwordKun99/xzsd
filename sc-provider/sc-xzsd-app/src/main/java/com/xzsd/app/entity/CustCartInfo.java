@@ -30,6 +30,7 @@ public class CustCartInfo {
     private Date updateTime;
     private long soreNo;
     private long version;
+    private String commodityName;
 
     @TableField(exist = false)
     private int pageSize;
@@ -37,6 +38,34 @@ public class CustCartInfo {
     private int pageNum;
     @TableField(exist = false)
     private String path;
+    @TableField(exist = false)
+    private String commodityPath;
+    @TableField(exist = false)
+    private String sellPrice;
+
+    public String getCommodityName() {
+        return commodityName;
+    }
+
+    public void setCommodityName(String commodityName) {
+        this.commodityName = commodityName;
+    }
+
+    public String getCommodityPath() {
+        return commodityPath;
+    }
+
+    public void setCommodityPath(String commodityPath) {
+        this.commodityPath = commodityPath;
+    }
+
+    public String getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(String sellPrice) {
+        this.sellPrice = sellPrice;
+    }
 
     public String getShopcarId() {
         return shopcarId;

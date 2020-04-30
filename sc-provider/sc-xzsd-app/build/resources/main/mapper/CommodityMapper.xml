@@ -13,4 +13,20 @@
             and a.systematic_code = #{systematicCode}
         </if>
     </select>
+
+    <!--查询二级分类下商品列表-->
+    <select id="listCommoditySencond" parameterType="com.xzsd.app.entity.CommodityInfo"
+            resultType="com.xzsd.app.entity.CommodityInfo">
+        select
+        b.commodity_id commodityId,
+        b.commodity_name commodityName,
+        b.commodity_path commodityPath
+        from t_commodity b
+        left join t_commodity_classification a on b.systematic_code = a.systematic_code
+        where a.is_delete = 0
+        <if test="parentCode != null and parentCode != ''">
+            and a.systematic_code = #{parentCode}
+        </if>
+        order by a.create_time desc
+    </select>
 </mapper>

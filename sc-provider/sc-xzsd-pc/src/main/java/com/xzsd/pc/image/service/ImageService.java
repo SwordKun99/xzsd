@@ -75,6 +75,7 @@ public class ImageService {
         imageInfo.setCreateTime(new Date());
         String createSerId = SecurityUtils.getCurrentUserId();
         imageInfo.setCreateSer(createSerId);
+        imageInfo.setImageType(0);
         imageInfo.setImageId(UUIDUtils.getUUID());
         Integer count = imageDao.insert(imageInfo);
         if (0 == count) {
@@ -181,7 +182,7 @@ public class ImageService {
     }
 
     /**
-     * commodity 查询商品详情
+     * commodity 查询商品列表成功
      *
      * @param commodityInfo
      * @return AppResponse

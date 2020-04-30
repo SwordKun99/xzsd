@@ -6,6 +6,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.dao.DriveDao;
 import com.xzsd.app.entity.DriveInfo;
+import com.xzsd.app.entity.ShopInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,9 @@ public class DriveService {
      */
     public AppResponse listDrive(DriveInfo driveInfo) {
         String driveId = SecurityUtils.getCurrentUserId();
-        driveInfo.setDriveId(driveId);
-        PageHelper.startPage(driveInfo.getPageNum(), driveInfo.getPageSize());
-        List<DriveInfo> listDrive = driveDao.listDrive(driveInfo.getDriveId());
-        PageInfo<DriveInfo> pageData = new PageInfo<>(listDrive);
-        return AppResponse.success("查询司机负责门店信息成功", pageData);
+        driveInfo = driveDao.selectById(driveId);
+        List<ShopInfo> listDrive = driveDao.listDrive(driveInfo.getDriveId());
+        driveInfo.setShopInfoList(listDrive);
+        return AppResponse.success("查询司机负责门店信息成功", driveInfo);
     }
 }

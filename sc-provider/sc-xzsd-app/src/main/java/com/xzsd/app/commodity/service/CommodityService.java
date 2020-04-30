@@ -1,6 +1,7 @@
 package com.xzsd.app.commodity.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.app.dao.CommodityClassDao;
 import com.xzsd.app.dao.CommodityDao;
@@ -43,7 +44,7 @@ public class CommodityService {
     }
 
     /**
-     * commodity 查询上级分类列表
+     * commodity 查询分类列表
      *
      * @param
      * @return AppResponse
@@ -51,9 +52,11 @@ public class CommodityService {
      * @Date 2020-03-29
      */
     public AppResponse listCommodityFirst() {
-        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
-        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
-        return AppResponse.success("查询成功！", list);
+        //查询所有的一级列表
+        List<CommodityClassInfo> commodityClassInfoList = commodityClassDao.listParentCode();
+        // 包装Page对象
+        PageInfo<CommodityClassInfo> pageData = new PageInfo<>(commodityClassInfoList);
+        return AppResponse.success("查询商品分类列表成功", pageData);
     }
 
     /**
@@ -64,18 +67,15 @@ public class CommodityService {
      * @Author SwordKun.
      * @Date 2020-03-29
      */
-    public AppResponse listCommoditySencond(String parentCode) {
-        QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CommodityClassInfo::getParentCode, parentCode);
-        List<CommodityClassInfo> list = commodityClassDao.selectList(queryWrapper);
-        if (list != null && list.size() != 0) {
-            for (CommodityClassInfo commodityClassInfo : list) {
-                CommodityInfo commodityInfo = new CommodityInfo();
-                commodityInfo.setSystematicCode(commodityClassInfo.getSystematicCode());
-                List<CommodityInfo> goodsList = commodityDao.getGoodsList(commodityInfo);
-                commodityClassInfo.setGoodsList(goodsList);
+    public AppResponse listCommoditySencond(CommodityClassInfo commodityClassInfo) {
+        List<CommodityClassInfo> commodityClassInfolist = commodityClassDao.listSecondCode(commodityClassInfo);
+        if (commodityClassInfolist != null && commodityClassInfolist.size() != 0) {
+            List<CommodityClassInfo> commodityClassInfoList1 = commodityClassInfolist;
+            for (CommodityClassInfo commodityClassInfo2 : commodityClassInfoList1) {
+                List<CommodityInfo> goodsList = commodityDao.listCommoditySencond(commodityClassInfo2.getParentCode());
+                commodityClassInfo2.setGoodsList(goodsList);
             }
         }
-        return AppResponse.success("查询成功！", list);
+        return AppResponse.success("查询成功！", commodityClassInfolist);
     }
 }

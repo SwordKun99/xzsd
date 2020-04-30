@@ -14,12 +14,12 @@ public class OrderMasterInfoVO {
     private String customerName;
     private String customerId;
     private double orderMoney;
-    private double distnctMoney;
+    private String sellPrice;
     private String goodsCnt;
     private String orderNumber;
     private long channelType;
     private double feeMoney;
-    private String goosNum;
+    private String cnt;
     private String orderStatus;
     private double paymentMoney;
     private String payTimeend;
@@ -105,14 +105,21 @@ public class OrderMasterInfoVO {
     }
 
 
-    public double getDistnctMoney() {
-        return distnctMoney;
+    public String getSellPrice() {
+        return sellPrice;
     }
 
-    public void setDistnctMoney(double distnctMoney) {
-        this.distnctMoney = distnctMoney;
+    public void setSellPrice(String sellPrice) {
+        this.sellPrice = sellPrice;
     }
 
+    public String getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(String cnt) {
+        this.cnt = cnt;
+    }
 
     public String getGoodsCnt() {
         return goodsCnt;
@@ -148,16 +155,6 @@ public class OrderMasterInfoVO {
     public void setFeeMoney(double feeMoney) {
         this.feeMoney = feeMoney;
     }
-
-
-    public String getGoosNum() {
-        return goosNum;
-    }
-
-    public void setGoosNum(String goosNum) {
-        this.goosNum = goosNum;
-    }
-
 
     public String getOrderStatus() {
         return orderStatus;

@@ -16,8 +16,9 @@ import java.util.List;
 @TableName("t_commodity_classification")
 public class CommodityClassInfo implements Serializable {
 
-    @TableId
+
     private String systematicId;
+    @TableId
     private String systematicCode;
     private String systematicName;
     private String parentCode;

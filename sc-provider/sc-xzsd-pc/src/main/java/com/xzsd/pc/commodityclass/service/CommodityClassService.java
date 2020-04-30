@@ -7,7 +7,10 @@ import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.StringUtil;
 import com.neusoft.util.UUIDUtils;
 import com.xzsd.pc.dao.CommodityClassDao;
+import com.xzsd.pc.dao.UserDao;
 import com.xzsd.pc.entity.CommodityClassInfo;
+import com.xzsd.pc.entity.CommodityInfo;
+import com.xzsd.pc.entity.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,9 @@ public class CommodityClassService {
     @Autowired(required = true)
     private CommodityClassDao commodityClassDao;
 
+    @Autowired(required = true)
+    private UserDao userDao;
+
     /**
      * CommodityClass 新增商品分类
      *
@@ -40,7 +46,23 @@ public class CommodityClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse saveCommodityClass(CommodityClassInfo commodityclassInfo) {
+        //判断当前操作人，管理员才拥有权限
+        String createUserId = SecurityUtils.getCurrentUserId();
+        UserInfo userInfo = userDao.getUserByUserId(createUserId);
+        Integer userRole = userInfo.getRole();
+        if (userRole != null && userRole != 1) {
+            return AppResponse.bizError("无操作权限");
+        }
         // 校验商品分类是否存在
+        if (commodityclassInfo.getParentCode() != null && commodityclassInfo.getParentCode() != "") {
+            QueryWrapper<CommodityClassInfo> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.lambda().eq(CommodityClassInfo::getSystematicCode, commodityclassInfo.getParentCode());
+            CommodityClassInfo commodityClassInfo1 = commodityClassDao.selectOne(queryWrapper1);
+            if (commodityClassInfo1 == null) {
+                return AppResponse.bizError("商品分类上一级分类不存在，请重新输入！");
+            }
+            commodityclassInfo.setParentName(commodityClassInfo1.getSystematicName());
+        }
         QueryWrapper<CommodityClassInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(CommodityClassInfo::getSystematicName, commodityclassInfo.getSystematicName());
         int countUCommodityClassNo = commodityClassDao.selectCount(queryWrapper);
@@ -51,7 +73,6 @@ public class CommodityClassService {
         commodityclassInfo.setIsDelete(0);
         commodityclassInfo.setVersion(0);
         commodityclassInfo.setCreateTime(new Date());
-        String createUserId = SecurityUtils.getCurrentUserId();
         commodityclassInfo.setCreateSer(createUserId);
         commodityclassInfo.setSystematicId(UUIDUtils.getUUID());
         // 新增商品分类
@@ -73,6 +94,13 @@ public class CommodityClassService {
 
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateCommodityClassById(CommodityClassInfo commodityclassInfo) {
+        //判断当前操作人，管理员才拥有权限
+        String createUserId = SecurityUtils.getCurrentUserId();
+        UserInfo userInfo = userDao.getUserByUserId(createUserId);
+        Integer userRole = userInfo.getRole();
+        if (userRole != null && userRole != 1) {
+            return AppResponse.bizError("无操作权限");
+        }
         AppResponse appResponse = AppResponse.success("删除成功！");
         commodityclassInfo = commodityClassDao.selectById(commodityclassInfo.getSystematicId());
         if (commodityclassInfo == null) {

@@ -10,6 +10,7 @@ public class ShopInfoVO {
     private String shopId;
     private String shopNumber;
     private String driveId;
+    private String userNo;
     private String userId;
     private String userPhone;
     private String userEmail;
@@ -34,6 +35,13 @@ public class ShopInfoVO {
     private int startPage;
     private int pagesize;
 
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
 
     public String getShopId() {
         return shopId;

@@ -9,6 +9,7 @@ import com.neusoft.util.UUIDUtils;
 import com.xzsd.app.dao.*;
 import com.xzsd.app.entity.*;
 import com.xzsd.app.entity.VO.OrderMasterInfoVO;
+import org.hibernate.validator.constraints.ModCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -48,6 +49,12 @@ public class OrderService {
     @Resource
     private UserDao userDao;
 
+    @Resource
+    private OrderVODao orderVODao;
+
+    @Resource
+    private CustCartDao custCartDao;
+
     /**
      * order 新增订单
      *
@@ -60,28 +67,27 @@ public class OrderService {
     public AppResponse saveOrder(OrderMasterInfo orderMasterInfo) {
         String customerId = SecurityUtils.getCurrentUserId();
         String orderId = UUIDUtils.getUUID();
+        if (StringUtil.isNullOrEmpty(orderMasterInfo.getCommodityId()) || StringUtil.isNullOrEmpty(orderMasterInfo.getSellPrice()) || StringUtil.isNullOrEmpty(orderMasterInfo.getCnt())) {
+            return AppResponse.bizError("传入订单信息有误，请重试！");
+        }
         String[] goodId = orderMasterInfo.getCommodityId().split(",");
-        String[] goodMoney = orderMasterInfo.getDistnctMoney().split(",");
-        String[] goodNum = orderMasterInfo.getGoosNum().split(",");
+        String[] goodMoney = orderMasterInfo.getSellPrice().split(",");
+        String[] goodNum = orderMasterInfo.getCnt().split(",");
         double totlePrice = 0;
         Integer goodCnt = 0;
         for (int i = 0; i < goodMoney.length; i++) {
             //校验库存
             CommodityInfo commodityInfo = commodityDao.selectById(goodId[i]);
+            int kc = Integer.parseInt(commodityInfo.getRepertory());
             if (commodityInfo != null) {
                 if (commodityInfo.getUpDownstate() == '0') {
                     return AppResponse.bizError(commodityInfo.getCommodityName() + "商品已售罄，请重试！");
                 } else if (commodityInfo.getUpDownstate() == '2' || commodityInfo.getUpDownstate() == '3') {
                     return AppResponse.bizError(commodityInfo.getCommodityName() + "商品已下架，请重试！");
                 } else if (commodityInfo.getUpDownstate() == '1') {
-                    int kc = Integer.parseInt(commodityInfo.getRepertory());
                     if (kc < Integer.parseInt(goodNum[i])) {
                         return AppResponse.bizError(commodityInfo.getCommodityName() + "商品库存不足，请重试！");
                     }
-                    //更新库存
-                    int newkc = kc - Integer.parseInt(goodNum[i]);
-                    commodityInfo.setRepertory(Integer.toString(newkc));
-                    commodityDao.updateById(commodityInfo);
                 }
             } else {
                 return AppResponse.bizError("未找到商品，请重试！");
@@ -100,12 +106,39 @@ public class OrderService {
             orderCommodityInfo.setCreateUser(customerId);
             orderCommodityInfo.setOrderId(orderId);
             orderCommodityDao.insert(orderCommodityInfo);
+
+            //更新库存
+            int newkc = kc - Integer.parseInt(goodNum[i]);
+            commodityInfo.setRepertory(Integer.toString(newkc));
+            commodityInfo.setSoldNumber(commodityInfo.getSoldNumber() + Integer.parseInt(goodNum[i]));
+            commodityDao.updateById(commodityInfo);
+
+            //删除购物车，根据客户id，商品id
+            QueryWrapper<CustCartInfo> custCartQueryWrapper = new QueryWrapper<>();
+            custCartQueryWrapper.lambda().eq(CustCartInfo::getCommodityId,commodityInfo.getCommodityId());
+            custCartQueryWrapper.lambda().eq(CustCartInfo::getCustomerId,customerId);
+            custCartQueryWrapper.lambda().eq(CustCartInfo::getIsDelete,0);
+            CustCartInfo custCartInfo = custCartDao.selectOne(custCartQueryWrapper);
+            if (custCartInfo != null) {
+                custCartInfo.setIsDelete(1);
+                custCartInfo.setUpdateTime(new Date());
+                custCartInfo.setUpdateUser(customerId);
+                custCartDao.updateById(custCartInfo);
+            } else {
+                return AppResponse.bizError("购物车商品不存在，请重试！");
+            }
         }
         //判断客户是否绑定邀请码及邀请码是否过期
-        ShopInfo shopInfo = shopDao.selectById(orderMasterInfo.getShopId());
         CustomerInfo customerInfo = customerDao.selectById(customerId);
-        if (customerInfo.getInvitation() == null || customerInfo.getInvitation() != shopInfo.getInvitation()) {
+        if (customerInfo == null || customerInfo.getInvitation() == null) {
             return AppResponse.bizError("请前往绑定或更新邀请码！");
+        }
+        QueryWrapper<ShopInfo> shopInfoQueryWrapper = new QueryWrapper<>();
+        shopInfoQueryWrapper.lambda().eq(ShopInfo::getIsDelete, 0);
+        shopInfoQueryWrapper.lambda().eq(ShopInfo::getInvitation, customerInfo.getInvitation());
+        List<ShopInfo> shopInfoList = shopDao.selectList(shopInfoQueryWrapper);
+        if (shopInfoList == null || shopInfoList.size() == 0 || shopInfoList.size() > 1) {
+            return AppResponse.bizError("邀请码有误！");
         }
         //添加订单表
         orderMasterInfo.setOrderMoney(totlePrice);
@@ -117,7 +150,9 @@ public class OrderService {
         orderMasterInfo.setCreateSer(customerId);
         orderMasterInfo.setCustomerName(customerInfo.getCustomerName());
         orderMasterInfo.setCustomerPhone(customerInfo.getCustomerPhone());
-        orderMasterInfo.setShopAddress(shopInfo.getShopAddrees());
+        orderMasterInfo.setShopAddress(shopInfoList.get(0).getShopAddrees());
+        orderMasterInfo.setShopId(shopInfoList.get(0).getShopId());
+        orderMasterInfo.setShopName(shopInfoList.get(0).getShopName());
         orderMasterInfo.setVersion(0);
         orderMasterInfo.setIsDelete(0);
         orderMasterInfo.setOrderStatus("1");
@@ -142,19 +177,15 @@ public class OrderService {
     public AppResponse updateOrderStatus(OrderMasterInfoVO orderMasterInfoVO) {
         //获取当前登录客户id
         String customerId = SecurityUtils.getCurrentUserId();
-        QueryWrapper<OrderMasterInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(OrderMasterInfo::getOrderStatus, orderMasterInfoVO.getOrderStatus());
-        queryWrapper.lambda().eq(OrderMasterInfo::getIsDelete, 0);
-        Integer count = orderDao.selectCount(queryWrapper);
-        if (0 != count) {
+        OrderMasterInfo orderMasterInfoO = orderDao.selectById(orderMasterInfoVO.getOrderId());
+        if (orderMasterInfoO == null) {
+            return AppResponse.bizError("查询不到该订单，请重试！");
+        }
+        if (orderMasterInfoO.getOrderStatus().equals(orderMasterInfoVO.getOrderStatus())) {
             return AppResponse.bizError("订单状态已存在，请重新选择！");
         }
         //修改订单状态  客户端：（1：已下单、2：未取货、3：已取货、4：未评价、5：已评价、6：已取消取货、7、取消订单）
         // 店长端：（1：发货中、2：确认到货、3：确认取货、4、确认取货、4、确认取货、6取消取货、7、取消到货）
-        OrderMasterInfo orderMasterInfoVO1 = orderDao.selectById(orderMasterInfoVO.getOrderId());
-        if (orderMasterInfoVO1 == null) {
-            return AppResponse.bizError("查询不到该订单，请重试！");
-        }
         OrderMasterInfo orderMasterInfo = new OrderMasterInfo();
         BeanUtils.copyProperties(orderMasterInfoVO, orderMasterInfo);
         orderMasterInfo.setVersion(orderMasterInfo.getVersion() + 1);
@@ -201,12 +232,15 @@ public class OrderService {
     public AppResponse listOrder(OrderMasterInfo orderMasterInfo) {
         String customerId = SecurityUtils.getCurrentUserId();
         UserInfo userInfo = userDao.selectById(customerId);
-        if (userInfo.getRole() == '2') {//店长
+        if (userInfo.getRole() == 2) {//店长
             QueryWrapper<ShopInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(ShopInfo::getUserId, customerId);
             ShopInfo shopInfo = shopDao.selectOne(queryWrapper);
             orderMasterInfo.setShopId(shopInfo.getShopId());
-        } else if (userInfo.getRole() == '3') {//客户
+        } else if (userInfo.getRole() == 3) {//客户
+//            QueryWrapper<OrderMasterInfo> queryWrapper = new QueryWrapper<>();
+//            queryWrapper.lambda().eq(OrderMasterInfo::getCustomerId,customerId);
+//            List<OrderMasterInfo> orderMasterInfoList = orderDao.selectList(queryWrapper);
             orderMasterInfo.setCustomerId(customerId);
         }
         //根据条件找到符合条件的订单

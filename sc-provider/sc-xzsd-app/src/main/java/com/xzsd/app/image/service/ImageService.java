@@ -1,6 +1,7 @@
 package com.xzsd.app.image.service;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.app.dao.ImageDao;
 import com.xzsd.app.entity.ImageInfo;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @DescriptionDemo 实现类
@@ -35,8 +37,9 @@ public class ImageService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listImage() {
-        ImageInfo imageInfo = imageDao.listImage();
-        return AppResponse.success("查询成功！", imageInfo);
+        QueryWrapper<ImageInfo> queryWrapper = new QueryWrapper<>();
+        List<ImageInfo> list = imageDao.selectList(queryWrapper);
+        return AppResponse.success("查询成功！", list);
     }
 }
 

@@ -6,11 +6,13 @@
     <select id="listParentCode" parameterType="com.xzsd.pc.entity.CommodityClassInfo"
             resultType="com.xzsd.pc.entity.CommodityClassInfo">
         select
-        a.parent_name parentName,
-        a.parent_code parentCode,
+        a.systematic_code parentCode,
+        a.systematic_name parentName,
         a.version
         from t_commodity_classification a
         where a.is_delete = 0
+        and a.parent_name is null
+        and a.parent_code is null
         order by a.create_time desc
     </select>
 
@@ -23,7 +25,6 @@
         a.version
         from t_commodity_classification a
         where a.is_delete = 0
-
         <if test="parentCode != null and parentCode != ''">
             and a.parent_code = #{parentCode}
         </if>

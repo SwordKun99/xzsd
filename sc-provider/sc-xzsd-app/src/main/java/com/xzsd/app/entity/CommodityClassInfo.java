@@ -37,6 +37,16 @@ public class CommodityClassInfo implements Serializable {
     private int pageNum;
     @TableField(exist = false)
     private List<CommodityInfo> goodsList;
+    @TableField(exist = false)
+    private List<CommodityClassInfo> commodityInfoList2;
+
+    public List<CommodityClassInfo> getCommodityInfoList2() {
+        return commodityInfoList2;
+    }
+
+    public void setCommodityInfoList2(List<CommodityClassInfo> commodityInfoList2) {
+        this.commodityInfoList2 = commodityInfoList2;
+    }
 
     public String getSystematicId() {
         return systematicId;

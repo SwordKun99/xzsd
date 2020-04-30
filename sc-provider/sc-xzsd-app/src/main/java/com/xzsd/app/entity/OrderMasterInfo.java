@@ -26,13 +26,13 @@ public class OrderMasterInfo {
     //订单总价
     private double orderMoney;
     //单价
-    private String distnctMoney;
+    private String sellPrice;
     //订单各个商品数量
     private Integer goodsCnt;
     private String orderNumber;
     private long channelType;
     private double feeMoney;
-    private String goosNum;
+    private String cnt;
     private String orderStatus;
     private double paymentMoney;
     //支付时间起
@@ -143,12 +143,12 @@ public class OrderMasterInfo {
         this.orderMoney = orderMoney;
     }
 
-    public String getDistnctMoney() {
-        return distnctMoney;
+    public String getSellPrice() {
+        return sellPrice;
     }
 
-    public void setDistnctMoney(String distnctMoney) {
-        this.distnctMoney = distnctMoney;
+    public void setSellPrice(String sellPrice) {
+        this.sellPrice = sellPrice;
     }
 
     public Integer getGoodsCnt() {
@@ -186,14 +186,13 @@ public class OrderMasterInfo {
     }
 
 
-    public String getGoosNum() {
-        return goosNum;
+    public String getCnt() {
+        return cnt;
     }
 
-    public void setGoosNum(String goosNum) {
-        this.goosNum = goosNum;
+    public void setCnt(String cnt) {
+        this.cnt = cnt;
     }
-
 
     public String getOrderStatus() {
         return orderStatus;

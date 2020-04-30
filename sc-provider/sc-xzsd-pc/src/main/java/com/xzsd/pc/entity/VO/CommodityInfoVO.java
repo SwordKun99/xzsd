@@ -13,13 +13,12 @@ public class CommodityInfoVO {
     private String commodityName;
     private String stoneId;
     private String stoneName;
-    private String commodityImage;
     private String parentCode;
     private String systematicCode;
     private String pringting;
     private String costPrice;
     private String sellPrice;
-    private String soldNumber;
+    private Integer soldNumber;
     private String channel;
     private String repertory;
     private String introduce;
@@ -102,15 +101,6 @@ public class CommodityInfoVO {
 
     public void setStoneName(String stoneName) {
         this.stoneName = stoneName;
-    }
-
-
-    public String getCommodityImage() {
-        return commodityImage;
-    }
-
-    public void setCommodityImage(String commodityImage) {
-        this.commodityImage = commodityImage;
     }
 
     public String getParentCode() {
@@ -257,11 +247,11 @@ public class CommodityInfoVO {
     }
 
 
-    public String getSoldNumber() {
+    public Integer getSoldNumber() {
         return soldNumber;
     }
 
-    public void setSoldNumber(String soldNumber) {
+    public void setSoldNumber(Integer soldNumber) {
         this.soldNumber = soldNumber;
     }
 

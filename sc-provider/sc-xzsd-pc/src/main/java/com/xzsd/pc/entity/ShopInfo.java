@@ -18,6 +18,7 @@ public class ShopInfo {
     private String shopId;
     private String shopNumber;
     private String driveId;
+    private String userNo;
     private String userId;
     private String userPhone;
     private String userEmail;
@@ -43,6 +44,14 @@ public class ShopInfo {
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
 
     public String getShopId() {
         return shopId;

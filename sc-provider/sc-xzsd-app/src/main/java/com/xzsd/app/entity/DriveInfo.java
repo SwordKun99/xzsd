@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @DescriptionDemo 司机实体类
@@ -49,6 +50,16 @@ public class DriveInfo {
     private int pageNum;
     @TableField(exist = false)
     private int pageSize;
+    @TableField(exist = false)
+    private List<ShopInfo> shopInfoList;
+
+    public List<ShopInfo> getShopInfoList() {
+        return shopInfoList;
+    }
+
+    public void setShopInfoList(List<ShopInfo> shopInfoList) {
+        this.shopInfoList = shopInfoList;
+    }
 
     public String getInvitation() {
         return invitation;

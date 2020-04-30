@@ -17,13 +17,11 @@ public class ImageInfo {
 
     @TableId
     private String imageId;
-    private String fileId;
     private String imageNumber;
     private String imageNo;
-    private String imageUr1;
     private String commodityId;
     private String commodityName;
-    private String imageType;
+    private Integer imageType;
     private String secondarDirectory;
     private String imageTitle;
     private Date periodStrat;
@@ -58,13 +56,6 @@ public class ImageInfo {
         this.imageId = imageId;
     }
 
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
 
     public String getImageNumber() {
         return imageNumber;
@@ -84,13 +75,6 @@ public class ImageInfo {
     }
 
 
-    public String getImageUr1() {
-        return imageUr1;
-    }
-
-    public void setImageUr1(String imageUr1) {
-        this.imageUr1 = imageUr1;
-    }
 
     public String getCommodityName() {
         return commodityName;
@@ -101,14 +85,13 @@ public class ImageInfo {
     }
 
 
-    public String getImageType() {
+    public Integer getImageType() {
         return imageType;
     }
 
-    public void setImageType(String imageType) {
+    public void setImageType(Integer imageType) {
         this.imageType = imageType;
     }
-
 
     public String getSecondarDirectory() {
         return secondarDirectory;
